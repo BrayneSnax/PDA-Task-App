@@ -107,21 +107,21 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   title: {
-	    fontSize: 28, // Reduced font size
+	    fontSize: 24, // Further reduced font size
 	    fontWeight: '700',
-	    marginBottom: 20, // Reduced margin
+	    marginBottom: 10, // Further reduced margin
 	  },
   scrollContent: {
     paddingBottom: 40, // Space for the bottom nav/tab bar
   },
   softBlock: {
     borderRadius: 12,
-	    padding: 12, // Reduced padding
-	    marginBottom: 12, // Reduced margin
+	    padding: 10, // Aggressively reduced padding
+	    marginBottom: 8, // Aggressively reduced margin
 	    borderWidth: 1,
 	  },
   softText: {
-	    fontSize: 16, // Reduced font size
+	    fontSize: 14, // Reduced font size
 	    fontWeight: '600',
 	  },
   microLabel: {
@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
 	  didItButton: {
 	    // Overrides for the 'did it' button to make it full width and primary
 	    width: '100%',
-	    paddingVertical: 16, // Reduced padding
-	    marginBottom: 12, // Reduced margin
+	    paddingVertical: 12, // Reduced padding
+	    marginBottom: 8, // Reduced margin
 	  },
 	  didItText: {
 	    fontSize: 20,
@@ -147,10 +147,10 @@ const styles = StyleSheet.create({
 	  actionButton: {
 	    width: '48%',
 	    borderRadius: 12,
-	    paddingVertical: 12, // Reduced padding
+	    paddingVertical: 10, // Reduced padding
 	    alignItems: 'center',
 	    justifyContent: 'center',
-	    marginBottom: 12, // Reduced margin
+	    marginBottom: 8, // Reduced margin
 	  },
   actionText: {
     fontSize: 16,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
 	    padding: 12, // Reduced padding
 	    marginBottom: 16, // Reduced margin
 	    borderWidth: 1,
-	    fontSize: 15, // Reduced font size
-	    lineHeight: 20,
+	    fontSize: 13, // Reduced font size
+	    lineHeight: 18,
 	  },
 });
