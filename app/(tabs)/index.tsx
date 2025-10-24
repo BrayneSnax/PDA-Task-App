@@ -549,11 +549,26 @@ export default function HomeScreen() {
             ))
           )}
 
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: colors.accent }]}
+            onPress={() => setIsSynthesisModalVisible(true)}
+          >
+            <Text style={[styles.addButtonText, { color: colors.card }]}>+ Create Journal Entry</Text>
+          </TouchableOpacity>
+
           <View style={{ height: 80 }} />
         </ScrollView>
 
         {/* Time Container Navigation at Bottom */}
         {renderTimeContainerNav()}
+
+        {/* Synthesis Modal for creating journal entries */}
+        <JournalisticSynthesisModal
+          isVisible={isSynthesisModalVisible}
+          onClose={() => setIsSynthesisModalVisible(false)}
+          moment={momentToSynthesize}
+          colors={colors}
+        />
       </View>
     );
   }
