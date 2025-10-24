@@ -60,6 +60,9 @@ export default function HomeScreen() {
   const [allyToEdit, setAllyToEdit] = useState(null);
   const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
   const [selectedItem, setSelectedItem] = useState<ContainerItem | null>(null);
+  const [isAnalysisModalVisible, setIsAnalysisModalVisible] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Update time every minute
   useEffect(() => {
@@ -446,6 +449,49 @@ export default function HomeScreen() {
 
           <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
             RECENT TRANSMISSIONS
+
+          {journalEntries.length > 0 && (
+            <TouchableOpacity
+              style={[styles.analyzeButton, { backgroundColor: colors.accent }]}
+              onPress={async () => {
+                setIsAnalyzing(true);
+                try {
+                  const response = await fetch("https://3000-ih2uy4a4o9o05vxo1xb09-a9018c65.manusvm.computer/api/trpc/journal.analyzeJournal", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      json: {
+                        entries: journalEntries.slice(0, 10).map(entry => ({
+                          title: entry.allyName || entry.anchorTitle || "Moment",
+                          text: entry.context || "",
+                          date: entry.date,
+                          status: entry.tone || "",
+                          note: entry.text || "",
+                        })),
+                      },
+                    }),
+                  });
+                  const data = await response.json();
+                  if (data.result?.data?.analysis) {
+                    setAnalysisResult(data.result.data.analysis);
+                    setIsAnalysisModalVisible(true);
+                  }
+                } catch (error) {
+                  console.error("Analysis failed:", error);
+                  Alert.alert("Analysis Failed", "Could not analyze journal entries. Please try again.");
+                } finally {
+                  setIsAnalyzing(false);
+                }
+              }}
+              disabled={isAnalyzing}
+            >
+              <Text style={[styles.analyzeButtonText, { color: colors.card }]}>
+                {isAnalyzing ? "Analyzing..." : "✨ Analyze with AI"}
+              </Text>
+            </TouchableOpacity>
+          )}
           </Text>
 
           {journalEntries.length === 0 ? (
@@ -993,6 +1039,43 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 10,
     fontStyle: 'italic',
+  },
+  analyzeButton: {
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  analyzeButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  analysisContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  analysisBackButton: {
+    paddingVertical: 10,
+    marginBottom: 20,
+  },
+  analysisBackText: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  analysisTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 20,
+  },
+  analysisContent: {
+    paddingBottom: 40,
+  },
+  analysisText: {
+    fontSize: 16,
+    lineHeight: 24,
   },
 });
 
