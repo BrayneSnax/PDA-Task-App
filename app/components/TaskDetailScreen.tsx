@@ -21,7 +21,7 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
 
       <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
         {/* Main Cue Block */}
         <View style={[styles.cueBlock, { backgroundColor: colors.accent + '20' }]}>
           <Text style={[styles.cueLabel, { color: colors.dim }]}>body cue:</Text>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   scrollContent: {
-    paddingBottom: 40 + insets.bottom, // Space for the bottom nav/tab bar + safe area
+    paddingBottom: 40, // Space for the bottom nav/tab bar
   },
   cueBlock: {
     borderRadius: 12,
