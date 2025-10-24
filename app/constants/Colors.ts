@@ -52,10 +52,10 @@ export const CircadianPalette = {
 };
 
 export const ContainerThemes: Record<ContainerId, string> = {
-  morning: "Soft Ignition",
-  afternoon: "Clarity & Balance",
-  evening: "Integration & Release",
-  late: "Descent & Safety",
+  morning: "orient gently; don't command yourself awake",
+  afternoon: "release built-up charge, re-enter presence",
+  evening: "unwind; let cognition return to body",
+  late: "signal safety; prepare for rest without force",
   situational: "Situational Grounding",
   uplift: "Uplift & Expansion",
 };
