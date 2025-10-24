@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useApp } from '../context/AppContext';
-import useColors from '../hooks/useColors';
+// import useColors from '../hooks/useColors'; // REMOVED FOR TEST
 import { formatTime, formatLongDate } from '../utils/time';
 import { ContainerThemes } from '../constants/Colors';
 import { TimeContainerSwitcher } from '../components/TimeContainerSwitcher';
@@ -17,6 +17,16 @@ import { AnchorCard } from '../components/AnchorCard';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AllyCard } from '../components/AllyCard';
 import { AddAllyModal, CraftMomentModal, EditAllyModal } from '../modal';
+
+// STATIC COLOR SCHEME FOR TEST
+const staticColors = {
+  bg: "#FFFFFF",
+  accent: "#4B0082",
+  text: "#000000",
+  dim: "#888888",
+  signal: "#FF0000",
+  card: "#F0F0F0",
+};
 
 export default function PDATaskApp() {
   const {
@@ -34,7 +44,8 @@ export default function PDATaskApp() {
     addAlly,
   } = useApp();
 
-  const colors = useColors(activeContainer, true); // true = use circadian colors
+  // const colors = useColors(activeContainer, true); // ORIGINAL LINE
+  const colors = staticColors; // REPLACED WITH STATIC COLORS FOR TEST
   const [currentTime, setCurrentTime] = useState(formatTime());
   const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'patterns'>('home');
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
@@ -368,7 +379,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    marginBottom: 8,
   },
   time: {
     fontSize: 48,
