@@ -608,7 +608,7 @@ export default function HomeScreen() {
                   </TouchableOpacity>
                 </View>
                 <Text style={[styles.patternText, { color: colors.text }]}>{pattern.text}</Text>
-              </TouchableOpacity>
+              </View>
             ))
           )}
 
