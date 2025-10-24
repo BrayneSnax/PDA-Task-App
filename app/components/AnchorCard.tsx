@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ContainerItem, ColorScheme } from '../constants/Types';
 
@@ -7,56 +7,32 @@ interface Props {
   completed: boolean;
   onToggle: () => void;
   colors: ColorScheme;
+  onPress: () => void; // New prop to handle press
 }
 
-export const AnchorCard = React.memo(({ item, completed, onToggle, colors }: Props) => {
-  const [expanded, setExpanded] = useState(false);
-
+export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress }: Props) => {
   return (
-    <View style={[styles.card, { backgroundColor: colors.card }]}>
-      <TouchableOpacity
-        style={styles.header}
-        onPress={() => setExpanded(!expanded)}
-        activeOpacity={0.7}
-      >
-        <View style={styles.row}>
-          <TouchableOpacity
-            onPress={onToggle}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text style={[styles.bullet, { color: completed ? colors.accent : colors.dim }]}>
-              {completed ? '✓' : '•'}
-            </Text>
-          </TouchableOpacity>
-          <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
-          <Text style={[styles.chevron, { color: colors.dim }]}>
-            {expanded ? '∧' : '∨'}
+    <TouchableOpacity
+      style={[styles.card, { backgroundColor: colors.card }]}
+      onPress={onPress} // Use the new onPress prop
+      activeOpacity={0.7}
+    >
+      <View style={styles.row}>
+        <TouchableOpacity
+          onPress={onToggle}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={[styles.bullet, { color: completed ? colors.accent : colors.dim }]}>
+            {completed ? '✓' : '•'}
           </Text>
-        </View>
-      </TouchableOpacity>
-
-      {expanded && (
-        <View style={styles.details}>
-          {item.body_cue && (
-            <Text style={[styles.cue, { color: colors.dim }]}>{item.body_cue}</Text>
-          )}
-          {item.micro && (
-            <View style={styles.microSection}>
-              <Text style={[styles.microLabel, { color: colors.dim }]}>micro:</Text>
-              <Text style={[styles.microText, { color: colors.text }]}>{item.micro}</Text>
-            </View>
-          )}
-          {item.desire && (
-            <View style={styles.desireSection}>
-              <Text style={[styles.desireLabel, { color: colors.dim }]}>why:</Text>
-              <Text style={[styles.desireText, { color: colors.text, fontStyle: 'italic' }]}>
-                {item.desire}
-              </Text>
-            </View>
-          )}
-        </View>
-      )}
-    </View>
+        </TouchableOpacity>
+        <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+        {/* Aesthetic elements for the new card look */}
+        <Text style={[styles.chevron, { color: colors.dim }]}>
+          {item.category === 'time' ? '🌅' : item.category === 'situational' ? '⚡' : '✨'}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 });
 
@@ -66,13 +42,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     overflow: 'hidden',
   },
-  header: {
-    padding: 16,
-  },
+  // Removed header style since the whole card is now the touchable area
+
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    padding: 16, // Add padding to the row now that it's the main content
   },
   bullet: {
     fontSize: 20,
@@ -84,47 +60,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   chevron: {
-    fontSize: 16,
+    fontSize: 20, // Make the icon larger
     fontWeight: '300',
   },
-  details: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    paddingTop: 4,
-    gap: 12,
-  },
-  cue: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  microSection: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  microLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  microText: {
-    flex: 1,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  desireSection: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  desireLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  desireText: {
-    flex: 1,
-    fontSize: 13,
-    lineHeight: 18,
-  },
+  // Removed all detail-related styles as they are now in TaskDetailScreen
+
 });

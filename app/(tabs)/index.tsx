@@ -13,8 +13,9 @@ import useColors from '../hooks/useColors';
 import { formatTime, formatLongDate } from '../utils/time';
 import { ContainerThemes } from '../constants/Colors';
 import { AnchorCard } from '../components/AnchorCard';
+import { TaskDetailScreen } from '../components/TaskDetailScreen';
 import { CollapsibleSection } from '../components/CollapsibleSection';
-import { CraftMomentModal } from '../modal';
+import { CraftMomentModal, Modal } from '../modal';
 import { ContainerId } from '../constants/Types';
 
 type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
@@ -44,6 +45,7 @@ export default function HomeScreen() {
   const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false);
   const [allyToEdit, setAllyToEdit] = useState(null);
   const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
+  const [selectedItem, setSelectedItem] = useState<ContainerItem | null>(null);
 
   // Update time every minute
   useEffect(() => {
@@ -197,6 +199,7 @@ export default function HomeScreen() {
                 completed={isCompleted(item.id)}
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
+                onPress={() => setSelectedItem(item)}
               />
             ))}
           </CollapsibleSection>
@@ -215,6 +218,7 @@ export default function HomeScreen() {
                 completed={isCompleted(item.id)}
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
+                onPress={() => setSelectedItem(item)}
               />
             ))}
           </CollapsibleSection>
@@ -233,6 +237,7 @@ export default function HomeScreen() {
                 completed={isCompleted(item.id)}
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
+                onPress={() => setSelectedItem(item)}
               />
             ))}
           </CollapsibleSection>
@@ -259,6 +264,21 @@ export default function HomeScreen() {
           }}
           colors={colors}
         />
+
+        {/* Task Detail Modal */}
+        {selectedItem && (
+          <Modal isVisible={!!selectedItem} onClose={() => setSelectedItem(null)}>
+            <TaskDetailScreen
+              item={selectedItem}
+              colors={colors}
+              onClose={() => setSelectedItem(null)}
+              onComplete={() => {
+                toggleCompletion(selectedItem.id);
+                setSelectedItem(null);
+              }}
+            />
+          </Modal>
+        )}
       </View>
     );
   }
