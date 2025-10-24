@@ -97,7 +97,7 @@ export default function HomeScreen() {
   const renderActionGrid = () => (
     <View style={styles.actionGrid}>
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
+        style={[styles.actionButton, { backgroundColor: 'transparent' }]}
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍃</Text>
@@ -105,7 +105,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
+        style={[styles.actionButton, { backgroundColor: 'transparent' }]}
         onPress={() => setCurrentScreen('journal')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>📖</Text>
@@ -113,7 +113,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
+        style={[styles.actionButton, { backgroundColor: 'transparent' }]}
         onPress={() => setCurrentScreen('patterns')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🌌</Text>
@@ -121,7 +121,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
+        style={[styles.actionButton, { backgroundColor: 'transparent' }]}
         onPress={() => setCurrentScreen('nourish')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍽️</Text>
