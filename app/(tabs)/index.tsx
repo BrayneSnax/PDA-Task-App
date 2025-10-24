@@ -48,6 +48,12 @@ export default function HomeScreen() {
     addAlly,
     journalEntries,
     removeJournalEntry,
+    patterns,
+    addPattern,
+    removePattern,
+    foodEntries,
+    addFoodEntry,
+    removeFoodEntry,
   } = useApp();
 
   const colors = useColors(activeContainer, true);
@@ -125,20 +131,22 @@ export default function HomeScreen() {
   );
 
   // Render Time Container Navigation at bottom with Craft a Moment button
-  const renderTimeContainerNav = () => {
+  const renderTimeContainerNav = (showCraftButton: boolean = false) => {
     const containers: ContainerId[] = ['morning', 'afternoon', 'evening', 'late'];
     const icons = { morning: '🌅', afternoon: '🌞', evening: '🌇', late: '🌙' };
     
     return (
       <View>
-        {/* Craft a Moment Button */}
-        <TouchableOpacity
-          style={[styles.craftMomentButton, { backgroundColor: colors.accent }]}
-          onPress={() => setIsCraftMomentModalVisible(true)}
-        >
-          <Text style={[styles.craftMomentIcon, { color: colors.card }]}>✨</Text>
-          <Text style={[styles.craftMomentText, { color: colors.card }]}>Craft a Moment</Text>
-        </TouchableOpacity>
+        {/* Craft a Moment Button - Only show on home screen */}
+        {showCraftButton && (
+          <TouchableOpacity
+            style={[styles.craftMomentButton, { backgroundColor: colors.accent }]}
+            onPress={() => setIsCraftMomentModalVisible(true)}
+          >
+            <Text style={[styles.craftMomentIcon, { color: colors.card }]}>✨</Text>
+            <Text style={[styles.craftMomentText, { color: colors.card }]}>Craft a Moment</Text>
+          </TouchableOpacity>
+        )}
 
         {/* Time Container Navigation */}
         <View style={[styles.timeContainerNav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
@@ -266,7 +274,7 @@ export default function HomeScreen() {
         </ScrollView>
 
         {/* Time Container Navigation at Bottom */}
-        {renderTimeContainerNav()}
+        {renderTimeContainerNav(true)}
 
         {/* Modals */}
         <CraftMomentModal
@@ -552,7 +560,6 @@ export default function HomeScreen() {
 
   // PATTERNS SCREEN
   if (currentScreen === 'patterns') {
-    const { patterns, removePattern } = useApp();
     const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
 
     return (
@@ -640,7 +647,6 @@ export default function HomeScreen() {
           isVisible={isAddPatternModalVisible}
           onClose={() => setIsAddPatternModalVisible(false)}
           onSave={(text, category) => {
-            const { addPattern } = useApp();
             addPattern({ text, category });
           }}
           colors={colors}
@@ -651,7 +657,6 @@ export default function HomeScreen() {
 
   // NOURISH MAP SCREEN
   if (currentScreen === 'nourish') {
-    const { foodEntries, removeFoodEntry, addFoodEntry } = useApp();
     const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
 
     return (
