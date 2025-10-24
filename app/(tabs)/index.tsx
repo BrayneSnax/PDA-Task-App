@@ -200,9 +200,9 @@ export default function HomeScreen() {
         </View>
 
         <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
+	          style={[styles.scrollView, { marginBottom: 0 }]}
+	          contentContainerStyle={styles.scrollContent}
+	          showsVerticalScrollIndicator={false}
         >
           {/* Time and Date Display */}
           <View style={styles.timeSection}>
@@ -303,7 +303,7 @@ export default function HomeScreen() {
             ))}
           </CollapsibleSection>
 
-          <View style={{ height: 80 }} />
+	          <View style={{ height: 40 }} />
         </ScrollView>
 
         {/* Time Container Navigation at Bottom */}
@@ -1125,10 +1125,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  analysisContainer: {
+  scrollView: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 20,
   },
   analysisBackButton: {
     paddingVertical: 10,

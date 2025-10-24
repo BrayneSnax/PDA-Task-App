@@ -12,10 +12,9 @@ interface Props {
 
 export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) => {
   const insets = useSafeAreaInsets();
-  const [note, setNote] = useState('');
-  const actionButtons = ['skipped', 'forgot', 'couldn\'t', 'not relevant'].slice(0, item.actionButtons || 4);
-
-  return (
+	  const [note, setNote] = useState('');
+	  const allActionButtons = ['skipped', 'forgot', 'couldn\'t', 'not relevant'];
+	  const actionButtons = allActionButtons.slice(0, item.actionButtons || 4);  return (
     <View style={[styles.container, { backgroundColor: colors.bg, paddingBottom: insets.bottom }]}>
       <TouchableOpacity style={styles.backButton} onPress={onClose}>
         <Text style={[styles.backText, { color: colors.text }]}>← back</Text>
@@ -62,33 +61,33 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
           numberOfLines={2}
         />
 
-        {/* Did It Button */}
-        <TouchableOpacity
-          style={[styles.didItButton, { backgroundColor: colors.accent }]}
-          onPress={() => onComplete('did it', note)}
-        >
-          <Text style={[styles.didItText, { color: colors.card }]}>did it</Text>
-        </TouchableOpacity>
-
-        {/* Action Buttons */}
-        <View style={styles.actionGrid}>
-          {actionButtons.map((action) => (
-            <TouchableOpacity
-              key={action}
-              style={[
-                styles.actionButton,
-                {
-                  backgroundColor: colors.accent + '10',
-                  // Darken the 'not relevant' button to match the screenshot's faded look
-                  opacity: action === 'not relevant' ? 0.6 : 1,
-                },
-              ]}
-              onPress={() => onComplete(action as any, note)}
-            >
-              <Text style={[styles.actionText, { color: colors.text }]}>{action}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+	        {/* Action Buttons */}
+	        <View style={styles.actionGrid}>
+	          {/* Did It Button */}
+	          <TouchableOpacity
+	            style={[styles.actionButton, styles.didItButton, { backgroundColor: colors.accent }]}
+	            onPress={() => onComplete('did it', note)}
+	          >
+	            <Text style={[styles.didItText, { color: colors.card }]}>did it</Text>
+	          </TouchableOpacity>
+	
+	          {actionButtons.map((action) => (
+	            <TouchableOpacity
+	              key={action}
+	              style={[
+	                styles.actionButton,
+	                {
+	                  backgroundColor: colors.accent + '10',
+	                  // Darken the 'not relevant' button to match the screenshot's faded look
+	                  opacity: action === 'not relevant' ? 0.6 : 1,
+	                },
+	              ]}
+	              onPress={() => onComplete(action as any, note)}
+	            >
+	              <Text style={[styles.actionText, { color: colors.text }]}>{action}</Text>
+	            </TouchableOpacity>
+	          ))}
+	        </View>
       </ScrollView>
     </View>
   );
@@ -144,32 +143,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  didItButton: {
-    borderRadius: 12,
-    paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  didItText: {
-    fontSize: 20,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-  },
+	  didItButton: {
+	    // Overrides for the 'did it' button to make it full width and primary
+	    width: '100%',
+	    paddingVertical: 20,
+	    marginBottom: 15,
+	  },
+	  didItText: {
+	    fontSize: 20,
+	    fontWeight: '700',
+	    textTransform: 'uppercase',
+	  },
   actionGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    width: '48%',
-    borderRadius: 12,
-    paddingVertical: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
+	    flexDirection: 'row',
+	    flexWrap: 'wrap',
+	    justifyContent: 'space-between',
+	  },
+	  actionButton: {
+	    width: '48%',
+	    borderRadius: 12,
+	    paddingVertical: 15,
+	    alignItems: 'center',
+	    justifyContent: 'center',
+	    marginBottom: 15,
+	  },
   actionText: {
     fontSize: 16,
     fontWeight: '500',
