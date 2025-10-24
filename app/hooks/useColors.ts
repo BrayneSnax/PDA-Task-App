@@ -2,7 +2,7 @@ import { useColorScheme as useRNColorScheme } from 'react-native';
 import { ColorScheme, ContainerId } from '../constants/Types';
 import { CircadianColors, LightColors, DarkColors } from '../constants/Colors';
 
-export function useColors(
+export default function useColors(
   activeContainer?: ContainerId,
   useCircadian: boolean = true
 ): ColorScheme {

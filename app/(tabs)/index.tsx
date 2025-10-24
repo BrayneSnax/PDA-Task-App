@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useApp } from '../context/AppContext';
-import { useColors } from '../hooks/useColors';
+import useColors from '../hooks/useColors';
 import { formatTime, formatLongDate } from '../utils/time';
 import { ContainerThemes } from '../constants/Colors';
 import { TimeContainerSwitcher } from '../components/TimeContainerSwitcher';
