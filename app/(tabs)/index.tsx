@@ -97,7 +97,7 @@ export default function HomeScreen() {
   const renderActionGrid = () => (
     <View style={styles.actionGrid}>
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card }]}
+        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍃</Text>
@@ -105,7 +105,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card }]}
+        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
         onPress={() => setCurrentScreen('journal')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>📖</Text>
@@ -113,7 +113,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card }]}
+        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
         onPress={() => setCurrentScreen('patterns')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🌌</Text>
@@ -121,7 +121,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: colors.card }]}
+        style={[styles.actionButton, { backgroundColor: colors.card + 'CC' }]}
         onPress={() => setCurrentScreen('nourish')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍽️</Text>
@@ -196,7 +196,7 @@ export default function HomeScreen() {
           <View style={styles.timeSection}>
             <View style={styles.timeRow}>
               <Text style={[styles.time, { color: colors.text }]}>{currentTime}</Text>
-              <View style={[styles.themeCard, { backgroundColor: colors.card }]}>
+              <View style={[styles.themeCard, { backgroundColor: colors.card + '80' }]}>
                 <Text style={[styles.themeText, { color: colors.text }]}>
                   {ContainerThemes[activeContainer]}
                 </Text>
@@ -503,7 +503,7 @@ export default function HomeScreen() {
           )}
 
           {journalEntries.length === 0 ? (
-            <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+            <View style={[styles.emptyCard, { backgroundColor: colors.card + 'B3' }]}>
               <Text style={[styles.emptyText, { color: colors.dim }]}>
                 No transmissions yet. Log your first interaction to begin.
               </Text>
@@ -512,7 +512,7 @@ export default function HomeScreen() {
             journalEntries.slice(0, 10).map((entry) => (
               <TouchableOpacity
                 key={entry.id}
-                style={[styles.entryCard, { backgroundColor: colors.card }]}
+                style={[styles.entryCard, { backgroundColor: colors.card + 'B3' }]}
                 onLongPress={() => {
                   Alert.alert(
                     'Delete Journal Entry',
@@ -588,14 +588,14 @@ export default function HomeScreen() {
           </Text>
 
           {patterns.length === 0 ? (
-            <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+            <View style={[styles.emptyCard, { backgroundColor: colors.card + 'B3' }]}>
               <Text style={[styles.emptyText, { color: colors.dim }]}>
                 No patterns recorded yet. Tap below to add your first observation.
               </Text>
             </View>
           ) : (
             patterns.map((pattern) => (
-              <View key={pattern.id} style={[styles.patternCard, { backgroundColor: colors.card }]}>
+              <View key={pattern.id} style={[styles.patternCard, { backgroundColor: colors.card + 'B3' }]}>
                 <View style={styles.patternHeader}>
                   <View style={styles.patternHeaderLeft}>
                     {pattern.category && (
@@ -626,7 +626,7 @@ export default function HomeScreen() {
             <Text style={[styles.addButtonText, { color: colors.card }]}>+ Record a Pattern</Text>
           </TouchableOpacity>
 
-          <View style={[styles.placeholderCard, { backgroundColor: colors.card, marginTop: 32 }]}>
+          <View style={[styles.placeholderCard, { backgroundColor: colors.card + 'B3', marginTop: 32 }]}>
             <Text style={[styles.placeholderIcon, { color: colors.accent }]}>🌌</Text>
             <Text style={[styles.placeholderTitle, { color: colors.text }]}>
               AI Pattern Weaver
@@ -685,14 +685,14 @@ export default function HomeScreen() {
           </Text>
 
           {foodEntries.length === 0 ? (
-            <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+            <View style={[styles.emptyCard, { backgroundColor: colors.card + 'B3' }]}>
               <Text style={[styles.emptyText, { color: colors.dim }]}>
                 No meals logged yet. Tap below to record your first nourishment.
               </Text>
             </View>
           ) : (
             foodEntries.map((entry) => (
-              <View key={entry.id} style={[styles.foodCard, { backgroundColor: colors.card }]}>
+              <View key={entry.id} style={[styles.foodCard, { backgroundColor: colors.card + 'B3' }]}>
                 <View style={styles.foodHeader}>
                   <View style={styles.foodHeaderLeft}>
                     <Text style={[styles.foodName, { color: colors.text }]}>{entry.name}</Text>
@@ -780,7 +780,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topSection: {
-    paddingTop: 16,
+    paddingTop: 48,
     paddingHorizontal: 20,
   },
   actionGrid: {
@@ -849,6 +849,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 1,
     paddingVertical: 8,
+    paddingBottom: 24,
   },
   timeButton: {
     flex: 1,
@@ -989,7 +990,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     marginHorizontal: 20,
-    marginBottom: 8,
+    marginBottom: 16,
     borderRadius: 12,
     gap: 8,
   },
