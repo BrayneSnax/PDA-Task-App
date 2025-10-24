@@ -3,7 +3,7 @@ import { ContainerId } from "./Types";
 export const CircadianPalette = {
   // --- Palette Refinement: Lower Contrast, Softer Glow ---
   morning: {
-    bg: "#F5E6CC", // Muted Pale Gold/Lemon Chiffon (Core background)
+    bg: "#F7E6A2", // Lemon Chiffon (Core background)
     accent: "#A2B8A6", // Muted Sage (Accent background)
     text: "#4D483B", // Deep brown-gray (Text)
     dim: "#B3A698", // Warm taupe (Secondary text)
@@ -19,7 +19,7 @@ export const CircadianPalette = {
     card: "#FFFFFF",
   },
   evening: {
-    bg: "#4D3A30", // Deep Copper/Brown (Ancient Copper - Core background)
+    bg: "#543E3B", // Ancient Copper (Core background - #PF543E is invalid)
     accent: "#8C4B3F", // Deeper rust (Accent background)
     text: "#4D3B36", // Dark walnut brown (Text)
     dim: "#B87333", // Copper/umber (Secondary text)
