@@ -6,6 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
+  LogBox, // Import LogBox
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
