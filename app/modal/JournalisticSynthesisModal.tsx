@@ -25,7 +25,7 @@ const checkInOptions = {
 };
 
 export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: Props) => {
-  const colors = useColors(momentData.container || 'morning');
+  const colors = useColors(momentData?.container || 'morning');
   const { addMoment } = useApp();
 
   const [synthesisState, setSynthesisState] = useState({
@@ -39,7 +39,7 @@ export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: P
   });
 
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && momentData) {
       // Reset state when modal opens
       setSynthesisState({
         context: '',

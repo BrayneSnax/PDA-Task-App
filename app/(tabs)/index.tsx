@@ -69,6 +69,8 @@ export default function HomeScreen() {
   const [isAnalysisModalVisible, setIsAnalysisModalVisible] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
+  const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
 
   // Update time every minute
   useEffect(() => {
@@ -565,8 +567,11 @@ export default function HomeScreen() {
         {/* Synthesis Modal for creating journal entries */}
         <JournalisticSynthesisModal
           isVisible={isSynthesisModalVisible}
-          onClose={() => setIsSynthesisModalVisible(false)}
-          moment={momentToSynthesize}
+          onClose={() => {
+            setIsSynthesisModalVisible(false);
+            setMomentToSynthesize({}); // Clear the moment on close
+          }}
+          momentData={momentToSynthesize} // Use momentData prop
           colors={colors}
         />
       </View>
@@ -575,7 +580,6 @@ export default function HomeScreen() {
 
   // PATTERNS SCREEN
   if (currentScreen === 'patterns') {
-    const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
 
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
@@ -672,7 +676,6 @@ export default function HomeScreen() {
 
   // NOURISH MAP SCREEN
   if (currentScreen === 'nourish') {
-    const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
 
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
