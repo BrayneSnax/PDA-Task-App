@@ -1,6 +1,6 @@
 import { Ally, ContainerItem } from './Types';
 
-// Default Chemical Allies
+// Default Chemical Allies (Keeping existing allies)
 export const DEFAULT_ALLIES: Ally[] = [
   {
     id: 'firestarter',
@@ -76,9 +76,10 @@ export const DEFAULT_ALLIES: Ally[] = [
   },
 ];
 
-// Default Grounding Anchors
+// Default Grounding Anchors (Expanded to include all items from the provided documents)
 export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
-  // Morning anchors
+  // --- Time-based anchors ---
+  // Morning (Theme: orient gently; don’t command yourself awake.)
   {
     id: 'morning-light',
     title: 'Light check-in',
@@ -100,8 +101,8 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'morning-gratitude',
     title: 'First gratitude',
-    body_cue: 'name one thing that doesn\'t hurt, confuse, or demand',
-    micro: 'whisper "thank you" once',
+    body_cue: 'name one thing that feels okay or steady',
+    micro: 'whisper “thank you” once',
     type: 'grounding',
     container: 'morning',
     category: 'time',
@@ -109,18 +110,18 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'morning-breath',
     title: 'Slow breath',
-    body_cue: 'three slow inhales through nose, exhale through mouth',
+    body_cue: 'three slow inhales through the nose, exhale through the mouth',
     micro: 'one conscious breath',
     type: 'grounding',
     container: 'morning',
     category: 'time',
   },
-  
-  // Afternoon anchors
+
+  // Afternoon (Theme: release built-up charge, re-enter presence.)
   {
     id: 'afternoon-hydration',
     title: 'Hydration reset',
-    body_cue: 'taste water; track its coolness through the throat',
+    body_cue: 'taste water, feel temperature, notice the act of swallowing',
     micro: 'one sip with attention',
     type: 'grounding',
     container: 'afternoon',
@@ -129,7 +130,7 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'afternoon-muscle',
     title: 'Muscle check',
-    body_cue: 'unclench jaw, roll shoulders, exhale',
+    body_cue: 'unclench jaw, roll shoulders, exhale tension',
     micro: 'drop shoulders once',
     type: 'grounding',
     container: 'afternoon',
@@ -138,7 +139,7 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'afternoon-horizon',
     title: 'Horizon view',
-    body_cue: 'find something distant and rest your eyes there',
+    body_cue: 'look at something distant for ten seconds',
     micro: 'glance toward open space',
     type: 'grounding',
     container: 'afternoon',
@@ -147,19 +148,19 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'afternoon-truth',
     title: 'Truth check',
-    body_cue: 'ask silently, "what\'s actually true right now?"',
+    body_cue: 'ask silently, “what’s actually true right now?”',
     micro: 'one honest exhale',
     type: 'grounding',
     container: 'afternoon',
     category: 'time',
   },
-  
-  // Evening anchors
+
+  // Evening (Theme: unwind; let cognition return to body.)
   {
     id: 'evening-lighting',
     title: 'Lighting shift',
-    body_cue: 'lower brightness; let color temperature warm',
-    micro: 'dim one lamp',
+    body_cue: 'dim screens and lamps; let light grow warmer',
+    micro: 'lower one light',
     type: 'grounding',
     container: 'evening',
     category: 'time',
@@ -167,28 +168,37 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'evening-water',
     title: 'Water ritual',
-    body_cue: 'wash or rinse hands slowly, feeling texture and change',
+    body_cue: 'wash or rinse hands slowly, noticing temperature and feel',
     micro: 'wet palms briefly',
     type: 'grounding',
     container: 'evening',
     category: 'time',
   },
   {
-    id: 'evening-closure',
-    title: 'Small closure',
-    body_cue: 'ask "what can I set down now?"',
-    micro: 'one slow sigh',
+    id: 'evening-gratitude',
+    title: 'Gratitude exhale',
+    body_cue: 'inhale what you want to keep; exhale what can leave',
+    micro: 'one gentle sigh',
     type: 'grounding',
     container: 'evening',
     category: 'time',
   },
-  
-  // Late night anchors
+  {
+    id: 'evening-scan',
+    title: 'Body scan mini',
+    body_cue: 'notice one tense area, breathe into it',
+    micro: 'name one body part',
+    type: 'grounding',
+    container: 'evening',
+    category: 'time',
+  },
+
+  // Late (Theme: signal safety; prepare for rest without force.)
   {
     id: 'late-breath',
-    title: 'Breath cadence',
+    title: 'Slow breathing',
     body_cue: 'inhale four, hold two, exhale six',
-    micro: 'one conscious breath',
+    micro: 'one slow breath',
     type: 'grounding',
     container: 'late',
     category: 'time',
@@ -196,96 +206,410 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
   {
     id: 'late-nest',
     title: 'Nest ritual',
-    body_cue: 'adjust blanket, find comfort, whisper "safe now"',
+    body_cue: 'adjust blanket or pillow; whisper “safe now.”',
     micro: 'smooth pillow once',
     type: 'grounding',
     container: 'late',
     category: 'time',
   },
   {
-    id: 'late-release',
-    title: 'Final release',
-    body_cue: 'scan body; soften one area that feels held',
-    micro: 'unclench tongue from roof of mouth',
+    id: 'late-checkin',
+    title: 'Quiet check-in',
+    body_cue: 'ask, “is there anything left that needs attention?” then rest',
+    micro: 'let the thought pass',
     type: 'grounding',
     container: 'late',
     category: 'time',
   },
-  
-  // Situational - Overstimulated
   {
-    id: 'sit-temperature',
+    id: 'late-muscle',
+    title: 'Muscle melt',
+    body_cue: 'tense all muscles for five seconds, then release',
+    micro: 'soften face',
+    type: 'grounding',
+    container: 'late',
+    category: 'time',
+  },
+
+  // --- Situational Grounding (Category: situational) ---
+  // Overstimulated (Theme: cool the system, return to containment.)
+  {
+    id: 'sit-over-temp',
     title: 'Temperature anchor',
-    body_cue: 'run cool water over wrists or back of neck until breath slows',
+    body_cue: 'run cool water over wrists or neck until breath slows',
     micro: 'touch cool surface',
     type: 'grounding',
-    container: 'morning',
+    container: 'situational',
     category: 'situational',
   },
   {
-    id: 'sit-boundary',
+    id: 'sit-over-boundary',
     title: 'Boundary anchor',
-    body_cue: 'lean back against a wall or solid surface; feel where your edges end',
+    body_cue: 'lean against a wall; feel your edges',
     micro: 'press one shoulder to wall',
     type: 'grounding',
-    container: 'morning',
+    container: 'situational',
     category: 'situational',
   },
   {
-    id: 'sit-sound',
+    id: 'sit-over-sound',
     title: 'Sound anchor',
-    body_cue: 'find a quiet low tone (fan, hum, white noise); match breath to it',
+    body_cue: 'find quiet hum or steady tone; breathe with it',
     micro: 'notice silence between sounds',
     type: 'grounding',
-    container: 'morning',
+    container: 'situational',
     category: 'situational',
   },
   {
-    id: 'sit-visual',
+    id: 'sit-over-visual',
     title: 'Visual anchor',
-    body_cue: 'lower your gaze; soften focus; let the world blur for a few seconds',
+    body_cue: 'lower gaze, soften focus, let blur happen',
     micro: 'close eyes halfway',
     type: 'grounding',
-    container: 'morning',
+    container: 'situational',
     category: 'situational',
   },
-  
-  // Uplift - Energized/Inspired
+
+  // Under-motivated (Theme: coax motion without pressure.)
   {
-    id: 'up-body',
-    title: 'Body anchor',
-    body_cue: 'notice where energy gathers (chest, hands, jaw); give it a small movement',
-    micro: 'shake or tap that spot once',
+    id: 'sit-under-activation',
+    title: 'Small activation',
+    body_cue: 'move one body part with curiosity',
+    micro: 'flex toes or fingers',
     type: 'grounding',
-    container: 'morning',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-under-orientation',
+    title: 'Orientation anchor',
+    body_cue: 'name where you are out loud',
+    micro: 'say one landmark',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-under-sensation',
+    title: 'Sensation spark',
+    body_cue: 'smell something vivid and breathe once',
+    micro: 'bring scent to nose',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-under-permission',
+    title: 'Permission anchor',
+    body_cue: 'say, “I can start small; that still counts.”',
+    micro: 'one nod forward',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+
+  // Mentally looped (Theme: interrupt spin with physical reference.)
+  {
+    id: 'sit-loop-touch',
+    title: 'Ground touch',
+    body_cue: 'hands on thighs or floor; name texture and temperature',
+    micro: 'tap fingers once',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-loop-reset',
+    title: 'Out-loud reset',
+    body_cue: 'speak what you’re thinking instead of replaying it',
+    micro: 'whisper one word, then exhale',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-loop-movement',
+    title: 'Movement anchor',
+    body_cue: 'walk to another spot; let body lead',
+    micro: 'take three steps',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-loop-pattern',
+    title: 'Visual pattern break',
+    body_cue: 'find five objects of the same color',
+    micro: 'spot one repeat',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+
+  // Socially drained (Theme: reclaim personal rhythm after contact.)
+  {
+    id: 'sit-social-corner',
+    title: 'Quiet corner',
+    body_cue: 'step away or mute notifications',
+    micro: 'turn head aside',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-social-skin',
+    title: 'Skin boundary',
+    body_cue: 'hand over heart or chest; feel pulse',
+    micro: 'palm to chest',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-social-breath',
+    title: 'Reclaim breath',
+    body_cue: 'sigh audibly; clear conversation residue',
+    micro: 'one low hum',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-social-affirmation',
+    title: 'Simple affirmation',
+    body_cue: '“I’m allowed to be quiet now.”',
+    micro: 'whisper it once',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+
+  // Emotionally flooded (Theme: widen the container, slow the tide.)
+  {
+    id: 'sit-flood-texture',
+    title: 'Texture anchor',
+    body_cue: 'hold something cool or rough; focus on feel',
+    micro: 'notice texture change',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-flood-naming',
+    title: 'Naming anchor',
+    body_cue: 'quietly label the feeling without story',
+    micro: 'say one word',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-flood-breath',
+    title: 'Containment breath',
+    body_cue: 'exhale as if drawing a soft circle around yourself',
+    micro: 'slow exhale through pursed lips',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+  {
+    id: 'sit-flood-weight',
+    title: 'Gentle weight',
+    body_cue: 'wrap in blanket or rest hand on chest or thighs',
+    micro: 'press palm to thigh',
+    type: 'grounding',
+    container: 'situational',
+    category: 'situational',
+  },
+
+  // --- Uplift and Expansion (Category: uplift) ---
+  // Energized / Inspired (Theme: channel charge into coherence.)
+  {
+    id: 'up-inspire-body',
+    title: 'Body anchor',
+    body_cue: 'notice where energy gathers; give it small movement',
+    micro: 'shake or tap once',
+    type: 'grounding',
+    container: 'uplift',
     category: 'uplift',
   },
   {
-    id: 'up-breath',
+    id: 'up-inspire-pacing',
     title: 'Breath pacing',
-    body_cue: 'keep exhale longer than inhale; match rhythm to heartbeat',
+    body_cue: 'longer exhale than inhale; sync with pulse',
     micro: 'one slow exhale',
     type: 'grounding',
-    container: 'morning',
+    container: 'uplift',
     category: 'uplift',
   },
   {
-    id: 'up-containment',
+    id: 'up-inspire-containment',
     title: 'Containment check',
-    body_cue: 'before sharing or acting, pause one breath: "Is this impulse ready or raw?"',
-    micro: 'one-count pause before move',
+    body_cue: 'one breath pause before acting or sharing',
+    micro: 'one-count pause',
     type: 'grounding',
-    container: 'morning',
+    container: 'uplift',
     category: 'uplift',
   },
   {
-    id: 'up-integration',
+    id: 'up-inspire-integration',
     title: 'Integration mark',
-    body_cue: 'jot or voice a quick note to capture the spark without chasing it',
-    micro: 'speak one sentence aloud',
+    body_cue: 'capture idea briefly without chasing it',
+    micro: 'say or jot one sentence',
     type: 'grounding',
-    container: 'morning',
+    container: 'uplift',
+    category: 'uplift',
+  },
+
+  // Clear / Focused (Theme: preserve clarity without tightening.)
+  {
+    id: 'up-clear-vision',
+    title: 'Vision softening',
+    body_cue: 'look away from screens, focus on something natural',
+    micro: 'glance at plant or window',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-clear-posture',
+    title: 'Posture reminder',
+    body_cue: 'lengthen spine, drop shoulders, exhale',
+    micro: 'small upward stretch',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-clear-sense',
+    title: 'Sense check',
+    body_cue: 'name one sound and one scent',
+    micro: 'identify one sound',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-clear-completion',
+    title: 'Completion cue',
+    body_cue: 'exhale, look around, then stand',
+    micro: 'one closing breath',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+
+  // Connected / Open (Theme: stay empathetic but differentiated.)
+  {
+    id: 'up-connect-boundary',
+    title: 'Boundary touch',
+    body_cue: 'hand on arm or chest while listening',
+    micro: 'self-touch once',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-connect-sync',
+    title: 'Breath sync',
+    body_cue: 'match another’s breath briefly, then return to yours',
+    micro: 'notice first solo breath',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-connect-eye',
+    title: 'Eye softening',
+    body_cue: 'blink slowly, widen peripheral view',
+    micro: 'one slow blink',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-connect-afterglow',
+    title: 'Afterglow check',
+    body_cue: 'ask, “what belongs to me, what belongs to them?”',
+    micro: 'whisper “mine / yours.”',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+
+  // Creative Flow (Theme: expression without burnout.)
+  {
+    id: 'up-flow-movement',
+    title: 'Movement pulse',
+    body_cue: 'sway, stretch, or tap rhythmically',
+    micro: 'one body sway',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-flow-ground',
+    title: 'Mini ground',
+    body_cue: 'feel feet or seat; remember body in creation',
+    micro: 'press feet once',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-flow-pause',
+    title: 'Pause-and-scan',
+    body_cue: 'ask, “am I still comfortable?”',
+    micro: 'roll neck',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-flow-closure',
+    title: 'Closure cue',
+    body_cue: 'close eyes, breathe, thank the work',
+    micro: 'hand to heart',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+
+  // Expansive / Transcendent (Theme: anchor awe so it integrates.)
+  {
+    id: 'up-trans-real',
+    title: 'Name the real',
+    body_cue: 'describe one ordinary thing nearby',
+    micro: 'say it quietly',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-trans-gesture',
+    title: 'Grounding gesture',
+    body_cue: 'thumb and middle finger pressed together; feel pulse',
+    micro: 'small squeeze',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-trans-weight',
+    title: 'Weight return',
+    body_cue: 'sense gravity; feel support points',
+    micro: 'shift weight slightly',
+    type: 'grounding',
+    container: 'uplift',
+    category: 'uplift',
+  },
+  {
+    id: 'up-trans-statement',
+    title: 'Integration statement',
+    body_cue: 'whisper, “This moment can live inside me.”',
+    micro: 'repeat silently',
+    type: 'grounding',
+    container: 'uplift',
     category: 'uplift',
   },
 ];
-
