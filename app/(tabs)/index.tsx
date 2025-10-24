@@ -19,6 +19,7 @@ import { CraftMomentModal } from '../modal';
 import { Modal } from '../components/Modal';
 import { Alert } from 'react-native';
 import { ContainerId } from '../constants/Types';
+import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
 
 // Conditional imports moved outside the component to fix "Rendered more hooks" error
 import { AllyCard } from '../components/AllyCard';
@@ -227,16 +228,8 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* Temporal Intelligence - Adaptive Suggestions Placeholder */}
-          <View style={[styles.placeholderCard, { backgroundColor: colors.card + 'B3', marginBottom: 20 }]}>
-            <Text style={[styles.placeholderIcon, { color: colors.accent }]}>🧭</Text>
-            <Text style={[styles.placeholderTitle, { color: colors.text }]}>
-              Temporal Intelligence: Adaptive Suggestions
-            </Text>
-            <Text style={[styles.placeholderText, { color: colors.dim }]}>
-              After a few days, the system will offer what it’s noticed, suggesting gentle cues like: "Late-night resets often slip by. Would a one-minute version help?"
-            </Text>
-          </View>
+	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
+	          <TemporalIntelligenceCard colors={colors} />
 
           {/* Resonant Grounding Field */}
           <Text style={[styles.sectionHeader, { color: colors.dim }]}>

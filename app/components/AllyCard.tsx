@@ -69,17 +69,17 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
           </Text>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>FUNCTION:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>ROLE:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.function}</Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>SHADOW:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>EDGE:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.shadow}</Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>RITUAL:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>CONTACT:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.ritual}</Text>
           </View>
 
@@ -97,7 +97,7 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 12,
+    borderRadius: 18,
     padding: 16,
     marginBottom: 12,
   },

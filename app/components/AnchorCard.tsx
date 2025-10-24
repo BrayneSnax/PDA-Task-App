@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 10, // Added wrapper for animation and margin
   },
   card: {
-    borderRadius: 12,
+    borderRadius: 18,
     overflow: 'hidden',
   },
   // Removed header style since the whole card is now the touchable area
