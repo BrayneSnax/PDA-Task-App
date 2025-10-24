@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { AppState, ContainerItem, Ally, Moment, Completion, ContainerId } from '../constants/Types';
+import { AppState, ContainerItem, Ally, Moment, Completion, ContainerId, Pattern } from '../constants/Types';
 import { JournalEntry } from '../constants/Types'; // Keep JournalEntry for backward compatibility if needed, but Moment is the new primary type
 import { DEFAULT_ALLIES, DEFAULT_GROUNDING_ITEMS } from '../constants/DefaultData';
 import { saveAppState, loadAppState } from '../utils/storage';
@@ -15,6 +15,8 @@ interface AppContextType extends AppState {
   removeAlly: (id: string) => void;
   logAllyUse: (allyName: string, details?: Partial<Moment>) => void;
   addMoment: (moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => void;
+  addPattern: (pattern: Omit<Pattern, 'id' | 'timestamp' | 'date'>) => void;
+  removePattern: (id: string) => void;
   setActiveContainer: (container: ContainerId) => void;
   loading: boolean;
 }
@@ -26,6 +28,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [allies, setAllies] = useState<Ally[]>(DEFAULT_ALLIES);
   const [journalEntries, setJournalEntries] = useState<Moment[]>([]);
   const [completions, setCompletions] = useState<Completion[]>([]);
+  const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [activeContainer, setActiveContainer] = useState<ContainerId>(getCurrentContainer());
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +45,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [items, allies, journalEntries, completions, loading]);
+  }, [items, allies, journalEntries, completions, patterns, loading]);
 
   const loadData = useCallback(async () => {
     const savedState = await loadAppState();
@@ -51,6 +54,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setAllies(savedState.allies.length > 0 ? savedState.allies : DEFAULT_ALLIES);
       setJournalEntries(savedState.journalEntries || []);
       setCompletions(savedState.completions || []);
+      setPatterns(savedState.patterns || []);
       setActiveContainer(savedState.activeContainer || getCurrentContainer());
     }
     setLoading(false);
@@ -62,9 +66,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       allies,
       journalEntries,
       completions,
+      patterns,
       activeContainer,
     });
-  }, [items, allies, journalEntries, completions, activeContainer]);
+  }, [items, allies, journalEntries, completions, patterns, activeContainer]);
 
   const addItem = useCallback((item: Omit<ContainerItem, 'id'>) => {
     const newItem: ContainerItem = {
@@ -165,11 +170,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [activeContainer, allies, addMoment]);
 
 
+  const addPattern = useCallback((pattern: Omit<Pattern, 'id' | 'timestamp' | 'date'>) => {
+    const now = new Date();
+    const newPattern: Pattern = {
+      ...pattern,
+      id: generateId(),
+      date: now.toISOString(),
+      timestamp: now.getTime(),
+    };
+    setPatterns(prev => [newPattern, ...prev]);
+  }, []);
+
+  const removePattern = useCallback((id: string) => {
+    setPatterns(prev => prev.filter(p => p.id !== id));
+  }, []);
+
   const value: AppContextType = {
     items,
     allies,
     journalEntries,
     completions,
+    patterns,
     activeContainer,
     addItem,
     removeItem,
@@ -180,6 +201,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     removeAlly,
     logAllyUse,
     addMoment,
+    addPattern,
+    removePattern,
     setActiveContainer,
     loading,
   };

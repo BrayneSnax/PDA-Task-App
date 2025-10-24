@@ -68,7 +68,7 @@ export default function HomeScreen() {
   const situationalAnchors = items.filter(item => item.category === 'situational');
   const upliftAnchors = items.filter(item => item.category === 'uplift');
 
-  // Render 2x2 Action Grid at top
+  // Render compact action buttons at top
   const renderActionGrid = () => (
     <View style={styles.actionGrid}>
       <TouchableOpacity
@@ -76,7 +76,7 @@ export default function HomeScreen() {
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍃</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Chemical{'\n'}Relationships</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Chemical Relationships</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -84,7 +84,7 @@ export default function HomeScreen() {
         onPress={() => setCurrentScreen('journal')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>📖</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Alchemical{'\n'}Journal</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Alchemical Journal</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -100,7 +100,7 @@ export default function HomeScreen() {
         onPress={() => setIsCraftMomentModalVisible(true)}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>✨</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Craft a{'\n'}Moment</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Craft a Moment</Text>
       </TouchableOpacity>
     </View>
   );
@@ -433,6 +433,10 @@ export default function HomeScreen() {
 
   // PATTERNS SCREEN
   if (currentScreen === 'patterns') {
+    const { patterns, removePattern } = useApp();
+    const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
+    const { AddPatternModal } = require('../modal/AddPatternModal');
+
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
@@ -454,16 +458,56 @@ export default function HomeScreen() {
             witnessing the rhythms
           </Text>
 
-          <View style={[styles.placeholderCard, { backgroundColor: colors.card }]}>
+          <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
+            YOUR PATTERNS
+          </Text>
+
+          {patterns.length === 0 ? (
+            <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+              <Text style={[styles.emptyText, { color: colors.dim }]}>
+                No patterns recorded yet. Tap below to add your first observation.
+              </Text>
+            </View>
+          ) : (
+            patterns.map((pattern) => (
+              <View key={pattern.id} style={[styles.patternCard, { backgroundColor: colors.card }]}>
+                <View style={styles.patternHeader}>
+                  <View style={styles.patternHeaderLeft}>
+                    {pattern.category && (
+                      <Text style={[styles.patternCategory, { color: colors.accent }]}>
+                        {pattern.category === 'anchor' && '⚓'}
+                        {pattern.category === 'substance' && '🍃'}
+                        {pattern.category === 'time' && '⏰'}
+                        {pattern.category === 'general' && '🌌'}
+                      </Text>
+                    )}
+                    <Text style={[styles.patternDate, { color: colors.dim }]}>
+                      {new Date(pattern.date).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  <TouchableOpacity onPress={() => removePattern(pattern.id)}>
+                    <Text style={[styles.deleteButton, { color: colors.dim }]}>×</Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={[styles.patternText, { color: colors.text }]}>{pattern.text}</Text>
+              </View>
+            ))
+          )}
+
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: colors.accent }]}
+            onPress={() => setIsAddPatternModalVisible(true)}
+          >
+            <Text style={[styles.addButtonText, { color: colors.card }]}>+ Record a Pattern</Text>
+          </TouchableOpacity>
+
+          <View style={[styles.placeholderCard, { backgroundColor: colors.card, marginTop: 32 }]}>
             <Text style={[styles.placeholderIcon, { color: colors.accent }]}>🌌</Text>
             <Text style={[styles.placeholderTitle, { color: colors.text }]}>
-              Pattern Weaver Module
+              AI Pattern Weaver
             </Text>
             <Text style={[styles.placeholderText, { color: colors.dim }]}>
-              This space will reveal the hidden rhythms in your practice — tracking how anchors, allies, and moments weave together across time.
-            </Text>
-            <Text style={[styles.placeholderText, { color: colors.dim, marginTop: 12 }]}>
-              Your transmissions are being collected, waiting for the pattern-weaver to arrive.
+              Soon, this space will automatically reveal hidden rhythms — tracking how anchors, allies, and moments weave together across time.
             </Text>
           </View>
 
@@ -472,6 +516,17 @@ export default function HomeScreen() {
 
         {/* Time Container Navigation at Bottom */}
         {renderTimeContainerNav()}
+
+        {/* Modal */}
+        <AddPatternModal
+          isVisible={isAddPatternModalVisible}
+          onClose={() => setIsAddPatternModalVisible(false)}
+          onSave={(text, category) => {
+            const { addPattern } = useApp();
+            addPattern({ text, category });
+          }}
+          colors={colors}
+        />
       </View>
     );
   }
@@ -493,28 +548,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   actionGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 16,
+    flexDirection: 'column',
+    gap: 8,
+    marginBottom: 12,
   },
   actionButton: {
-    width: '48%',
-    aspectRatio: 1.5,
-    borderRadius: 16,
-    padding: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    gap: 10,
   },
   actionIcon: {
-    fontSize: 32,
-    marginBottom: 8,
+    fontSize: 18,
   },
   actionText: {
     fontSize: 13,
     fontWeight: '600',
-    textAlign: 'center',
-    lineHeight: 16,
   },
   scrollView: {
     flex: 1,
@@ -661,6 +712,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     textAlign: 'center',
+  },
+  patternCard: {
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  patternHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  patternHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  patternCategory: {
+    fontSize: 16,
+  },
+  patternDate: {
+    fontSize: 12,
+  },
+  deleteButton: {
+    fontSize: 24,
+    fontWeight: '300',
+    padding: 4,
+  },
+  patternText: {
+    fontSize: 15,
+    lineHeight: 22,
   },
 });
 

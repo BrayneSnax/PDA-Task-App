@@ -62,10 +62,19 @@ export interface Completion {
   timestamp: number;
 }
 
+export interface Pattern {
+  id: string;
+  date: string; // YYYY-MM-DDTHH:mm:ss.sssZ
+  timestamp: number;
+  text: string; // The pattern observation
+  category?: string; // Optional: 'anchor', 'substance', 'time', 'general'
+}
+
 export interface AppState {
   items: ContainerItem[];
   allies: Ally[];
   journalEntries: Moment[];
   completions: Completion[];
+  patterns: Pattern[];
   activeContainer: ContainerId;
 }
