@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "PDA Task App",
+    "slug": "pda-task-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f0f23"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.michaelmistree.pdataskapp",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#0f0f23"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.michaelmistree.pdataskapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3e85196f-f0b0-4564-af6c-6c37e2ff95be"
+      }
+    }
+  }
+}
