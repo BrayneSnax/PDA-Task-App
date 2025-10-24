@@ -1067,7 +1067,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
   },
-  fo  date: {
+  date: {
     fontSize: 14,
     fontWeight: '400',
   },
