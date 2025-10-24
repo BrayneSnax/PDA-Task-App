@@ -15,7 +15,8 @@ import { ContainerThemes } from '../constants/Colors';
 import { AnchorCard } from '../components/AnchorCard';
 import { TaskDetailScreen } from '../components/TaskDetailScreen';
 import { CollapsibleSection } from '../components/CollapsibleSection';
-import { CraftMomentModal, Modal } from '../modal';
+import { CraftMomentModal } from '../modal';
+import { Modal } from '../components/Modal';
 import { ContainerId } from '../constants/Types';
 
 type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
