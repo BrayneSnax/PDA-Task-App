@@ -537,7 +537,7 @@ export default function HomeScreen() {
                     <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
                   </View>
                 )}
-              </TouchableOpacity>
+              </View>
             ))
           )}
 
@@ -732,7 +732,7 @@ export default function HomeScreen() {
                 {entry.notes && (
                   <Text style={[styles.foodNotes, { color: colors.dim }]}>{entry.notes}</Text>
                 )}
-              </TouchableOpacity>
+              </View>
             ))
           )}
 
