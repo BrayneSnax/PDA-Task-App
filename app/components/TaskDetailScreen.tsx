@@ -93,37 +93,37 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20, // Add top padding for aesthetic
-  },
+	  container: {
+	    flex: 1,
+	    paddingHorizontal: 16, // Reduced padding
+	    paddingTop: 16, // Reduced top padding
+	  },
   backButton: {
-    paddingVertical: 10,
-    marginBottom: 20,
-  },
+	    paddingVertical: 8,
+	    marginBottom: 16, // Reduced margin
+	  },
   backText: {
     fontSize: 16,
     fontWeight: '500',
   },
   title: {
-    fontSize: 32,
-    fontWeight: '700',
-    marginBottom: 30,
-  },
+	    fontSize: 28, // Reduced font size
+	    fontWeight: '700',
+	    marginBottom: 20, // Reduced margin
+	  },
   scrollContent: {
     paddingBottom: 40, // Space for the bottom nav/tab bar
   },
   softBlock: {
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    borderWidth: 1, // Subtle border for definition
-  },
+	    padding: 12, // Reduced padding
+	    marginBottom: 12, // Reduced margin
+	    borderWidth: 1,
+	  },
   softText: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
+	    fontSize: 16, // Reduced font size
+	    fontWeight: '600',
+	  },
   microLabel: {
     fontSize: 14,
     fontWeight: '500',
@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
 	  didItButton: {
 	    // Overrides for the 'did it' button to make it full width and primary
 	    width: '100%',
-	    paddingVertical: 20,
-	    marginBottom: 15,
+	    paddingVertical: 16, // Reduced padding
+	    marginBottom: 12, // Reduced margin
 	  },
 	  didItText: {
 	    fontSize: 20,
@@ -147,22 +147,22 @@ const styles = StyleSheet.create({
 	  actionButton: {
 	    width: '48%',
 	    borderRadius: 12,
-	    paddingVertical: 15,
+	    paddingVertical: 12, // Reduced padding
 	    alignItems: 'center',
 	    justifyContent: 'center',
-	    marginBottom: 15,
+	    marginBottom: 12, // Reduced margin
 	  },
   actionText: {
     fontSize: 16,
     fontWeight: '500',
   },
   noteInput: {
-    minHeight: 60,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    borderWidth: 1,
-    fontSize: 16,
-    lineHeight: 22,
-  },
+	    minHeight: 40, // Reduced min height
+	    borderRadius: 12,
+	    padding: 12, // Reduced padding
+	    marginBottom: 16, // Reduced margin
+	    borderWidth: 1,
+	    fontSize: 15, // Reduced font size
+	    lineHeight: 20,
+	  },
 });
