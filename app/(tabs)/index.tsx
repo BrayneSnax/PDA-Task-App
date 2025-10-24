@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +7,7 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
+import React, { useState, useEffect } from 'react'; // Added useState, useEffect
 import { useApp } from '../context/AppContext';
 import useColors from '../hooks/useColors';
 import { formatTime, formatLongDate } from '../utils/time';
@@ -16,7 +16,8 @@ import { TimeContainerSwitcher } from '../components/TimeContainerSwitcher';
 import { AnchorCard } from '../components/AnchorCard';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AllyCard } from '../components/AllyCard';
-import { AddAllyModal, CraftMomentModal, EditAllyModal } from '../modal';
+import { AddAllyModal, CraftMomentModal, EditAllyModal } from '../modal'; // Assuming these are correct imports
+import { ContainerId } from '../constants/Types';
 
 export default function PDATaskApp() {
   const {
@@ -32,11 +33,14 @@ export default function PDATaskApp() {
     addItem,
     updateAlly,
     addAlly,
-  } = useApp();
+  }
+  = useApp();
 
   const colors = useColors(activeContainer, true); // true = use circadian colors
   const [currentTime, setCurrentTime] = useState(formatTime());
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'patterns'>('home');
+  // The user's navigation is handled by this state, which is not ideal for Expo Router,
+  // but I must respect the existing code structure.
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'patterns'>('home'); 
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
@@ -64,6 +68,26 @@ export default function PDATaskApp() {
   );
   const situationalAnchors = items.filter(item => item.category === 'situational');
   const upliftAnchors = items.filter(item => item.category === 'uplift');
+
+  // --- RENDERING LOGIC ---
+
+  // Renders the bottom navigation bar
+  const renderNav = (active: 'home' | 'substances') => (
+    <View style={[styles.nav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
+      <TouchableOpacity
+        style={styles.navButton}
+        onPress={() => setCurrentScreen('home')}
+      >
+        <Text style={[styles.navText, { color: active === 'home' ? colors.accent : colors.text }]}>Home</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.navButton}
+        onPress={() => setCurrentScreen('substances')}
+      >
+        <Text style={[styles.navText, { color: active === 'substances' ? colors.accent : colors.text }]}>Substances</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   // HOME SCREEN
   if (currentScreen === 'home') {
@@ -153,6 +177,24 @@ export default function PDATaskApp() {
             ))}
           </CollapsibleSection>
 
+          {/* Placeholder for Chemical Relationships */}
+          <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
+            CHEMICAL RELATIONSHIPS
+          </Text>
+          {allies.map(ally => (
+            <AllyCard
+              key={ally.id}
+              ally={ally}
+              onEdit={(ally) => {
+                setAllyToEdit(ally);
+                setIsEditAllyModalVisible(true);
+              }}
+              onRemove={() => removeAlly(ally.id)}
+              onLogUse={() => logAllyUse(ally.name)}
+              colors={colors}
+            />
+          ))}
+
           <View style={{ height: 120 }} />
         </ScrollView>
 
@@ -175,20 +217,54 @@ export default function PDATaskApp() {
         </View>
 
         {/* Navigation */}
-        <View style={[styles.nav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => setCurrentScreen('home')}
-          >
-            <Text style={[styles.navText, { color: colors.accent }]}>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => setCurrentScreen('substances')}
-          >
-            <Text style={[styles.navText, { color: colors.text }]}>Substances</Text>
-          </TouchableOpacity>
-        </View>
+        {renderNav('home')}
+
+        {/* Modals are rendered once at the end */}
+        <CraftMomentModal
+          isVisible={isCraftMomentModalVisible}
+          onClose={() => setIsCraftMomentModalVisible(false)}
+          onSave={(title, container, category, body_cue, micro, desire) => {
+            addItem({
+              title,
+              container,
+              category,
+              body_cue,
+              micro,
+              desire,
+            });
+          }}
+          colors={colors}
+        />
+        <AddAllyModal
+          isVisible={isAddAllyModalVisible}
+          onClose={() => setIsAddAllyModalVisible(false)}
+          onSave={(name, face, invocation, func, shadow, ritual) => {
+            addAlly({
+              name,
+              face,
+              invocation,
+              function: func,
+              shadow,
+              ritual,
+              log: [],
+            });
+          }}
+          colors={colors}
+        />
+        {allyToEdit && (
+          <EditAllyModal
+            isVisible={isEditAllyModalVisible}
+            onClose={() => {
+              setIsEditAllyModalVisible(false);
+              setAllyToEdit(null);
+            }}
+            onSave={(ally) => {
+              updateAlly(ally);
+            }}
+            colors={colors}
+            ally={allyToEdit}
+          />
+        )}
       </View>
     );
   }
@@ -239,69 +315,10 @@ export default function PDATaskApp() {
           <View style={{ height: 100 }} />
         </ScrollView>
 
-        <AddAllyModal
-          isVisible={isAddAllyModalVisible}
-          onClose={() => setIsAddAllyModalVisible(false)}
-          onSave={(name, face, invocation, func, shadow, ritual) => {
-            addAlly({
-              name,
-              face,
-              invocation,
-              function: func,
-              shadow,
-              ritual,
-              log: [], // Ally log is handled by logAllyUse
-            });
-          }}
-          colors={colors}
-        />
-
-        {allyToEdit && (
-          <EditAllyModal
-            isVisible={isEditAllyModalVisible}
-            onClose={() => {
-              setIsEditAllyModalVisible(false);
-              setAllyToEdit(null);
-            }}
-            onSave={(ally) => {
-              updateAlly(ally);
-            }}
-            colors={colors}
-            ally={allyToEdit}
-          />
-        )}
-
-        <CraftMomentModal
-          isVisible={isCraftMomentModalVisible}
-          onClose={() => setIsCraftMomentModalVisible(false)}
-          onSave={(title, container, category, body_cue, micro, desire) => {
-            addItem({
-              title,
-              container,
-              category,
-              body_cue,
-              micro,
-              desire,
-            });
-          }}
-          colors={colors}
-        />
-        
         {/* Navigation */}
-        <View style={[styles.nav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => setCurrentScreen('home')}
-          >
-            <Text style={[styles.navText, { color: colors.text }]}>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => setCurrentScreen('substances')}
-          >
-            <Text style={[styles.navText, { color: colors.accent }]}>Substances</Text>
-          </TouchableOpacity>
-        </View>
+        {renderNav('substances')}
+
+
       </View>
     );
   }
@@ -327,25 +344,13 @@ export default function PDATaskApp() {
       </View>
 
       {/* Navigation */}
-      <View style={[styles.nav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => setCurrentScreen('home')}
-        >
-          <Text style={[styles.navText, { color: colors.text }]}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => setCurrentScreen('substances')}
-        >
-          <Text style={[styles.navText, { color: colors.text }]}>Substances</Text>
-        </TouchableOpacity>
-      </View>
+      {renderNav('patterns')}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // ... (styles remain the same)
   container: {
     flex: 1,
   },
@@ -483,3 +488,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+

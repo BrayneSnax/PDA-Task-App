@@ -143,12 +143,12 @@ interface EditAllyModalProps {
 }
 
 export const EditAllyModal: React.FC<EditAllyModalProps> = ({ isVisible, onClose, onSave, colors, ally }) => {
-  const [name, setName] = useState(ally.name);
-  const [face, setFace] = useState(ally.face);
-  const [invocation, setInvocation] = useState(ally.invocation);
-  const [func, setFunc] = useState(ally.function);
-  const [shadow, setShadow] = useState(ally.shadow);
-  const [ritual, setRitual] = useState(ally.ritual);
+  const [name, setName] = useState(ally?.name || '');
+  const [face, setFace] = useState(ally?.face || '');
+  const [invocation, setInvocation] = useState(ally?.invocation || '');
+  const [func, setFunc] = useState(ally?.function || '');
+  const [shadow, setShadow] = useState(ally?.shadow || '');
+  const [ritual, setRitual] = useState(ally?.ritual || '');
 
   useEffect(() => {
     if (ally) {
@@ -158,6 +158,14 @@ export const EditAllyModal: React.FC<EditAllyModalProps> = ({ isVisible, onClose
       setFunc(ally.function);
       setShadow(ally.shadow);
       setRitual(ally.ritual);
+    } else {
+      // Reset state if ally is null/undefined
+      setName('');
+      setFace('');
+      setInvocation('');
+      setFunc('');
+      setShadow('');
+      setRitual('');
     }
   }, [ally]);
 
@@ -175,6 +183,8 @@ export const EditAllyModal: React.FC<EditAllyModalProps> = ({ isVisible, onClose
       onClose();
     }
   };
+
+  if (!ally) return null; // Prevent rendering if ally is not set
 
   return (
     <Modal

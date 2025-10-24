@@ -27,7 +27,7 @@ export interface Ally {
   function: string;
   shadow: string;
   ritual: string;
-  log: number[]; // Array of timestamps
+  log: JournalEntry[];
 }
 
 export interface JournalEntry {

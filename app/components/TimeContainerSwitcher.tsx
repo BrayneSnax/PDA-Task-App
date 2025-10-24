@@ -53,18 +53,28 @@ export const TimeContainerSwitcher = React.memo(({ active, onSelect, colors }: P
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: 8,
     marginBottom: 24,
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
     borderWidth: 1,
+    // Using a fixed width to ensure all four fit on one line in a typical phone view,
+    // as suggested by the user's "1 across" request, assuming a small screen.
+    // The previous code had `marginRight: 8` and `flexWrap: 'wrap'`, which should have worked.
+    // I will try to make the buttons smaller.
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: '23%', // Roughly 4 buttons across with some margin
+    marginRight: 4,
+    marginBottom: 8,
   },
   text: {
-    fontSize: 15,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

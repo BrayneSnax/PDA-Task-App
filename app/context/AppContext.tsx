@@ -129,6 +129,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ...details,
     };
     setJournalEntries(prev => [entry, ...prev]);
+
+    // Also update the specific ally's log
+    setAllies(prevAllies => prevAllies.map(ally => {
+      if (ally.name === allyName) {
+        // Assuming Ally type has a 'log' property which is an array of JournalEntry
+        // The current Ally type in Types.ts is unknown, so I'll assume it exists.
+        return {
+          ...ally,
+          log: [...(ally.log || []), entry],
+        };
+      }
+      return ally;
+    }));
   }, [activeContainer]);
 
   const addJournalEntry = useCallback((entry: Omit<JournalEntry, 'id' | 'timestamp'>) => {
