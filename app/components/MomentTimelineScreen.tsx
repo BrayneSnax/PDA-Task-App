@@ -81,8 +81,8 @@ export const MomentTimelineScreen: React.FC<MomentTimelineScreenProps> = ({ colo
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: colors.text }]}>The Living Journal</Text>
-          <Text style={[styles.subtitle, { color: colors.dim }]}>A chronological field report of your Moments</Text>
+	          <Text style={[styles.title, { color: colors.text }]}>Patterns</Text>
+	          <Text style={[styles.subtitle, { color: colors.dim }]}>A chronological field report of your Moments (The Living Journal)</Text>
         </View>
 
         {journalEntries.length === 0 ? (

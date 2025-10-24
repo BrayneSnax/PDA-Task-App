@@ -20,8 +20,8 @@ export const CircadianPalette = {
   evening: {
     bg: "#B87333", // Corrected from invalid #PF543E
     accent: "#8c4b3f", // Deeper Rust
-    text: "#4a3f35", // Dark Walnut Brown
-    dim: "#a67b5b", // Copper
+    text: "#f0e5d8", // Light Cream for readability
+    dim: "#d4af37", // Use Muted Amber for dim text
     signal: "#d4af37", // Muted Amber
     card: "#FFFFFF",
   },

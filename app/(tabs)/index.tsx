@@ -42,7 +42,7 @@ export default function PDATaskApp() {
   const [currentTime, setCurrentTime] = useState(formatTime());
   // The user's navigation is handled by this state, which is not ideal for Expo Router,
   // but I must respect the existing code structure.
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'journal'>('home'); 
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'patterns'>('home'); 
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
   const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false); // New State
@@ -92,9 +92,9 @@ export default function PDATaskApp() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => setCurrentScreen('journal')}
+        onPress={() => setCurrentScreen('patterns')}
       >
-        <Text style={[styles.navText, { color: active === 'journal' ? colors.accent : colors.text }]}>Journal</Text>
+        <Text style={[styles.navText, { color: active === 'patterns' ? colors.accent : colors.text }]}>Patterns</Text>
       </TouchableOpacity>
     </View>
   );
@@ -111,11 +111,13 @@ export default function PDATaskApp() {
           showsVerticalScrollIndicator={false}
         >
           {/* Time Container Switcher */}
-          <TimeContainerSwitcher
+	          <View style={{ paddingTop: 16, marginBottom: 16 }}>
+	            <TimeContainerSwitcher
             active={activeContainer}
             onSelect={setActiveContainer}
             colors={colors}
-          />
+	          />
+	          </View>
 
           {/* Time and Date Display */}
           <View style={styles.timeSection}>
@@ -223,14 +225,14 @@ export default function PDATaskApp() {
             onPress={() => setIsCraftMomentModalVisible(true)}
           >
             <Text style={[styles.craftButtonText, { color: colors.card }]}>
-              + craft a moment
+              + Craft a Moment
             </Text>
 	          </TouchableOpacity>
 	          <TouchableOpacity
 	            style={[styles.notesButton, { backgroundColor: colors.card, borderColor: colors.dim }]}
-	            onPress={() => setCurrentScreen('journal')}
+	            onPress={() => setCurrentScreen('patterns')}
 	          >
-	            <Text style={[styles.notesButtonText, { color: colors.text }]}>Field Notes</Text>
+	            <Text style={[styles.notesButtonText, { color: colors.text }]}>Patterns</Text>
 	          </TouchableOpacity>
         </View>
 
@@ -360,8 +362,8 @@ export default function PDATaskApp() {
     );
   }
 
-	  // JOURNAL SCREEN
-	  if (currentScreen === 'journal') {
+	  // PATTERNS SCREEN
+	  if (currentScreen === 'patterns') {
 	    return (
 	      <MomentTimelineScreen
 	        colors={colors}
