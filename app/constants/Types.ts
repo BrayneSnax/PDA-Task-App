@@ -70,11 +70,24 @@ export interface Pattern {
   category?: string; // Optional: 'anchor', 'substance', 'time', 'general'
 }
 
+export interface FoodEntry {
+  id: string;
+  date: string; // YYYY-MM-DDTHH:mm:ss.sssZ
+  timestamp: number;
+  name: string; // What was eaten
+  portion?: string; // Optional: serving size
+  notes?: string; // Optional: how it felt, context
+  mood_before?: string; // Optional: emotional state before
+  mood_after?: string; // Optional: emotional state after
+  energy_level?: string; // Optional: 'low', 'medium', 'high'
+}
+
 export interface AppState {
   items: ContainerItem[];
   allies: Ally[];
   journalEntries: Moment[];
   completions: Completion[];
   patterns: Pattern[];
+  foodEntries: FoodEntry[];
   activeContainer: ContainerId;
 }

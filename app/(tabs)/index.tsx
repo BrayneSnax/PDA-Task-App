@@ -17,7 +17,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection';
 import { CraftMomentModal } from '../modal';
 import { ContainerId } from '../constants/Types';
 
-type Screen = 'home' | 'substances' | 'journal' | 'patterns';
+type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
 
 export default function HomeScreen() {
   const {
@@ -68,7 +68,7 @@ export default function HomeScreen() {
   const situationalAnchors = items.filter(item => item.category === 'situational');
   const upliftAnchors = items.filter(item => item.category === 'uplift');
 
-  // Render compact action buttons at top
+  // Render 1x4 horizontal action buttons at top
   const renderActionGrid = () => (
     <View style={styles.actionGrid}>
       <TouchableOpacity
@@ -76,7 +76,7 @@ export default function HomeScreen() {
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍃</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Chemical Relationships</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Chemical</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -84,7 +84,7 @@ export default function HomeScreen() {
         onPress={() => setCurrentScreen('journal')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>📖</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Alchemical Journal</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Journal</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -97,42 +97,54 @@ export default function HomeScreen() {
 
       <TouchableOpacity
         style={[styles.actionButton, { backgroundColor: colors.card }]}
-        onPress={() => setIsCraftMomentModalVisible(true)}
+        onPress={() => setCurrentScreen('nourish')}
       >
-        <Text style={[styles.actionIcon, { color: colors.accent }]}>✨</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Craft a Moment</Text>
+        <Text style={[styles.actionIcon, { color: colors.accent }]}>🍽️</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Nourish</Text>
       </TouchableOpacity>
     </View>
   );
 
-  // Render Time Container Navigation at bottom
+  // Render Time Container Navigation at bottom with Craft a Moment button
   const renderTimeContainerNav = () => {
     const containers: ContainerId[] = ['morning', 'afternoon', 'evening', 'late'];
     const icons = { morning: '🌅', afternoon: '🌞', evening: '🌇', late: '🌙' };
     
     return (
-      <View style={[styles.timeContainerNav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
-        {containers.map(container => (
-          <TouchableOpacity
-            key={container}
-            style={[
-              styles.timeButton,
-              activeContainer === container && { backgroundColor: colors.accent + '20' }
-            ]}
-            onPress={() => {
-              setActiveContainer(container);
-              setCurrentScreen('home');
-            }}
-          >
-            <Text style={[styles.timeIcon, { color: colors.accent }]}>{icons[container]}</Text>
-            <Text style={[
-              styles.timeText,
-              { color: activeContainer === container ? colors.accent : colors.dim }
-            ]}>
-              {container.charAt(0).toUpperCase() + container.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <View>
+        {/* Craft a Moment Button */}
+        <TouchableOpacity
+          style={[styles.craftMomentButton, { backgroundColor: colors.accent }]}
+          onPress={() => setIsCraftMomentModalVisible(true)}
+        >
+          <Text style={[styles.craftMomentIcon, { color: colors.card }]}>✨</Text>
+          <Text style={[styles.craftMomentText, { color: colors.card }]}>Craft a Moment</Text>
+        </TouchableOpacity>
+
+        {/* Time Container Navigation */}
+        <View style={[styles.timeContainerNav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
+          {containers.map(container => (
+            <TouchableOpacity
+              key={container}
+              style={[
+                styles.timeButton,
+                activeContainer === container && { backgroundColor: colors.accent + '20' }
+              ]}
+              onPress={() => {
+                setActiveContainer(container);
+                setCurrentScreen('home');
+              }}
+            >
+              <Text style={[styles.timeIcon, { color: colors.accent }]}>{icons[container]}</Text>
+              <Text style={[
+                styles.timeText,
+                { color: activeContainer === container ? colors.accent : colors.dim }
+              ]}>
+                {container.charAt(0).toUpperCase() + container.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     );
   };
@@ -531,6 +543,120 @@ export default function HomeScreen() {
     );
   }
 
+  // NOURISH MAP SCREEN
+  if (currentScreen === 'nourish') {
+    const { foodEntries, removeFoodEntry, addFoodEntry } = useApp();
+    const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
+    const { AddFoodModal } = require('../modal/AddFoodModal');
+
+    return (
+      <View style={[styles.container, { backgroundColor: colors.bg }]}>
+        <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
+        
+        {/* 1x4 Action Grid at Top */}
+        <View style={styles.topSection}>
+          {renderActionGrid()}
+        </View>
+
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={[styles.containerTitle, { color: colors.text }]}>
+            Nourish Map
+          </Text>
+          <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
+            tracking fuel & feeling
+          </Text>
+
+          <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
+            RECENT MEALS
+          </Text>
+
+          {foodEntries.length === 0 ? (
+            <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+              <Text style={[styles.emptyText, { color: colors.dim }]}>
+                No meals logged yet. Tap below to record your first nourishment.
+              </Text>
+            </View>
+          ) : (
+            foodEntries.map((entry) => (
+              <View key={entry.id} style={[styles.foodCard, { backgroundColor: colors.card }]}>
+                <View style={styles.foodHeader}>
+                  <View style={styles.foodHeaderLeft}>
+                    <Text style={[styles.foodName, { color: colors.text }]}>{entry.name}</Text>
+                    {entry.portion && (
+                      <Text style={[styles.foodPortion, { color: colors.dim }]}> • {entry.portion}</Text>
+                    )}
+                  </View>
+                  <TouchableOpacity onPress={() => removeFoodEntry(entry.id)}>
+                    <Text style={[styles.deleteButton, { color: colors.dim }]}>×</Text>
+                  </TouchableOpacity>
+                </View>
+                
+                <Text style={[styles.foodDate, { color: colors.dim }]}>
+                  {new Date(entry.date).toLocaleString()}
+                </Text>
+
+                {entry.energy_level && (
+                  <View style={styles.foodDetail}>
+                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>Energy:</Text>
+                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>
+                      {entry.energy_level === 'low' && '🔋 Low'}
+                      {entry.energy_level === 'medium' && '⚡ Medium'}
+                      {entry.energy_level === 'high' && '✨ High'}
+                    </Text>
+                  </View>
+                )}
+
+                {entry.mood_before && (
+                  <View style={styles.foodDetail}>
+                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>Before:</Text>
+                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>{entry.mood_before}</Text>
+                  </View>
+                )}
+
+                {entry.mood_after && (
+                  <View style={styles.foodDetail}>
+                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>After:</Text>
+                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>{entry.mood_after}</Text>
+                  </View>
+                )}
+
+                {entry.notes && (
+                  <Text style={[styles.foodNotes, { color: colors.dim }]}>{entry.notes}</Text>
+                )}
+              </View>
+            ))
+          )}
+
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: colors.accent }]}
+            onPress={() => setIsAddFoodModalVisible(true)}
+          >
+            <Text style={[styles.addButtonText, { color: colors.card }]}>+ Log Nourishment</Text>
+          </TouchableOpacity>
+
+          <View style={{ height: 80 }} />
+        </ScrollView>
+
+        {/* Time Container Navigation at Bottom */}
+        {renderTimeContainerNav()}
+
+        {/* Modal */}
+        <AddFoodModal
+          isVisible={isAddFoodModalVisible}
+          onClose={() => setIsAddFoodModalVisible(false)}
+          onSave={(entry) => {
+            addFoodEntry(entry);
+          }}
+          colors={colors}
+        />
+      </View>
+    );
+  }
+
   return null;
 }
 
@@ -548,24 +674,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   actionGrid: {
-    flexDirection: 'column',
-    gap: 8,
+    flexDirection: 'row',
+    gap: 6,
     marginBottom: 12,
   },
   actionButton: {
-    flexDirection: 'row',
+    flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    gap: 10,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    gap: 4,
   },
   actionIcon: {
-    fontSize: 18,
+    fontSize: 20,
   },
   actionText: {
-    fontSize: 13,
+    fontSize: 10,
     fontWeight: '600',
+    textAlign: 'center',
   },
   scrollView: {
     flex: 1,
@@ -743,6 +871,69 @@ const styles = StyleSheet.create({
   patternText: {
     fontSize: 15,
     lineHeight: 22,
+  },
+  craftMomentButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    marginBottom: 8,
+    borderRadius: 12,
+    gap: 8,
+  },
+  craftMomentIcon: {
+    fontSize: 18,
+  },
+  craftMomentText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  foodCard: {
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  foodHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  foodHeaderLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  foodName: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  foodPortion: {
+    fontSize: 14,
+  },
+  foodDate: {
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  foodDetail: {
+    flexDirection: 'row',
+    marginTop: 6,
+    gap: 6,
+  },
+  foodDetailLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  foodDetailValue: {
+    fontSize: 13,
+  },
+  foodNotes: {
+    fontSize: 13,
+    marginTop: 10,
+    fontStyle: 'italic',
   },
 });
 
