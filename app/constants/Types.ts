@@ -90,4 +90,5 @@ export interface AppState {
   patterns: Pattern[];
   foodEntries: FoodEntry[];
   activeContainer: ContainerId;
+  ambientRhythmEnabled: boolean; // New state for Ambient Rhythm toggle
 }

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ContainerItem, ColorScheme } from '../constants/Types';
+import { getRandomNarrativePhrase, showMicroNote, triggerSoftPulseAnimation } from '../utils/feedback';
 
 interface Props {
   item: ContainerItem;
@@ -12,6 +14,32 @@ interface Props {
 }
 
 export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress, onDelete }: Props) => {
+  const opacity = useSharedValue(1);
+
+  const handleToggle = useCallback(() => {
+    onToggle();
+    if (!completed) {
+      // Logic for completion: Somatic Layer & Narrative Layer
+      const phrase = getRandomNarrativePhrase();
+      showMicroNote(phrase);
+      triggerSoftPulseAnimation(item.id);
+
+      // Simple animation for the card itself (soft pulse effect)
+      opacity.value = withTiming(0.95, { duration: 100 }, () => {
+        opacity.value = withTiming(1, { duration: 300 });
+      });
+    }
+  }, [completed, onToggle, item.id, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      transform: [{ scale: opacity.value === 1 ? 1 : 0.98 }],
+    };
+  });
+
+  return (
+    <Animated.View style={[animatedStyle, styles.animatedWrapper]}>
   return (
     <TouchableOpacity
       style={[styles.card, { backgroundColor: colors.card }]}
@@ -21,7 +49,7 @@ export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPre
     >
       <View style={styles.row}>
         <TouchableOpacity
-          onPress={onToggle}
+          onPress={handleToggle}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text style={[styles.bullet, { color: completed ? colors.accent : colors.dim }]}>
@@ -35,13 +63,16 @@ export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPre
         </Text>
       </View>
     </TouchableOpacity>
+    </Animated.View>
   );
 });
 
 const styles = StyleSheet.create({
+  animatedWrapper: {
+    marginBottom: 10, // Added wrapper for animation and margin
+  },
   card: {
     borderRadius: 12,
-    marginBottom: 10,
     overflow: 'hidden',
   },
   // Removed header style since the whole card is now the touchable area

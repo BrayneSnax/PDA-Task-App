@@ -35,6 +35,8 @@ type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
 export default function HomeScreen() {
   const {
     items,
+    ambientRhythmEnabled,
+    toggleAmbientRhythm,
     allies,
     activeContainer,
     setActiveContainer,
@@ -182,6 +184,14 @@ export default function HomeScreen() {
   if (currentScreen === 'home') {
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
+        {/* Ambient Rhythm Placeholder */}
+        {ambientRhythmEnabled && (
+          <View style={[styles.ambientRhythmPlaceholder, { backgroundColor: colors.accent + '10' }]}>
+            <Text style={[styles.ambientRhythmText, { color: colors.accent }]}>
+              {activeContainer.toUpperCase()} HUM: Barely audible metronome of safety.
+            </Text>
+          </View>
+        )}
         <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
         
         {/* 2x2 Action Grid at Top */}
@@ -198,13 +208,34 @@ export default function HomeScreen() {
           <View style={styles.timeSection}>
             <View style={styles.timeRow}>
               <Text style={[styles.time, { color: colors.text }]}>{currentTime}</Text>
-              <View style={[styles.themeCard, { backgroundColor: colors.card + '80' }]}>
+              <TouchableOpacity
+                style={[styles.themeCard, { backgroundColor: colors.card + '80' }]}
+                onPress={toggleAmbientRhythm}
+              >
                 <Text style={[styles.themeText, { color: colors.text }]}>
                   {ContainerThemes[activeContainer]}
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
-            <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
+            <View style={styles.dateRow}>
+              <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
+              <TouchableOpacity onPress={toggleAmbientRhythm}>
+                <Text style={[styles.date, { color: ambientRhythmEnabled ? colors.accent : colors.dim }]}>
+                  {ambientRhythmEnabled ? '🎶 Rhythm ON' : '🔇 Rhythm OFF'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Temporal Intelligence - Adaptive Suggestions Placeholder */}
+          <View style={[styles.placeholderCard, { backgroundColor: colors.card + 'B3', marginBottom: 20 }]}>
+            <Text style={[styles.placeholderIcon, { color: colors.accent }]}>🧭</Text>
+            <Text style={[styles.placeholderTitle, { color: colors.text }]}>
+              Temporal Intelligence: Adaptive Suggestions
+            </Text>
+            <Text style={[styles.placeholderText, { color: colors.dim }]}>
+              After a few days, the system will offer what it’s noticed, suggesting gentle cues like: "Late-night resets often slip by. Would a one-minute version help?"
+            </Text>
           </View>
 
           {/* Resonant Grounding Field */}
@@ -1036,9 +1067,27 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
   },
-  foodName: {
-    fontSize: 16,
-    fontWeight: '600',
+  fo  date: {
+    fontSize: 14,
+    fontWeight: '400',
+  },
+  dateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  ambientRhythmPlaceholder: {
+    padding: 8,
+    borderRadius: 8,
+    marginHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  ambientRhythmText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   foodPortion: {
     fontSize: 14,
@@ -1100,6 +1149,29 @@ const styles = StyleSheet.create({
   analysisText: {
     fontSize: 16,
     lineHeight: 24,
+  },
+  placeholderCard: {
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  placeholderIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  placeholderTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  placeholderText: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
 

@@ -6,6 +6,7 @@ import { saveAppState, loadAppState } from '../utils/storage';
 import { formatDate, generateId, getCurrentContainer } from '../utils/time';
 
 interface AppContextType extends AppState {
+  toggleAmbientRhythm: () => void;
   addItem: (item: Omit<ContainerItem, 'id'>) => void;
   removeItem: (id: string) => void;
   toggleCompletion: (itemId: string) => void;
@@ -38,6 +39,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
   const [activeContainer, setActiveContainer] = useState<ContainerId>(getCurrentContainer());
+  const [ambientRhythmEnabled, setAmbientRhythmEnabled] = useState(false); // New state
   const [loading, setLoading] = useState(true);
 
   // Load data on mount
@@ -53,7 +55,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [items, allies, journalEntries, completions, patterns, foodEntries, loading]);
+  }, [items, allies, journalEntries, completions, patterns, foodEntries, activeContainer, ambientRhythmEnabled, loading]);
 
   const loadData = useCallback(async () => {
     const savedState = await loadAppState();
@@ -65,6 +67,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setPatterns(savedState.patterns || []);
       setFoodEntries(savedState.foodEntries || []);
       setActiveContainer(savedState.activeContainer || getCurrentContainer());
+      setAmbientRhythmEnabled(savedState.ambientRhythmEnabled || false); // Load new state
     }
     setLoading(false);
   }, []);
@@ -78,8 +81,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       patterns,
       foodEntries,
       activeContainer,
+      ambientRhythmEnabled, // Save new state
     });
-  }, [items, allies, journalEntries, completions, patterns, foodEntries, activeContainer]);
+  }, [items, allies, journalEntries, completions, patterns, foodEntries, activeContainer, ambientRhythmEnabled]);
 
   const addItem = useCallback((item: Omit<ContainerItem, 'id'>) => {
     const newItem: ContainerItem = {
@@ -210,6 +214,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setFoodEntries(prev => prev.filter(e => e.id !== id));
   }, []);
 
+  const toggleAmbientRhythm = useCallback(() => {
+    setAmbientRhythmEnabled(prev => !prev);
+  }, []);
+
   const value: AppContextType = {
     removeJournalEntry,
     items,
@@ -219,6 +227,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     patterns,
     foodEntries,
     activeContainer,
+    ambientRhythmEnabled, // New state
+    toggleAmbientRhythm, // New function
     addItem,
     removeItem,
     toggleCompletion,
