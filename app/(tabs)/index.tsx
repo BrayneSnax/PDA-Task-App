@@ -263,9 +263,9 @@ export default function HomeScreen() {
             ))}
           </CollapsibleSection>
 
-          {/* Situational Grounding */}
-          <CollapsibleSection
-            title="SITUATIONAL GROUNDING"
+	          {/* Situational Resonance */}
+	          <CollapsibleSection
+	            title="SITUATIONAL RESONANCE"
             icon="⚡"
             colors={colors}
             defaultExpanded={false}

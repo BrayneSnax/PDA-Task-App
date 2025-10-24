@@ -64,6 +64,6 @@ export const ContainerThemes: Record<ContainerId, string> = {
   afternoon: "release built-up charge, re-enter presence",
   evening: "unwind; let cognition return to body",
   late: "signal safety; prepare for rest without force",
-  situational: "Situational Grounding",
+  situational: "Situational Resonance",
   uplift: "Uplift & Expansion",
 };
