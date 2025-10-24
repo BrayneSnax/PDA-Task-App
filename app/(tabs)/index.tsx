@@ -449,6 +449,7 @@ export default function HomeScreen() {
 
           <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
             RECENT TRANSMISSIONS
+          </Text>
 
           {journalEntries.length > 0 && (
             <TouchableOpacity
@@ -492,7 +493,6 @@ export default function HomeScreen() {
               </Text>
             </TouchableOpacity>
           )}
-          </Text>
 
           {journalEntries.length === 0 ? (
             <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
