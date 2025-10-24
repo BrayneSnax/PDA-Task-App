@@ -144,17 +144,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [activeContainer]);
 
   // Keeping logAllyUse for now, but redirecting it to the new addMoment
-  const logAllyUse = useCallback((allyName: string, details?: Partial<Moment>) => {
-    const ally = allies.find(a => a.name === allyName);
-    if (!ally) {
-      console.error(`Ally not found: ${allyName}`);
+  const logAllyUse = useCallback((ally: Ally, details?: Partial<Moment>) => {
+    // Ally object is passed directly from AllyCard/index.tsx
+    if (!ally || !ally.name) {
+      console.error(`Ally object invalid: ${ally}`);
       return;
     }
     const moment: Omit<Moment, 'id' | 'timestamp' | 'date'> = {
-      text: `Used ${allyName}`,
+      text: `Used ${ally.name}`,
       container: activeContainer,
       allyId: ally.id,
-      allyName: allyName,
+      allyName: ally.name,
       // Default values for new fields
       tone: details?.tone || '',
       frequency: details?.frequency || '',

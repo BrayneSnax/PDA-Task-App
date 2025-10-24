@@ -37,20 +37,27 @@ const MomentCard: React.FC<{ moment: Moment, colors: ColorScheme }> = ({ moment,
         </View>
       )}
 
-      {/* Journalistic Synthesis */}
-      <View style={styles.synthesisContainer}>
-        <Text style={[styles.synthesisTitle, { color: colors.dim }]}>Journalistic Synthesis</Text>
-        
-        <Text style={[styles.synthesisItem, { color: colors.text }]}>
-          <Text style={{ fontWeight: 'bold' }}>Tone:</Text> {moment.tone || 'N/A'}
-        </Text>
-        <Text style={[styles.synthesisItem, { color: colors.text }]}>
-          <Text style={{ fontWeight: 'bold' }}>Frequency:</Text> {moment.frequency || 'N/A'}
-        </Text>
-        <Text style={[styles.synthesisItem, { color: colors.text }]}>
-          <Text style={{ fontWeight: 'bold' }}>Presence:</Text> {moment.presence || 'N/A'}
-        </Text>
-      </View>
+	      {/* Journalistic Synthesis (The Living Journal) */}
+	      <View style={styles.synthesisContainer}>
+	        <Text style={[styles.synthesisTitle, { color: colors.dim }]}>Journalistic Synthesis</Text>
+	        
+	        <Text style={[styles.synthesisItem, { color: colors.text, fontWeight: 'bold' }]}>
+	          Tone: {moment.tone || 'N/A'} - Frequency: {moment.frequency || 'N/A'} - Presence: {moment.presence || 'N/A'}
+	        </Text>
+	
+	        {moment.context && <Text style={[styles.reflectionPrompt, { color: colors.text }]}>
+	          <Text style={{ fontWeight: 'bold', color: colors.accent }}>The Setting of the Altar:</Text> {moment.context}
+	        </Text>}
+	        {moment.action_reflection && <Text style={[styles.reflectionPrompt, { color: colors.text }]}>
+	          <Text style={{ fontWeight: 'bold', color: colors.accent }}>The Invocation:</Text> {moment.action_reflection}
+	        </Text>}
+	        {moment.result_shift && <Text style={[styles.reflectionPrompt, { color: colors.text }]}>
+	          <Text style={{ fontWeight: 'bold', color: colors.accent }}>The Field Report:</Text> {moment.result_shift}
+	        </Text>}
+	        {moment.conclusion_offering && <Text style={[styles.reflectionPrompt, { color: colors.text }]}>
+	          <Text style={{ fontWeight: 'bold', color: colors.accent }}>The Offering:</Text> {moment.conclusion_offering}
+	        </Text>}
+	      </View>
 
       {/* Full Text Entry */}
       {moment.text && (
@@ -171,7 +178,12 @@ const styles = StyleSheet.create({
   },
   synthesisItem: {
     fontSize: 15,
-    marginBottom: 4,
+    marginBottom: 8,
+  },
+  reflectionPrompt: {
+    fontSize: 15,
+    lineHeight: 22,
+    marginTop: 8,
   },
   textContainer: {
     marginTop: 8,

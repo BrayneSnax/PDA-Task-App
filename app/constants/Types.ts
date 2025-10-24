@@ -41,20 +41,19 @@ export interface Moment {
   container: ContainerId;
   
   // Journalistic Synthesis Fields
+  // Journalistic Synthesis Fields (The 3-part check-in)
   tone: string; // e.g., "Lighter", "Same", "Spikier"
   frequency: string; // e.g., "Water", "Light", "Movement"
   presence: string; // e.g., "The Setting of the Altar", "The Invocation", "The Field Report"
+
+  // Guided Reflection Prompts
+  context: string; // "The Setting of the Altar"
+  action_reflection: string; // "The Invocation"
+  result_shift: string; // "The Field Report"
+  conclusion_offering: string; // "The Offering"
   
   // Old JournalEntry fields, now part of Moment
   text: string;
-}
-
-export interface JournalEntry {
-  id: string;
-  date: string; // YYYY-MM-DD
-  timestamp: number;
-  text: string;
-  container: ContainerId;
 }
 
 export interface Completion {

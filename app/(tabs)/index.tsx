@@ -17,6 +17,7 @@ import { AnchorCard } from '../components/AnchorCard';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AllyCard } from '../components/AllyCard';
 import { MomentTimelineScreen } from '../components/MomentTimelineScreen';
+import { JournalisticSynthesisModal } from '../modal/JournalisticSynthesisModal'; // New Import
 import { AddAllyModal, CraftMomentModal, EditAllyModal } from '../modal'; // Assuming these are correct imports
 import { ContainerId } from '../constants/Types';
 
@@ -44,6 +45,8 @@ export default function PDATaskApp() {
   const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'journal'>('home'); 
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
+  const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false); // New State
+  const [momentToSynthesize, setMomentToSynthesize] = useState<Partial<Moment>>({}); // New State
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
   const [allyToEdit, setAllyToEdit] = useState(null);
 
@@ -197,7 +200,15 @@ export default function PDATaskApp() {
                 setIsEditAllyModalVisible(true);
               }}
               onRemove={() => removeAlly(ally.id)}
-              onLogUse={() => logAllyUse(ally.name)}
+              onLogUse={(ally) => {
+                setMomentToSynthesize({
+                  allyId: ally.id,
+                  allyName: ally.name,
+                  container: activeContainer,
+                  text: `Used ${ally.name}`,
+                });
+                setIsSynthesisModalVisible(true);
+              }}
               colors={colors}
             />
           ))}
@@ -272,6 +283,17 @@ export default function PDATaskApp() {
             ally={allyToEdit}
           />
         )}
+
+        {/* Journalistic Synthesis Modal (New) */}
+        <JournalisticSynthesisModal
+          isVisible={isSynthesisModalVisible}
+          onClose={() => {
+            setIsSynthesisModalVisible(false);
+            setMomentToSynthesize({});
+          }}
+          momentData={momentToSynthesize}
+          colors={colors}
+        />
       </View>
     );
   }
@@ -307,7 +329,15 @@ export default function PDATaskApp() {
                 setIsEditAllyModalVisible(true);
               }}
               onRemove={() => removeAlly(ally.id)}
-              onLogUse={() => logAllyUse(ally.name)}
+              onLogUse={(ally) => {
+                setMomentToSynthesize({
+                  allyId: ally.id,
+                  allyName: ally.name,
+                  container: activeContainer,
+                  text: `Used ${ally.name}`,
+                });
+                setIsSynthesisModalVisible(true);
+              }}
               colors={colors}
             />
           ))}
