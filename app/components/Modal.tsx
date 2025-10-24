@@ -37,10 +37,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    overflow: 'hidden', // Clip content to the rounded corners
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -51,6 +49,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: '90%', // Set a width to the modal
     maxHeight: '80%', // Set a max height
+    flex: 1, // Allow the modal to expand and contain the content
   },
 });
 

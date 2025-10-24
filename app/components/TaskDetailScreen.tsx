@@ -14,7 +14,7 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.bg, paddingTop: insets.top }]}>
+    <View style={[styles.container, { backgroundColor: colors.bg, paddingBottom: insets.bottom }]}>
       <TouchableOpacity style={styles.backButton} onPress={onClose}>
         <Text style={[styles.backText, { color: colors.text }]}>← back</Text>
       </TouchableOpacity>
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 20, // Add top padding for aesthetic
   },
   backButton: {
     paddingVertical: 10,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   scrollContent: {
-    paddingBottom: 40, // Space for the bottom nav/tab bar
+    paddingBottom: 40 + insets.bottom, // Space for the bottom nav/tab bar + safe area
   },
   cueBlock: {
     borderRadius: 12,
