@@ -15,6 +15,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: { display: 'none' }, // Hide the tab bar completely
       }}>
       <Tabs.Screen
         name="index"
@@ -23,18 +24,17 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
+      {/* Keep other files for potential future use but hide from navigation */}
       <Tabs.Screen
         name="substances"
         options={{
-          title: 'Substances',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="leaf.fill" color={color} />,
+          href: null, // Remove from navigation
         }}
       />
       <Tabs.Screen
         name="journal"
         options={{
-          title: 'Journal',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
+          href: null, // Remove from navigation
         }}
       />
     </Tabs>
