@@ -68,30 +68,31 @@ export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPre
 });
 
 const styles = StyleSheet.create({
-  animatedWrapper: {
-    marginBottom: 10, // Added wrapper for animation and margin
-  },
+	  animatedWrapper: {
+	    marginBottom: 12, // Increased margin for better separation
+	  },
   card: {
     borderRadius: 12,
     overflow: 'hidden',
   },
   // Removed header style since the whole card is now the touchable area
 
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 16, // Add padding to the row now that it's the main content
-  },
+	  row: {
+	    flexDirection: 'row',
+	    alignItems: 'center',
+	    gap: 16, // Increased gap for better spacing
+	    paddingVertical: 20, // Increased vertical padding for easier tapping
+	    paddingHorizontal: 16,
+	  },
   bullet: {
     fontSize: 20,
     fontWeight: '600',
   },
   title: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
-  },
+	    fontSize: 17, // Slightly larger font size for reading
+	    fontWeight: '500',
+	  },
   chevron: {
     fontSize: 20, // Make the icon larger
     fontWeight: '300',

@@ -206,36 +206,32 @@ export default function HomeScreen() {
 	          contentContainerStyle={styles.scrollContent}
 	          showsVerticalScrollIndicator={false}
         >
-          {/* Time and Date Display */}
-          <View style={styles.timeSection}>
-            <View style={styles.timeRow}>
-              <Text style={[styles.time, { color: colors.text }]}>{currentTime}</Text>
-              <TouchableOpacity
-                style={[styles.themeCard, { backgroundColor: colors.card + '80' }]}
-                onPress={toggleAmbientRhythm}
-              >
-                <Text style={[styles.themeText, { color: colors.text }]}>
-                  {ContainerThemes[activeContainer]}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.dateRow}>
-              <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
-              <TouchableOpacity onPress={toggleAmbientRhythm}>
-                <Text style={[styles.date, { color: ambientRhythmEnabled ? colors.accent : colors.dim }]}>
-                  {ambientRhythmEnabled ? '🎶 Rhythm ON' : '🔇 Rhythm OFF'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+	          {/* Time and Date Display - Reduced Prominence */}
+	          <View style={styles.timeSection}>
+	            <View style={styles.timeRow}>
+	              <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
+	              <Text style={[styles.time, { color: colors.text, fontSize: 14, fontWeight: '400' }]}>{currentTime}</Text>
+	            </View>
+	            <View style={styles.dateRow}>
+	              <Text style={[styles.themeText, { color: colors.dim, fontWeight: '500' }]}>
+	                {ContainerThemes[activeContainer]}
+	              </Text>
+	              <TouchableOpacity onPress={toggleAmbientRhythm}>
+	                <Text style={[styles.date, { color: ambientRhythmEnabled ? colors.accent : colors.dim }]}>
+	                  {ambientRhythmEnabled ? '🎶 Rhythm ON' : '🔇 Rhythm OFF'}
+	                </Text>
+	              </TouchableOpacity>
+	            </View>
+	          </View>
 
 	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
 	          <TemporalIntelligenceCard colors={colors} />
 
           {/* Resonant Grounding Field */}
-          <Text style={[styles.sectionHeader, { color: colors.dim }]}>
-            RESONANT GROUNDING FIELD
-          </Text>
+	          {/* Resonant Grounding Field - Single Line Title */}
+	          <Text style={[styles.sectionHeader, { color: colors.dim, fontSize: 14, fontWeight: '500' }]}>
+	            RESONANT FIELD
+	          </Text>
 
           {/* Time-based Anchors */}
           <CollapsibleSection
@@ -863,11 +859,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     marginBottom: 8,
-  },
-  time: {
-    fontSize: 48,
-    fontWeight: '300',
-    letterSpacing: -1,
+  	  time: {
+	    fontSize: 24, // Reduced size
+	    fontWeight: '700',
+	  },etterSpacing: -1,
   },
   themeCard: {
     flex: 1,
@@ -1065,12 +1060,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
   },
-  dateRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
+	  dateRow: {
+	    flexDirection: 'row',
+	    justifyContent: 'space-between',
+	    alignItems: 'center',
+	    width: '100%',
+	    marginBottom: 10, // Reduced margin
+	  },
   ambientRhythmPlaceholder: {
     padding: 8,
     borderRadius: 8,
