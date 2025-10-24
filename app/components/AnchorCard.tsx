@@ -8,13 +8,15 @@ interface Props {
   onToggle: () => void;
   colors: ColorScheme;
   onPress: () => void; // New prop to handle press
+  onDelete: () => void; // New prop to handle long press delete
 }
 
-export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress }: Props) => {
+export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress, onDelete }: Props) => {
   return (
     <TouchableOpacity
       style={[styles.card, { backgroundColor: colors.card }]}
       onPress={onPress} // Use the new onPress prop
+      onLongPress={onDelete} // Use the new onLongPress prop for deletion
       activeOpacity={0.7}
     >
       <View style={styles.row}>

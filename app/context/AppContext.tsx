@@ -21,6 +21,7 @@ interface AppContextType extends AppState {
   removeFoodEntry: (id: string) => void;
   setActiveContainer: (container: ContainerId) => void;
   loading: boolean;
+  removeJournalEntry: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -29,6 +30,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ContainerItem[]>(DEFAULT_GROUNDING_ITEMS);
   const [allies, setAllies] = useState<Ally[]>(DEFAULT_ALLIES);
   const [journalEntries, setJournalEntries] = useState<Moment[]>([]);
+  
+  const removeJournalEntry = useCallback((id: string) => {
+    setJournalEntries(prev => prev.filter(entry => entry.id !== id));
+  }, []);
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
@@ -206,6 +211,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: AppContextType = {
+    removeJournalEntry,
     items,
     allies,
     journalEntries,

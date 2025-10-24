@@ -17,7 +17,18 @@ import { TaskDetailScreen } from '../components/TaskDetailScreen';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { CraftMomentModal } from '../modal';
 import { Modal } from '../components/Modal';
+import { Alert } from 'react-native';
 import { ContainerId } from '../constants/Types';
+
+// Conditional imports moved outside the component to fix "Rendered more hooks" error
+import { AllyCard } from '../components/AllyCard';
+import { JournalEntryCard } from '../components/JournalEntryCard';
+import { PatternCard } from '../components/PatternCard';
+import { FoodEntryCard } from '../components/FoodEntryCard';
+import { AddAllyModal, EditAllyModal } from '../modal';
+import { JournalisticSynthesisModal } from '../modal/JournalisticSynthesisModal';
+import { AddPatternModal } from '../modal/AddPatternModal';
+import { AddFoodModal } from '../modal/AddFoodModal';
 
 type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
 
@@ -31,10 +42,12 @@ export default function HomeScreen() {
     isCompleted,
     loading,
     addItem,
+    removeItem,
     removeAlly,
     updateAlly,
     addAlly,
     journalEntries,
+    removeJournalEntry,
   } = useApp();
 
   const colors = useColors(activeContainer, true);
@@ -201,6 +214,7 @@ export default function HomeScreen() {
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
+                onDelete={() => removeItem(item.id)}
               />
             ))}
           </CollapsibleSection>
@@ -220,6 +234,7 @@ export default function HomeScreen() {
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
+                onDelete={() => removeItem(item.id)}
               />
             ))}
           </CollapsibleSection>
@@ -239,6 +254,7 @@ export default function HomeScreen() {
                 onToggle={() => toggleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
+                onDelete={() => removeItem(item.id)}
               />
             ))}
           </CollapsibleSection>
@@ -273,8 +289,23 @@ export default function HomeScreen() {
               item={selectedItem}
               colors={colors}
               onClose={() => setSelectedItem(null)}
-              onComplete={() => {
-                toggleCompletion(selectedItem.id);
+              onComplete={(status, note) => {
+                if (status === 'did it') {
+                  toggleCompletion(selectedItem.id);
+                }
+                
+                // Log the action as a journal entry
+                addItem({
+                  title: selectedItem.title,
+                  container: selectedItem.container,
+                  category: selectedItem.category,
+                  body_cue: selectedItem.body_cue,
+                  micro: selectedItem.micro,
+                  desire: selectedItem.desire,
+                  status: status,
+                  note: note,
+                });
+
                 setSelectedItem(null);
               }}
             />
@@ -286,10 +317,6 @@ export default function HomeScreen() {
 
   // SUBSTANCES SCREEN
   if (currentScreen === 'substances') {
-    const { AllyCard } = require('../components/AllyCard');
-    const { AddAllyModal, EditAllyModal } = require('../modal');
-    const { JournalisticSynthesisModal } = require('../modal/JournalisticSynthesisModal');
-
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
@@ -429,7 +456,20 @@ export default function HomeScreen() {
             </View>
           ) : (
             journalEntries.slice(0, 10).map((entry) => (
-              <View key={entry.id} style={[styles.entryCard, { backgroundColor: colors.card }]}>
+              <TouchableOpacity
+                key={entry.id}
+                style={[styles.entryCard, { backgroundColor: colors.card }]}
+                onLongPress={() => {
+                  Alert.alert(
+                    'Delete Journal Entry',
+                    'Are you sure you want to delete this entry?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Delete', onPress: () => removeJournalEntry(entry.id), style: 'destructive' },
+                    ]
+                  );
+                }}
+              >
                 <View style={styles.entryHeader}>
                   <Text style={[styles.entryTitle, { color: colors.text }]}>
                     {entry.allyName || entry.anchorTitle || 'Moment'}
@@ -451,7 +491,7 @@ export default function HomeScreen() {
                     <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
                   </View>
                 )}
-              </View>
+              </TouchableOpacity>
             ))
           )}
 
@@ -468,7 +508,6 @@ export default function HomeScreen() {
   if (currentScreen === 'patterns') {
     const { patterns, removePattern } = useApp();
     const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
-    const { AddPatternModal } = require('../modal/AddPatternModal');
 
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
@@ -523,7 +562,7 @@ export default function HomeScreen() {
                   </TouchableOpacity>
                 </View>
                 <Text style={[styles.patternText, { color: colors.text }]}>{pattern.text}</Text>
-              </View>
+              </TouchableOpacity>
             ))
           )}
 
@@ -568,7 +607,6 @@ export default function HomeScreen() {
   if (currentScreen === 'nourish') {
     const { foodEntries, removeFoodEntry, addFoodEntry } = useApp();
     const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
-    const { AddFoodModal } = require('../modal/AddFoodModal');
 
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
@@ -648,7 +686,7 @@ export default function HomeScreen() {
                 {entry.notes && (
                   <Text style={[styles.foodNotes, { color: colors.dim }]}>{entry.notes}</Text>
                 )}
-              </View>
+              </TouchableOpacity>
             ))
           )}
 

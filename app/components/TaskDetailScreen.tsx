@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { ContainerItem, ColorScheme } from '../constants/Types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,11 +7,13 @@ interface Props {
   item: ContainerItem;
   colors: ColorScheme;
   onClose: () => void;
-  onComplete: () => void;
+  onComplete: (status: 'did it' | 'skipped' | 'forgot' | 'couldn\'t' | 'not relevant', note: string) => void;
 }
 
 export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) => {
   const insets = useSafeAreaInsets();
+  const [note, setNote] = useState('');
+  const actionButtons = ['skipped', 'forgot', 'couldn\'t', 'not relevant'].slice(0, item.actionButtons || 4);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bg, paddingBottom: insets.bottom }]}>
@@ -42,17 +44,35 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
           </View>
         )}
 
+        {/* Note Input */}
+        <TextInput
+          style={[
+            styles.noteInput,
+            {
+              backgroundColor: colors.card,
+              color: colors.text,
+              borderColor: colors.dim,
+            },
+          ]}
+          placeholder="Sprawl text if the moment drives you..."
+          placeholderTextColor={colors.dim}
+          value={note}
+          onChangeText={setNote}
+          multiline={true}
+          numberOfLines={2}
+        />
+
         {/* Did It Button */}
         <TouchableOpacity
           style={[styles.didItButton, { backgroundColor: colors.accent }]}
-          onPress={onComplete}
+          onPress={() => onComplete('did it', note)}
         >
           <Text style={[styles.didItText, { color: colors.card }]}>did it</Text>
         </TouchableOpacity>
 
         {/* Action Buttons */}
         <View style={styles.actionGrid}>
-          {['skipped', 'forgot', 'couldn\'t', 'not relevant'].map((action, index) => (
+          {actionButtons.map((action) => (
             <TouchableOpacity
               key={action}
               style={[
@@ -63,8 +83,7 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
                   opacity: action === 'not relevant' ? 0.6 : 1,
                 },
               ]}
-              // Placeholder for actual action logic
-              onPress={() => console.log(action)}
+              onPress={() => onComplete(action as any, note)}
             >
               <Text style={[styles.actionText, { color: colors.text }]}>{action}</Text>
             </TouchableOpacity>
@@ -154,5 +173,14 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 16,
     fontWeight: '500',
+  },
+  noteInput: {
+    minHeight: 60,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    fontSize: 16,
+    lineHeight: 22,
   },
 });

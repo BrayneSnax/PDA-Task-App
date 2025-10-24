@@ -5,7 +5,7 @@ import { Ally, ColorScheme } from '../constants/Types';
 interface Props {
   ally: Ally;
   onEdit: (ally: Ally) => void;
-  onRemove: () => void;
+  onRemove?: () => void;
   onLogUse: () => void;
   colors: ColorScheme;
 }
@@ -25,14 +25,16 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
         {
           text: 'Delete',
           onPress: () => {
-            Alert.alert(
-              'Confirm Delete',
-              `Are you sure you want to remove ${ally.name}?`,
-              [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Delete', onPress: onRemove, style: 'destructive' },
-              ]
-            );
+            if (onRemove) {
+              Alert.alert(
+                'Confirm Delete',
+                `Are you sure you want to remove ${ally.name}?`,
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Delete', onPress: onRemove, style: 'destructive' },
+                ]
+              );
+            }
           },
           style: 'destructive',
         },
