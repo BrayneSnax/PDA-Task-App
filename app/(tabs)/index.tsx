@@ -29,6 +29,9 @@ export default function PDATaskApp() {
     removeAlly,
     logAllyUse,
     loading,
+    addItem,
+    updateAlly,
+    addAlly,
   } = useApp();
 
   const colors = useColors(activeContainer, true); // true = use circadian colors
@@ -37,7 +40,7 @@ export default function PDATaskApp() {
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
-  const [allyToEdit, setAllyToEdit] = useState<Ally | null>(null);
+  const [allyToEdit, setAllyToEdit] = useState(null);
 
   // Update time every minute
   useEffect(() => {
