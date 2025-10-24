@@ -26,8 +26,8 @@ export const TimeContainerSwitcher = React.memo(({ active, onSelect, colors }: P
             style={[
               styles.button,
               {
-                backgroundColor: isActive ? `${colors.accent}33` : 'transparent', // Use 20% opacity of accent for soft fill
-                borderColor: 'transparent', // Remove border
+                backgroundColor: isActive ? colors.accent : 'transparent',
+                borderColor: colors.dim,
               },
             ]}
             onPress={() => onSelect(container.id)}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    borderWidth: 0, // Remove border
+    borderWidth: 1,
     // Using a fixed width to ensure all four fit on one line in a typical phone view,
     // as suggested by the user's "1 across" request, assuming a small screen.
     // The previous code had `marginRight: 8` and `flexWrap: 'wrap'`, which should have worked.

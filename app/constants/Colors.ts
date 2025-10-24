@@ -3,52 +3,52 @@ import { ContainerId } from "./Types";
 export const CircadianPalette = {
   // --- Palette Refinement: Lower Contrast, Softer Glow ---
   morning: {
-    bg: "#F7E6A2", // Lemon Chiffon (Core background)
-    accent: "#A2B8A6", // Muted Sage (Accent background)
-    text: "#4D483B", // Deep brown-gray (Text)
-    dim: "#B3A698", // Warm taupe (Secondary text)
-    signal: "#F2A08E", // Gentle coral (Signal color)
+    bg: "#F7F5EC", // Lighter, Softer Cream
+    accent: "#A2B8A6", // Muted Sage (Same, good calm)
+    text: "#4D483B", // Deep Brown-Gray (Slightly softer)
+    dim: "#B3A698", // Warm Taupe (Same)
+    signal: "#F2A08E", // Gentle Coral (Same)
     card: "#FFFFFF",
   },
   afternoon: {
-    bg: "#E0FFFF", // Near Electric Blue (Core background - #7DF9FF is too bright)
-    accent: "#B0E0E6", // Pale sand/desaturated turquoise (Accent background)
-    text: "#3B4D48", // Dark gray with faint green tint (Text)
-    dim: "#A9A9A9", // Cool stone (Secondary text)
-    signal: "#40E0D0", // Aqua/Teal (Signal color)
+    bg: "#E6F7FF", // Very Pale Blue/Cyan
+    accent: "#7DF9FF", // Aqua (Slightly brighter, as a focus color)
+    text: "#3B4D48", // Dark Gray with Green Tint (Same)
+    dim: "#A9A9A9", // Cool Stone (Same)
+    signal: "#00BFFF", // Deep Sky Blue (Same)
     card: "#FFFFFF",
   },
   evening: {
-    bg: "#543E3B", // Ancient Copper (Core background - #PF543E is invalid)
-    accent: "#8C4B3F", // Deeper rust (Accent background)
-    text: "#4D3B36", // Dark walnut brown (Text)
-    dim: "#B87333", // Copper/umber (Secondary text)
-    signal: "#D4AF37", // Muted amber (Signal color)
+    bg: "#332D33", // Deep, muted purple-gray
+    accent: "#D4AF37", // Muted Amber (Used as primary accent)
+    text: "#F0E5D8", // Light Cream (Soft glow for text)
+    dim: "#8C4B3F", // Deeper Rust (Used as dim color)
+    signal: "#B87333", // Copper/Bronze (Used as signal)
     card: "#1A1A1A",
   },
   late: {
-    bg: "#4B0082", // Indigo (Core background)
-    accent: "#5A6E5A", // Dark moss (Accent background)
-    text: "#F0F0F0", // Off-white (Text)
-    dim: "#A9B8A6", // Muted sage (Secondary text)
-    signal: "#4682B4", // Moon-blue (Signal color)
+    bg: "#1A1A1A", // Darkest background
+    accent: "#A9B8A6", // Muted Sage (Soft contrast)
+    text: "#F0F0F0", // Off-White (Soft glow for text)
+    dim: "#5A6E5A", // Dark Moss (Very subtle dim)
+    signal: "#4682B4", // Moon-Blue (Same)
     card: "#333333", // Darker card
   },
   // Neutral/Utility Containers
   situational: {
-    bg: "#D3D3D3", // Neutral gray with whisper of blue (Core background)
-    accent: "#A9A9A9", // Light slate (Accent background)
-    text: "#36454F", // Charcoal (Text)
-    dim: "#C0C0C0", // Mist gray (Secondary text)
-    signal: "#B19CD9", // Gentle lavender (Signal color)
+    bg: "#F5F5F5", // Lighter Neutral Gray
+    accent: "#B19CD9", // Gentle Lavender (Used as accent)
+    text: "#36454F", // Charcoal (Same)
+    dim: "#D3D3D3", // Mist Gray (Same)
+    signal: "#E6E6FA", // Soft Lilac (Used as signal)
     card: "#FFFFFF",
   },
   uplift: {
-    bg: "#E6E6FA", // Very light periwinkle (Core background)
-    accent: "#B19CD9", // Soft lilac (Accent background)
-    text: "#000080", // Dark indigo (Text)
-    dim: "#B19CD9", // Muted violet (Secondary text)
-    signal: "#00CED1", // Thin line of cyan (Signal color)
+    bg: "#FAFAFA", // Near-white
+    accent: "#00BFFF", // Cyan (As a burst of energy)
+    text: "#000080", // Dark Indigo (Same)
+    dim: "#B19CD9", // Muted Violet (Same)
+    signal: "#00FFFF", // Bright Cyan (Same)
     card: "#FFFFFF",
   },
 };
