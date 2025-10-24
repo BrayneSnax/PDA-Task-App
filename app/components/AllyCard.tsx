@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Pressable, Alert } from 'react-native';
 import { Ally, ColorScheme } from '../constants/Types';
 
 interface Props {
@@ -13,33 +13,51 @@ interface Props {
 export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
+  const handleLongPress = () => {
+    Alert.alert(
+      `${ally.name}`,
+      'Choose an action:',
+      [
+        {
+          text: 'Edit',
+          onPress: () => onEdit(ally),
+        },
+        {
+          text: 'Delete',
+          onPress: () => {
+            Alert.alert(
+              'Confirm Delete',
+              `Are you sure you want to remove ${ally.name}?`,
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete', onPress: onRemove, style: 'destructive' },
+              ]
+            );
+          },
+          style: 'destructive',
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
   return (
-    <View style={[styles.card, { backgroundColor: colors.card }]}>
+    <Pressable
+      onPress={() => setExpanded(!expanded)}
+      onLongPress={handleLongPress}
+      delayLongPress={500}
+      style={[styles.card, { backgroundColor: colors.card }]}
+    >
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => setExpanded(!expanded)}
-          style={{ flex: 1 }}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.name, { color: colors.text }]}>
-            {ally.face} {ally.name}
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.actions}>
-          <TouchableOpacity
-            onPress={() => onEdit(ally)}
-            style={[styles.editButton, { backgroundColor: colors.accent }]}
-          >
-            <Text style={[styles.editButtonText, { color: colors.card }]}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onRemove}
-            style={[styles.deleteButton, { borderColor: colors.dim }]}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text style={[styles.deleteText, { color: colors.dim }]}>×</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={[styles.name, { color: colors.text }]}>
+          {ally.face} {ally.name}
+        </Text>
+        <Text style={[styles.expandIcon, { color: colors.dim }]}>
+          {expanded ? '∧' : '∨'}
+        </Text>
       </View>
 
       {expanded && (
@@ -49,17 +67,17 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
           </Text>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>Function:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>FUNCTION:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.function}</Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>Shadow:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>SHADOW:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.shadow}</Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.label, { color: colors.dim }]}>Ritual:</Text>
+            <Text style={[styles.label, { color: colors.dim }]}>RITUAL:</Text>
             <Text style={[styles.text, { color: colors.text }]}>{ally.ritual}</Text>
           </View>
 
@@ -71,7 +89,7 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </Pressable>
   );
 });
 
@@ -84,37 +102,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
   },
   name: {
     fontSize: 17,
     fontWeight: '600',
+    flex: 1,
   },
-  actions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  editButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  editButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  deleteButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  deleteText: {
-    fontSize: 22,
+  expandIcon: {
+    fontSize: 16,
     fontWeight: '300',
-    marginTop: -2,
   },
   details: {
     marginTop: 16,
@@ -128,10 +125,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   label: {
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   text: {
     fontSize: 14,
@@ -148,3 +144,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+

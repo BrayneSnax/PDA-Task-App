@@ -202,7 +202,7 @@ export default function PDATaskApp() {
                 setIsEditAllyModalVisible(true);
               }}
               onRemove={() => removeAlly(ally.id)}
-              onLogUse={(ally) => {
+              onLogUse={() => {
                 setMomentToSynthesize({
                   allyId: ally.id,
                   allyName: ally.name,
@@ -331,7 +331,7 @@ export default function PDATaskApp() {
                 setIsEditAllyModalVisible(true);
               }}
               onRemove={() => removeAlly(ally.id)}
-              onLogUse={(ally) => {
+              onLogUse={() => {
                 setMomentToSynthesize({
                   allyId: ally.id,
                   allyName: ally.name,
@@ -357,7 +357,46 @@ export default function PDATaskApp() {
         {/* Navigation */}
         {renderNav('substances')}
 
-
+        {/* Modals for Substances Screen */}
+        <AddAllyModal
+          isVisible={isAddAllyModalVisible}
+          onClose={() => setIsAddAllyModalVisible(false)}
+          onSave={(name, face, invocation, func, shadow, ritual) => {
+            addAlly({
+              name,
+              face,
+              invocation,
+              function: func,
+              shadow,
+              ritual,
+              log: [],
+            });
+          }}
+          colors={colors}
+        />
+        {allyToEdit && (
+          <EditAllyModal
+            isVisible={isEditAllyModalVisible}
+            onClose={() => {
+              setIsEditAllyModalVisible(false);
+              setAllyToEdit(null);
+            }}
+            onSave={(ally) => {
+              updateAlly(ally);
+            }}
+            colors={colors}
+            ally={allyToEdit}
+          />
+        )}
+        <JournalisticSynthesisModal
+          isVisible={isSynthesisModalVisible}
+          onClose={() => {
+            setIsSynthesisModalVisible(false);
+            setMomentToSynthesize({});
+          }}
+          momentData={momentToSynthesize}
+          colors={colors}
+        />
       </View>
     );
   }
