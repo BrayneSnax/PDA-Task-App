@@ -537,7 +537,7 @@ export default function HomeScreen() {
                     <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
                   </View>
                 )}
-              </View>
+              </TouchableOpacity>
             ))
           )}
 
