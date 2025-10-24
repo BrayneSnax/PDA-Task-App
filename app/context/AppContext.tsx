@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { AppState, ContainerItem, Ally, JournalEntry, Completion, ContainerId } from '../constants/Types';
+import { AppState, ContainerItem, Ally, Moment, Completion, ContainerId } from '../constants/Types';
+import { JournalEntry } from '../constants/Types'; // Keep JournalEntry for backward compatibility if needed, but Moment is the new primary type
 import { DEFAULT_ALLIES, DEFAULT_GROUNDING_ITEMS } from '../constants/DefaultData';
 import { saveAppState, loadAppState } from '../utils/storage';
 import { formatDate, generateId, getCurrentContainer } from '../utils/time';
@@ -12,8 +13,8 @@ interface AppContextType extends AppState {
   addAlly: (ally: Omit<Ally, 'id'>) => void;
   updateAlly: (ally: Ally) => void;
   removeAlly: (id: string) => void;
-  logAllyUse: (allyName: string, details?: Partial<JournalEntry>) => void;
-  addJournalEntry: (entry: Omit<JournalEntry, 'id' | 'timestamp'>) => void;
+  logAllyUse: (allyName: string, details?: Partial<Moment>) => void;
+  addMoment: (moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => void;
   setActiveContainer: (container: ContainerId) => void;
   loading: boolean;
 }
@@ -23,7 +24,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ContainerItem[]>(DEFAULT_GROUNDING_ITEMS);
   const [allies, setAllies] = useState<Ally[]>(DEFAULT_ALLIES);
-  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [journalEntries, setJournalEntries] = useState<Moment[]>([]);
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [activeContainer, setActiveContainer] = useState<ContainerId>(getCurrentContainer());
   const [loading, setLoading] = useState(true);
@@ -119,39 +120,50 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setAllies(prev => prev.filter(a => a.id !== id));
   }, []);
 
-  const logAllyUse = useCallback((allyName: string, details?: Partial<JournalEntry>) => {
-    const entry: JournalEntry = {
+  const addMoment = useCallback((moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => {
+    const newMoment: Moment = {
+      ...moment,
       id: generateId(),
-      date: formatDate(),
+      date: new Date().toISOString(),
       timestamp: Date.now(),
-      text: `Used ${allyName}`,
-      container: activeContainer,
-      ...details,
     };
-    setJournalEntries(prev => [entry, ...prev]);
+    setJournalEntries(prev => [newMoment, ...prev]);
 
-    // Also update the specific ally's log
-    setAllies(prevAllies => prevAllies.map(ally => {
-      if (ally.name === allyName) {
-        // Assuming Ally type has a 'log' property which is an array of JournalEntry
-        // The current Ally type in Types.ts is unknown, so I'll assume it exists.
-        return {
-          ...ally,
-          log: [...(ally.log || []), entry],
-        };
-      }
-      return ally;
-    }));
+    // Update ally log if an ally was involved
+    if (newMoment.allyId) {
+      setAllies(prevAllies => prevAllies.map(ally => {
+        if (ally.id === newMoment.allyId) {
+          return {
+            ...ally,
+            log: [newMoment, ...ally.log],
+          };
+        }
+        return ally;
+      }));
+    }
   }, [activeContainer]);
 
-  const addJournalEntry = useCallback((entry: Omit<JournalEntry, 'id' | 'timestamp'>) => {
-    const newEntry: JournalEntry = {
-      ...entry,
-      id: generateId(),
-      timestamp: Date.now(),
+  // Keeping logAllyUse for now, but redirecting it to the new addMoment
+  const logAllyUse = useCallback((allyName: string, details?: Partial<Moment>) => {
+    const ally = allies.find(a => a.name === allyName);
+    if (!ally) {
+      console.error(`Ally not found: ${allyName}`);
+      return;
+    }
+    const moment: Omit<Moment, 'id' | 'timestamp' | 'date'> = {
+      text: `Used ${allyName}`,
+      container: activeContainer,
+      allyId: ally.id,
+      allyName: allyName,
+      // Default values for new fields
+      tone: details?.tone || '',
+      frequency: details?.frequency || '',
+      presence: details?.presence || '',
+      ...details,
     };
-    setJournalEntries(prev => [newEntry, ...prev]);
-  }, []);
+    addMoment(moment);
+  }, [activeContainer, allies, addMoment]);
+
 
   const value: AppContextType = {
     items,
@@ -167,7 +179,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     updateAlly,
     removeAlly,
     logAllyUse,
-    addJournalEntry,
+    addMoment,
     setActiveContainer,
     loading,
   };

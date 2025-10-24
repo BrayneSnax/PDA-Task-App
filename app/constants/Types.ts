@@ -27,7 +27,26 @@ export interface Ally {
   function: string;
   shadow: string;
   ritual: string;
-  log: JournalEntry[];
+  log: Moment[];
+}
+
+export interface Moment {
+  id: string;
+  date: string; // YYYY-MM-DDTHH:mm:ss.sssZ
+  timestamp: number;
+  allyId?: string;
+  anchorId?: string;
+  allyName?: string;
+  anchorTitle?: string;
+  container: ContainerId;
+  
+  // Journalistic Synthesis Fields
+  tone: string; // e.g., "Lighter", "Same", "Spikier"
+  frequency: string; // e.g., "Water", "Light", "Movement"
+  presence: string; // e.g., "The Setting of the Altar", "The Invocation", "The Field Report"
+  
+  // Old JournalEntry fields, now part of Moment
+  text: string;
 }
 
 export interface JournalEntry {
@@ -47,7 +66,7 @@ export interface Completion {
 export interface AppState {
   items: ContainerItem[];
   allies: Ally[];
-  journalEntries: JournalEntry[];
+  journalEntries: Moment[];
   completions: Completion[];
   activeContainer: ContainerId;
 }

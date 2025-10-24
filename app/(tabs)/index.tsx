@@ -16,6 +16,7 @@ import { TimeContainerSwitcher } from '../components/TimeContainerSwitcher';
 import { AnchorCard } from '../components/AnchorCard';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AllyCard } from '../components/AllyCard';
+import { MomentTimelineScreen } from '../components/MomentTimelineScreen';
 import { AddAllyModal, CraftMomentModal, EditAllyModal } from '../modal'; // Assuming these are correct imports
 import { ContainerId } from '../constants/Types';
 
@@ -40,7 +41,7 @@ export default function PDATaskApp() {
   const [currentTime, setCurrentTime] = useState(formatTime());
   // The user's navigation is handled by this state, which is not ideal for Expo Router,
   // but I must respect the existing code structure.
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'patterns'>('home'); 
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'substances' | 'journal'>('home'); 
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
@@ -71,8 +72,8 @@ export default function PDATaskApp() {
 
   // --- RENDERING LOGIC ---
 
-  // Renders the bottom navigation bar
-  const renderNav = (active: 'home' | 'substances') => (
+	// Renders the bottom navigation bar
+	  const renderNav = (active: 'home' | 'substances' | 'journal') => (
     <View style={[styles.nav, { backgroundColor: colors.bg, borderTopColor: colors.dim }]}>
       <TouchableOpacity
         style={styles.navButton}
@@ -85,6 +86,12 @@ export default function PDATaskApp() {
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.navText, { color: active === 'substances' ? colors.accent : colors.text }]}>Substances</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.navButton}
+        onPress={() => setCurrentScreen('journal')}
+      >
+        <Text style={[styles.navText, { color: active === 'journal' ? colors.accent : colors.text }]}>Journal</Text>
       </TouchableOpacity>
     </View>
   );
@@ -207,13 +214,13 @@ export default function PDATaskApp() {
             <Text style={[styles.craftButtonText, { color: colors.card }]}>
               + craft a moment
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.notesButton, { backgroundColor: colors.card, borderColor: colors.dim }]}
-            onPress={() => setCurrentScreen('patterns')}
-          >
-            <Text style={[styles.notesButtonText, { color: colors.text }]}>field notes</Text>
-          </TouchableOpacity>
+	          </TouchableOpacity>
+	          <TouchableOpacity
+	            style={[styles.notesButton, { backgroundColor: colors.card, borderColor: colors.dim }]}
+	            onPress={() => setCurrentScreen('journal')}
+	          >
+	            <Text style={[styles.notesButtonText, { color: colors.text }]}>Field Notes</Text>
+	          </TouchableOpacity>
         </View>
 
         {/* Navigation */}
@@ -323,30 +330,23 @@ export default function PDATaskApp() {
     );
   }
 
-  // PATTERNS SCREEN (placeholder)
-  return (
-    <View style={[styles.container, { backgroundColor: colors.bg }]}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
-      
-      <View style={styles.centerContent}>
-        <Text style={[styles.placeholderText, { color: colors.text }]}>
-          Field Notes
-        </Text>
-        <Text style={[styles.placeholderSubtext, { color: colors.dim }]}>
-          Pattern recognition coming soon
-        </Text>
-        <TouchableOpacity
-          style={[styles.backButton, { backgroundColor: colors.accent }]}
-          onPress={() => setCurrentScreen('home')}
-        >
-          <Text style={[styles.backButtonText, { color: colors.card }]}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Navigation */}
-      {renderNav('patterns')}
-    </View>
-  );
+	  // JOURNAL SCREEN
+	  if (currentScreen === 'journal') {
+	    return (
+	      <MomentTimelineScreen
+	        colors={colors}
+	        onBack={() => setCurrentScreen('home')}
+	      />
+	    );
+	  }
+	
+	  // Should not happen, but return home as fallback
+	  return (
+	    <View style={[styles.container, { backgroundColor: colors.bg }]}>
+	      <Text style={[styles.placeholderText, { color: colors.text }]}>Error: Screen not found</Text>
+	      {renderNav('home')}
+	    </View>
+	  );
 }
 
 const styles = StyleSheet.create({
