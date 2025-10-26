@@ -70,17 +70,17 @@ export const AllyCard = React.memo(({ ally, onEdit, onRemove, onLogUse, colors }
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: colors.dim }]}>ROLE:</Text>
-            <Text style={[styles.text, { color: colors.text }]}>{ally.function}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>{ally.function || ''}</Text>
           </View>
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: colors.dim }]}>EDGE:</Text>
-            <Text style={[styles.text, { color: colors.text }]}>{ally.shadow}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>{ally.shadow || ''}</Text>
           </View>
 
           <View style={styles.section}>
             <Text style={[styles.label, { color: colors.dim }]}>CONTACT:</Text>
-            <Text style={[styles.text, { color: colors.text }]}>{ally.ritual}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>{ally.ritual || ''}</Text>
           </View>
 
           <TouchableOpacity

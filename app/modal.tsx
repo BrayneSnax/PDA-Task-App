@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
-import { ColorScheme, ContainerId } from '../constants/Types';
+
+import { Ally, ColorScheme, ContainerId } from '../constants/Types';
 
 // --- AddAllyModal (Existing) ---
 
@@ -12,12 +13,12 @@ interface AddAllyModalProps {
 }
 
 export const AddAllyModal: React.FC<AddAllyModalProps> = ({ isVisible, onClose, onSave, colors }) => {
-  const [name, setName] = useState('');
-  const [face, setFace] = useState('');
-  const [invocation, setInvocation] = useState('');
-  const [func, setFunc] = useState('');
-  const [shadow, setShadow] = useState('');
-  const [ritual, setRitual] = useState('');
+  const [name, setName] = React.useState('');
+  const [face, setFace] = React.useState('');
+  const [invocation, setInvocation] = React.useState('');
+  const [func, setFunc] = React.useState('');
+  const [shadow, setShadow] = React.useState('');
+  const [ritual, setRitual] = React.useState('');
 
   const handleSave = () => {
     if (name.trim()) {
@@ -143,14 +144,14 @@ interface EditAllyModalProps {
 }
 
 export const EditAllyModal: React.FC<EditAllyModalProps> = ({ isVisible, onClose, onSave, colors, ally }) => {
-  const [name, setName] = useState(ally?.name || '');
-  const [face, setFace] = useState(ally?.face || '');
-  const [invocation, setInvocation] = useState(ally?.invocation || '');
-  const [func, setFunc] = useState(ally?.function || '');
-  const [shadow, setShadow] = useState(ally?.shadow || '');
-  const [ritual, setRitual] = useState(ally?.ritual || '');
+  const [name, setName] = React.useState(ally?.name || '');
+  const [face, setFace] = React.useState(ally?.face || '');
+  const [invocation, setInvocation] = React.useState(ally?.invocation || '');
+  const [func, setFunc] = React.useState(ally?.function || '');
+  const [shadow, setShadow] = React.useState(ally?.shadow || '');
+  const [ritual, setRitual] = React.useState(ally?.ritual || '');
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ally) {
       setName(ally.name);
       setFace(ally.face);
@@ -308,12 +309,12 @@ const categoryOptions: { id: 'time' | 'situational' | 'uplift'; label: string }[
 ];
 
 export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, onClose, onSave, colors }) => {
-  const [title, setTitle] = useState('');
-  const [selectedContainer, setSelectedContainer] = useState<ContainerId>('morning');
-  const [selectedCategory, setSelectedCategory] = useState<'time' | 'situational' | 'uplift'>('time');
-  const [bodyCue, setBodyCue] = useState('');
-  const [micro, setMicro] = useState('');
-  const [desire, setDesire] = useState('');
+  const [title, setTitle] = React.useState('');
+  const [selectedContainer, setSelectedContainer] = React.useState<ContainerId>('morning');
+  const [selectedCategory, setSelectedCategory] = React.useState<'time' | 'situational' | 'uplift'>('time');
+  const [bodyCue, setBodyCue] = React.useState('');
+  const [micro, setMicro] = React.useState('');
+  const [desire, setDesire] = React.useState('');
 
   const handleSave = () => {
     if (title.trim()) {
