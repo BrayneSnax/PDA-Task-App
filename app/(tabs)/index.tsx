@@ -186,14 +186,7 @@ export default function HomeScreen() {
   if (currentScreen === 'home') {
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
-        {/* Ambient Rhythm Placeholder */}
-        {ambientRhythmEnabled && (
-          <View style={[styles.ambientRhythmPlaceholder, { backgroundColor: colors.accent + '10' }]}>
-            <Text style={[styles.ambientRhythmText, { color: colors.accent }]}>
-              {activeContainer.toUpperCase()} HUM: Barely audible metronome of safety.
-            </Text>
-          </View>
-        )}
+        
         <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
         
         {/* 2x2 Action Grid at Top */}
@@ -216,11 +209,7 @@ export default function HomeScreen() {
 	              <Text style={[styles.themeText, { color: colors.dim, fontWeight: '500' }]}>
 	                {ContainerThemes[activeContainer]}
 	              </Text>
-	              <TouchableOpacity onPress={toggleAmbientRhythm}>
-	                <Text style={[styles.date, { color: ambientRhythmEnabled ? colors.accent : colors.dim }]}>
-	                  {ambientRhythmEnabled ? '🎶 Rhythm ON' : '🔇 Rhythm OFF'}
-	                </Text>
-	              </TouchableOpacity>
+
 	            </View>
 	          </View>
 
@@ -819,7 +808,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topSection: {
-    paddingTop: 48,
+    paddingTop: 10, // Reduced from 48 to 10
     paddingHorizontal: 20,
   },
   actionGrid: {
@@ -849,6 +838,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
+    paddingTop: 10, // Added a small top padding to the scroll view content
     paddingBottom: 40,
   },
   timeSection: {
@@ -1067,18 +1057,7 @@ const styles = StyleSheet.create({
 	    width: '100%',
 	    marginBottom: 10, // Reduced margin
 	  },
-  ambientRhythmPlaceholder: {
-    padding: 8,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  ambientRhythmText: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
+
   foodPortion: {
     fontSize: 14,
   },
