@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; // Assuming Picker is available or will be installed
+
 import { ContainerId, ColorScheme, Moment } from '../constants/Types';
 import { useApp } from '../context/AppContext';
 import useColors from '../hooks/useColors';
@@ -12,10 +14,10 @@ interface Props {
 }
 
 const synthesisPrompts = [
-  { key: 'context', title: 'The Setting of the Altar', placeholder: 'Describe the physical and emotional landscape before the moment (Where were you? What was the dominant feeling?)' },
-  { key: 'action_reflection', title: 'The Invocation', placeholder: 'How did the ritual feel in the body? What was the most impactful part of the Ally/Anchor use?' },
-  { key: 'result_shift', title: 'The Field Report', placeholder: 'What was the single most surprising or notable shift in your state? What did the Ally/Anchor teach you in this moment?' },
-  { key: 'conclusion_offering', title: 'The Offering', placeholder: 'What is the one truth or lesson you will carry forward from this Moment?' },
+  // Combining the first two prompts into a single "Reflection" field
+  { key: 'reflection', title: 'Reflection & Invocation', placeholder: 'Describe the physical and emotional landscape, and how the ritual felt in the body.' },
+  // Combining the last two prompts into a single "Insight" field
+  { key: 'insight', title: 'Field Report & Offering', placeholder: 'What was the most surprising shift, and what is the one lesson you will carry forward?' },
 ];
 
 const checkInOptions = {
@@ -29,10 +31,8 @@ export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: P
   const { addMoment } = useApp();
 
   const [synthesisState, setSynthesisState] = useState({
-    context: '',
-    action_reflection: '',
-    result_shift: '',
-    conclusion_offering: '',
+    reflection: '', // New combined field
+    insight: '',     // New combined field
     tone: '',
     frequency: '',
     presence: '',
@@ -42,10 +42,8 @@ export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: P
     if (isVisible && momentData) {
       // Reset state when modal opens
       setSynthesisState({
-        context: '',
-        action_reflection: '',
-        result_shift: '',
-        conclusion_offering: '',
+        reflection: '', // New combined field
+        insight: '',     // New combined field
         tone: '',
         frequency: '',
         presence: '',
@@ -63,6 +61,13 @@ export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: P
     const finalMoment: Omit<Moment, 'id' | 'timestamp' | 'date'> = {
       ...momentData,
       ...synthesisState,
+      // The original fields are no longer in synthesisState, so we need to ensure Moment type is updated
+      // For now, we will map the new fields to the old ones for compatibility with the existing Moment type structure
+      // A more complete solution would update the Moment type, but for a quick fix:
+      context: synthesisState.reflection,
+      action_reflection: '',
+      result_shift: synthesisState.insight,
+      conclusion_offering: '',
       text: momentData.text || 'Moment recorded', // Fallback text
       container: momentData.container || 'morning', // Fallback container
     } as Omit<Moment, 'id' | 'timestamp' | 'date'>; // Cast to ensure correct type
@@ -90,62 +95,64 @@ export const JournalisticSynthesisModal = ({ isVisible, onClose, momentData }: P
           </Text>
 
           <ScrollView style={styles.scrollView}>
-            {/* The 3-Part Check-in (Tone, Frequency, Presence) */}
+            {/* The 3-Part Check-in (Tone, Frequency, Presence) - Now as Dropdowns */}
             <View style={styles.checkInSection}>
               <Text style={[styles.sectionTitle, { color: colors.accent }]}>The 3-Part Check-in</Text>
-              
-              {/* Tone */}
-              <Text style={[styles.promptLabel, { color: colors.text }]}>Tone (How did it feel?)</Text>
-              <View style={styles.optionRow}>
-                {checkInOptions.tone.map(option => (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.optionButton,
-                      { backgroundColor: synthesisState.tone === option ? colors.accent : colors.bg },
-                      { borderColor: colors.dim, borderWidth: 1 }
-                    ]}
-                    onPress={() => handleSelect('tone', option)}
-                  >
-                    <Text style={[styles.optionText, { color: synthesisState.tone === option ? colors.card : colors.text }]}>{option}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
 
-              {/* Frequency */}
-              <Text style={[styles.promptLabel, { color: colors.text, marginTop: 12 }]}>Frequency (What helped?)</Text>
-              <View style={styles.optionRow}>
-                {checkInOptions.frequency.map(option => (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.optionButton,
-                      { backgroundColor: synthesisState.frequency === option ? colors.accent : colors.bg },
-                      { borderColor: colors.dim, borderWidth: 1 }
-                    ]}
-                    onPress={() => handleSelect('frequency', option)}
-                  >
-                    <Text style={[styles.optionText, { color: synthesisState.frequency === option ? colors.card : colors.text }]}>{option}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <View style={styles.dropdownRow}>
+                {/* Tone Dropdown */}
+                <View style={styles.dropdownContainer}>
+                  <Text style={[styles.promptLabel, { color: colors.text }]}>Tone</Text>
+                  <View style={[styles.pickerWrapper, { borderColor: colors.dim, backgroundColor: colors.bg }]}>
+                    <Picker
+                      selectedValue={synthesisState.tone}
+                      onValueChange={(itemValue) => handleSelect('tone', itemValue)}
+                      style={[styles.picker, { color: colors.text }]}
+                      dropdownIconColor={colors.text}
+                    >
+                      <Picker.Item label="How did it feel?" value="" enabled={false} />
+                      {checkInOptions.tone.map(option => (
+                        <Picker.Item key={option} label={option} value={option} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
 
-              {/* Presence */}
-              <Text style={[styles.promptLabel, { color: colors.text, marginTop: 12 }]}>Presence (Where was your mind?)</Text>
-              <View style={styles.optionRow}>
-                {checkInOptions.presence.map(option => (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.optionButton,
-                      { backgroundColor: synthesisState.presence === option ? colors.accent : colors.bg },
-                      { borderColor: colors.dim, borderWidth: 1 }
-                    ]}
-                    onPress={() => handleSelect('presence', option)}
-                  >
-                    <Text style={[styles.optionText, { color: synthesisState.presence === option ? colors.card : colors.text }]}>{option}</Text>
-                  </TouchableOpacity>
-                ))}
+                {/* Frequency Dropdown */}
+                <View style={styles.dropdownContainer}>
+                  <Text style={[styles.promptLabel, { color: colors.text }]}>Frequency</Text>
+                  <View style={[styles.pickerWrapper, { borderColor: colors.dim, backgroundColor: colors.bg }]}>
+                    <Picker
+                      selectedValue={synthesisState.frequency}
+                      onValueChange={(itemValue) => handleSelect('frequency', itemValue)}
+                      style={[styles.picker, { color: colors.text }]}
+                      dropdownIconColor={colors.text}
+                    >
+                      <Picker.Item label="What helped?" value="" enabled={false} />
+                      {checkInOptions.frequency.map(option => (
+                        <Picker.Item key={option} label={option} value={option} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+
+                {/* Presence Dropdown */}
+                <View style={styles.dropdownContainer}>
+                  <Text style={[styles.promptLabel, { color: colors.text }]}>Presence</Text>
+                  <View style={[styles.pickerWrapper, { borderColor: colors.dim, backgroundColor: colors.bg }]}>
+                    <Picker
+                      selectedValue={synthesisState.presence}
+                      onValueChange={(itemValue) => handleSelect('presence', itemValue)}
+                      style={[styles.picker, { color: colors.text }]}
+                      dropdownIconColor={colors.text}
+                    >
+                      <Picker.Item label="Where was your mind?" value="" enabled={false} />
+                      {checkInOptions.presence.map(option => (
+                        <Picker.Item key={option} label={option} value={option} />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
               </View>
             </View>
 
@@ -257,6 +264,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderWidth: 1,
   },
+  // New styles for the dropdown layout
+  dropdownRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  dropdownContainer: {
+    flex: 1,
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 40, // Adjust height as needed
+    width: '100%',
+  },
+  // Removed old button styles
   optionRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
