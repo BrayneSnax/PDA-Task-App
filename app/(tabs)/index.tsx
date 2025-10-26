@@ -205,12 +205,9 @@ export default function HomeScreen() {
 	              <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
 	              <Text style={[styles.time, { color: colors.text, fontSize: 14, fontWeight: '400' }]}>{currentTime}</Text>
 	            </View>
-	            <View style={styles.dateRow}>
-	              <Text style={[styles.themeText, { color: colors.dim, fontWeight: '500' }]}>
-	                {ContainerThemes[activeContainer]}
-	              </Text>
-
-	            </View>
+		              <Text style={[styles.themeText, { color: colors.dim, fontWeight: '500', marginTop: 8 }]}>
+		                {ContainerThemes[activeContainer]}
+		              </Text>
 	          </View>
 
 	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
@@ -1050,13 +1047,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
   },
-	  dateRow: {
-	    flexDirection: 'row',
-	    justifyContent: 'space-between',
-	    alignItems: 'center',
-	    width: '100%',
-	    marginBottom: 10, // Reduced margin
-	  },
+
 
   foodPortion: {
     fontSize: 14,
