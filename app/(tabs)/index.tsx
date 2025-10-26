@@ -200,15 +200,23 @@ export default function HomeScreen() {
 	          showsVerticalScrollIndicator={false}
         >
 	          {/* Time and Date Display - Reduced Prominence */}
-	          <View style={styles.timeSection}>
-	            <View style={styles.timeRow}>
-	              <Text style={[styles.date, { color: colors.dim }]}>{formatLongDate()}</Text>
-	              <Text style={[styles.time, { color: colors.text, fontSize: 14, fontWeight: '400' }]}>{currentTime}</Text>
-	            </View>
-		              <Text style={[styles.themeText, { color: colors.dim, fontWeight: '500', marginTop: 8 }]}>
-		                {ContainerThemes[activeContainer]}
-		              </Text>
-	          </View>
+		          <View style={[styles.timeSection, { alignItems: 'center' }]}>
+		            <View style={styles.timeRow}>
+		              <Text style={[styles.date, { color: colors.dim, textAlign: 'center' }]}>{formatLongDate()}</Text>
+		              <Text style={[styles.time, { color: colors.text, fontSize: 14, fontWeight: '400', textAlign: 'center' }]}>{currentTime}</Text>
+		            </View>
+			              <Text style={[styles.themeText, { 
+			                color: colors.dim, 
+			                fontWeight: '500', 
+			                marginTop: 12, 
+			                fontSize: 28, // Increased size
+			                fontFamily: 'OleoScript-Bold', // Custom font
+			                textAlign: 'center', 
+			                lineHeight: 32, // Adjusted line height for script font
+			              }]}>
+			                {ContainerThemes[activeContainer]}
+			              </Text>
+		          </View>
 
 	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
 	          <TemporalIntelligenceCard colors={colors} />
@@ -840,16 +848,18 @@ const styles = StyleSheet.create({
   },
   timeSection: {
     marginBottom: 24,
+    alignItems: 'center', // Center the content of the time section
   },
   timeRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center', // Center the time and date row
     gap: 16,
     marginBottom: 8,
   	  time: {
-	    fontSize: 24, // Reduced size
-	    fontWeight: '700',
-	  },etterSpacing: -1,
+		    fontSize: 24, // Reduced size
+		    fontWeight: '700',
+		  },etterSpacing: -1,
   },
   themeCard: {
     flex: 1,
@@ -858,8 +868,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   themeText: {
-    fontSize: 16,
-    fontStyle: 'italic',
+    fontSize: 28, // Increased size for the new aesthetic
+    fontFamily: 'OleoScript-Bold', // Custom font
+    fontStyle: 'normal', // Ensure not italic
+    textAlign: 'center',
+    lineHeight: 32,
   },
   date: {
     fontSize: 16,

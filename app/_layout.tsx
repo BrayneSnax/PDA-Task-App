@@ -1,6 +1,10 @@
 import { AppProvider } from './context/AppContext';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback, useEffect, useState } from 'react';
+import { OleoScript_700Bold } from '@expo-google-fonts/oleo-script';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { LogBox } from 'react-native';
@@ -18,11 +22,45 @@ export const unstable_settings = {
   anchor: '(tabs)',
 };
 
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Load custom fonts
+        await Font.loadAsync({
+          'OleoScript-Bold': OleoScript_700Bold,
+        });
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we didn't call this,
+      // we would see the splash screen stay visible until the first render.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider onLayout={onLayoutRootView}>
+    
       <AppProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
