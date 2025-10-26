@@ -68,6 +68,7 @@ export const StateIndicators = {
   violet: "#B19CD9", // Focus
 };
 
+// Aesthetic titles updated to be more evocative
 export const ContainerThemes: Record<ContainerId, string> = {
   morning: "Coming Online",
   afternoon: "Recalibration",
