@@ -69,10 +69,10 @@ export const StateIndicators = {
 };
 
 export const ContainerThemes: Record<ContainerId, string> = {
-  morning: "orient gently; don't command yourself awake",
-  afternoon: "release built-up charge, re-enter presence",
-  evening: "unwind; let cognition return to body",
-  late: "signal safety; prepare for rest without force",
+  morning: "Coming Online",
+  afternoon: "Recalibration",
+  evening: "Integration",
+  late: "Descent",
   situational: "Situational Resonance",
   uplift: "Uplift & Expansion",
 };
