@@ -12,7 +12,7 @@ import { useApp } from '../context/AppContext';
 import useColors from '../hooks/useColors';
 import { AllyCard } from '../components/AllyCard';
 import { AddAllyModal, EditAllyModal } from '../modal';
-import { SubstanceJournalisticSynthesisModal } from '../modal/SubstanceJournalisticSynthesisModal';
+import { SubstanceSynthesisModal } from '../modal/SubstanceSynthesisModal';
 
 export default function SubstancesScreen() {
   const {
@@ -180,7 +180,7 @@ export default function SubstancesScreen() {
           ally={allyToEdit}
         />
       )}
-      <SubstanceJournalisticSynthesisModal
+      <SubstanceSynthesisModal
         isVisible={isSynthesisModalVisible}
         onClose={() => {
           setIsSynthesisModalVisible(false);

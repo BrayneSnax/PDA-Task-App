@@ -12,7 +12,8 @@ interface Props {
   colors: ColorScheme;
 }
 
-export const SubstanceJournalisticSynthesisModal = ({ isVisible, onClose, momentData }: Props) => {
+// Updated modal with text inputs instead of dropdowns
+export const SubstanceSynthesisModal = ({ isVisible, onClose, momentData }: Props) => {
   const colors = useColors(momentData?.container || 'morning');
   const { addSubstanceMoment } = useApp();
 
