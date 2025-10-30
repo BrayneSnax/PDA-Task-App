@@ -117,36 +117,29 @@ export default function SubstancesScreen() {
               
               {entry.tone && (
                 <View style={styles.checkInRow}>
-                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Tone:</Text>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Intention:</Text>
                   <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.tone}</Text>
                 </View>
               )}
               
               {entry.frequency && (
                 <View style={styles.checkInRow}>
-                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Frequency:</Text>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Sensation:</Text>
                   <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.frequency}</Text>
                 </View>
               )}
               
               {entry.presence && (
                 <View style={styles.checkInRow}>
-                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Presence:</Text>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Reflection:</Text>
                   <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.presence}</Text>
                 </View>
               )}
 
               {entry.context && (
                 <View style={styles.reflectionSection}>
-                  <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Reflection:</Text>
+                  <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Synthesis & Invocation:</Text>
                   <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
-                </View>
-              )}
-
-              {entry.result_shift && (
-                <View style={styles.reflectionSection}>
-                  <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Insight:</Text>
-                  <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.result_shift}</Text>
                 </View>
               )}
             </View>

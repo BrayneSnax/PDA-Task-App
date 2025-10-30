@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 
 import { ContainerId, ColorScheme, Moment } from '../constants/Types';
 import { useApp } from '../context/AppContext';
@@ -13,53 +12,43 @@ interface Props {
   colors: ColorScheme;
 }
 
-const synthesisPrompts = [
-  { key: 'reflection', title: 'Reflection & Invocation', placeholder: 'Describe the physical and emotional landscape, and how the ritual felt in the body.' },
-  { key: 'insight', title: 'Field Report & Offering', placeholder: 'What was the most surprising shift, and what is the one lesson you will carry forward?' },
-];
-
-const checkInOptions = {
-  tone: ['Lighter', 'Same', 'Spikier'],
-  frequency: ['Water', 'Light', 'Movement', 'Sound', 'Novelty', 'Social'],
-  presence: ['Focused', 'Scattered', 'Present', 'Distant'],
-};
-
 export const SubstanceJournalisticSynthesisModal = ({ isVisible, onClose, momentData }: Props) => {
   const colors = useColors(momentData?.container || 'morning');
   const { addSubstanceMoment } = useApp();
 
   const [synthesisState, setSynthesisState] = useState({
+    intention: '',
+    sensation: '',
     reflection: '',
-    insight: '',
-    tone: '',
-    frequency: '',
-    presence: '',
+    synthesis: '',
   });
 
   useEffect(() => {
     if (isVisible && momentData) {
       setSynthesisState({
+        intention: '',
+        sensation: '',
         reflection: '',
-        insight: '',
-        tone: '',
-        frequency: '',
-        presence: '',
+        synthesis: '',
       });
     }
   }, [isVisible]);
 
   const handleSave = () => {
-    if (!synthesisState.tone || !synthesisState.frequency || !synthesisState.presence) {
-      alert('Please select Tone, Frequency, and Presence before saving.');
+    if (!synthesisState.intention || !synthesisState.sensation || !synthesisState.reflection) {
+      alert('Please fill in Intention, Sensation, and Reflection before saving.');
       return;
     }
 
     const finalMoment: Omit<Moment, 'id' | 'timestamp' | 'date'> = {
       ...momentData,
-      ...synthesisState,
-      context: synthesisState.reflection,
+      // Map new fields to Moment type structure
+      tone: synthesisState.intention,
+      frequency: synthesisState.sensation,
+      presence: synthesisState.reflection,
+      context: synthesisState.synthesis,
       action_reflection: '',
-      result_shift: synthesisState.insight,
+      result_shift: '',
       conclusion_offering: '',
       text: momentData.text || 'Substance moment recorded',
       container: momentData.container || 'morning',
@@ -69,7 +58,7 @@ export const SubstanceJournalisticSynthesisModal = ({ isVisible, onClose, moment
     onClose();
   };
 
-  const handleSelect = (key: keyof typeof synthesisState, value: string) => {
+  const handleTextChange = (key: keyof typeof synthesisState, value: string) => {
     setSynthesisState(prev => ({ ...prev, [key]: value }));
   };
 
@@ -82,72 +71,56 @@ export const SubstanceJournalisticSynthesisModal = ({ isVisible, onClose, moment
     >
       <View style={[styles.centeredView, { backgroundColor: colors.bg + 'CC' }]}>
         <View style={[styles.modalView, { backgroundColor: colors.card }]}>
-          <Text style={[styles.modalTitle, { color: colors.text }]}>Substance Journalistic Synthesis</Text>
+          <Text style={[styles.modalTitle, { color: colors.text }]}>Journalistic Synthesis</Text>
           <Text style={[styles.modalSubtitle, { color: colors.dim }]}>
-            Reflect on your substance experience with guided prompts.
+            Reflect on the Moment.
           </Text>
 
           <ScrollView style={styles.scrollView}>
             <View style={styles.checkInSection}>
-              <Text style={[styles.sectionTitle, { color: colors.accent }]}>The 3-Part Check-in</Text>
+              <Text style={[styles.sectionTitle, { color: colors.accent }]}>THE 3-PART CHECK-IN</Text>
 
-              <Text style={[styles.label, { color: colors.text }]}>Tone</Text>
-              <View style={[styles.pickerContainer, { backgroundColor: colors.bg, borderColor: colors.dim }]}>
-                <Picker
-                  selectedValue={synthesisState.tone}
-                  onValueChange={(value) => handleSelect('tone', value)}
-                  style={[styles.picker, { color: colors.text }]}
-                >
-                  <Picker.Item label="Select..." value="" />
-                  {checkInOptions.tone.map(option => (
-                    <Picker.Item key={option} label={option} value={option} />
-                  ))}
-                </Picker>
-              </View>
+              <Text style={[styles.label, { color: colors.text }]}>Intention</Text>
+              <TextInput
+                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                placeholder="..."
+                placeholderTextColor={colors.dim}
+                value={synthesisState.intention}
+                onChangeText={(text) => handleTextChange('intention', text)}
+              />
 
-              <Text style={[styles.label, { color: colors.text }]}>Frequency</Text>
-              <View style={[styles.pickerContainer, { backgroundColor: colors.bg, borderColor: colors.dim }]}>
-                <Picker
-                  selectedValue={synthesisState.frequency}
-                  onValueChange={(value) => handleSelect('frequency', value)}
-                  style={[styles.picker, { color: colors.text }]}
-                >
-                  <Picker.Item label="Select..." value="" />
-                  {checkInOptions.frequency.map(option => (
-                    <Picker.Item key={option} label={option} value={option} />
-                  ))}
-                </Picker>
-              </View>
+              <Text style={[styles.label, { color: colors.text }]}>Sensation</Text>
+              <TextInput
+                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                placeholder="..."
+                placeholderTextColor={colors.dim}
+                value={synthesisState.sensation}
+                onChangeText={(text) => handleTextChange('sensation', text)}
+              />
 
-              <Text style={[styles.label, { color: colors.text }]}>Presence</Text>
-              <View style={[styles.pickerContainer, { backgroundColor: colors.bg, borderColor: colors.dim }]}>
-                <Picker
-                  selectedValue={synthesisState.presence}
-                  onValueChange={(value) => handleSelect('presence', value)}
-                  style={[styles.picker, { color: colors.text }]}
-                >
-                  <Picker.Item label="Select..." value="" />
-                  {checkInOptions.presence.map(option => (
-                    <Picker.Item key={option} label={option} value={option} />
-                  ))}
-                </Picker>
-              </View>
+              <Text style={[styles.label, { color: colors.text }]}>Reflection</Text>
+              <TextInput
+                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                placeholder="..."
+                placeholderTextColor={colors.dim}
+                value={synthesisState.reflection}
+                onChangeText={(text) => handleTextChange('reflection', text)}
+              />
             </View>
 
-            {synthesisPrompts.map(prompt => (
-              <View key={prompt.key} style={styles.promptSection}>
-                <Text style={[styles.promptTitle, { color: colors.accent }]}>{prompt.title}</Text>
-                <TextInput
-                  style={[styles.textInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
-                  placeholder={prompt.placeholder}
-                  placeholderTextColor={colors.dim}
-                  value={synthesisState[prompt.key as keyof typeof synthesisState]}
-                  onChangeText={(text) => handleSelect(prompt.key as keyof typeof synthesisState, text)}
-                  multiline
-                  numberOfLines={4}
-                />
-              </View>
-            ))}
+            <View style={styles.promptSection}>
+              <Text style={[styles.guidedReflectionTitle, { color: colors.accent }]}>GUIDED REFLECTION</Text>
+              <Text style={[styles.promptTitle, { color: colors.text }]}>Synthesis & Invocation</Text>
+              <TextInput
+                style={[styles.textInput, styles.largeTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                placeholder="Trace the atmosphere of the ritual — sensations, emotions, and any shift that followed..."
+                placeholderTextColor={colors.dim}
+                value={synthesisState.synthesis}
+                onChangeText={(text) => handleTextChange('synthesis', text)}
+                multiline
+                numberOfLines={8}
+              />
+            </View>
           </ScrollView>
 
           <View style={styles.buttonRow}>
@@ -161,7 +134,7 @@ export const SubstanceJournalisticSynthesisModal = ({ isVisible, onClose, moment
               style={[styles.button, styles.saveButton, { backgroundColor: colors.accent }]}
               onPress={handleSave}
             >
-              <Text style={[styles.buttonText, { color: colors.card }]}>Save</Text>
+              <Text style={[styles.buttonText, { color: colors.card }]}>Synthesize Moment</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -215,29 +188,33 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 6,
   },
-  pickerContainer: {
-    borderRadius: 8,
-    borderWidth: 1,
-    overflow: 'hidden',
-  },
-  picker: {
-    height: 50,
-  },
-  promptSection: {
-    marginBottom: 20,
-  },
-  promptTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
   textInput: {
     borderRadius: 8,
     borderWidth: 1,
     padding: 12,
     fontSize: 14,
-    minHeight: 80,
+  },
+  miniTextInput: {
+    minHeight: 44,
+  },
+  largeTextInput: {
+    minHeight: 120,
     textAlignVertical: 'top',
+  },
+  promptSection: {
+    marginBottom: 20,
+  },
+  guidedReflectionTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 12,
+  },
+  promptTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
   },
   buttonRow: {
     flexDirection: 'row',
