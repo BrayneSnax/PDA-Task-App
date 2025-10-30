@@ -24,11 +24,12 @@ import { ContainerId } from '../constants/Types';
 import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
 
 // Conditional imports moved outside the component to fix "Rendered more hooks" error
-import { AllyCard } from '../components/AllyCard';
+// import { AllyCard } from '../components/AllyCard'; // Moved to substances.tsx
+import SubstancesScreen from './substances';
 import { JournalEntryCard } from '../components/JournalEntryCard';
 import { PatternCard } from '../components/PatternCard';
 import { FoodEntryCard } from '../components/FoodEntryCard';
-import { AddAllyModal, EditAllyModal } from '../modal';
+// import { AddAllyModal, EditAllyModal } from '../modal'; // Moved to substances.tsx
 import { DailyBlockSynthesisModal } from '../modal/DailyBlockSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
@@ -40,7 +41,7 @@ export default function HomeScreen() {
     items,
     ambientRhythmEnabled,
     toggleAmbientRhythm,
-    allies,
+    // allies,
     activeContainer,
     setActiveContainer,
     toggleCompletion,
@@ -48,9 +49,9 @@ export default function HomeScreen() {
     loading,
     addItem,
     removeItem,
-    removeAlly,
-    updateAlly,
-    addAlly,
+    // removeAlly,
+    // updateAlly,
+    // addAlly,
     journalEntries,
     removeJournalEntry,
     patterns,
@@ -65,11 +66,11 @@ export default function HomeScreen() {
   const [currentTime, setCurrentTime] = useState(formatTime());
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
-  const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
-  const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
-  const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false);
-  const [allyToEdit, setAllyToEdit] = useState(null);
-  const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
+// const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
+// const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
+// const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false);
+// const [allyToEdit, setAllyToEdit] = useState(null);
+// const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
   const [selectedItem, setSelectedItem] = useState<ContainerItem | null>(null);
   const [isAnalysisModalVisible, setIsAnalysisModalVisible] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
@@ -344,105 +345,7 @@ export default function HomeScreen() {
     );
   }
 
-  // SUBSTANCES SCREEN
-  if (currentScreen === 'substances') {
-    return (
-      <View style={[styles.container, { backgroundColor: colors.bg }]}>
-        <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
-        
-        {/* 2x2 Action Grid at Top */}
-        <View style={styles.topSection}>
-          {renderActionGrid()}
-        </View>
-
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={[styles.containerTitle, { color: colors.text }]}>
-            Substances
-          </Text>
-          <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
-            your living pharmacopoeia
-          </Text>
-
-          <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
-            YOUR SUBSTANCES
-          </Text>
-
-          {allies.map(ally => (
-            <AllyCard
-              key={ally.id}
-              ally={ally}
-              onEdit={(ally: any) => {
-                setAllyToEdit(ally);
-                setIsEditAllyModalVisible(true);
-              }}
-              onRemove={() => removeAlly(ally.id)}
-              onLogUse={() => {
-                setMomentToSynthesize({
-                  allyId: ally.id,
-                  allyName: ally.name,
-                  container: activeContainer,
-                  text: `Used ${ally.name}`,
-                });
-                setIsSynthesisModalVisible(true);
-              }}
-              colors={colors}
-            />
-          ))}
-
-          <TouchableOpacity
-            style={[styles.addButton, { backgroundColor: colors.accent }]}
-            onPress={() => setIsAddAllyModalVisible(true)}
-          >
-            <Text style={[styles.addButtonText, { color: colors.card }]}>+ Add New Companion</Text>
-          </TouchableOpacity>
-
-          <View style={{ height: 80 }} />
-        </ScrollView>
-
-        {/* Time Container Navigation at Bottom */}
-        {renderTimeContainerNav()}
-
-        {/* Modals */}
-        <AddAllyModal
-          isVisible={isAddAllyModalVisible}
-          onClose={() => setIsAddAllyModalVisible(false)}
-          onSave={(name: string, face: string, invocation: string, func: string, shadow: string, ritual: string) => {
-            addAlly({
-              name,
-              face,
-              invocation,
-              function: func,
-              shadow,
-              ritual,
-              log: [],
-            });
-          }}
-          colors={colors}
-        />
-        {allyToEdit && (
-          <EditAllyModal
-            isVisible={isEditAllyModalVisible}
-            onClose={() => {
-              setIsEditAllyModalVisible(false);
-              setAllyToEdit(null);
-            }}
-            onSave={(ally: any) => {
-              updateAlly(ally);
-            }}
-            colors={colors}
-            ally={allyToEdit}
-          />
-        )}
-        {/* Substances now uses its own SubstanceSynthesisModal in substances.tsx */}
-      </View>
-    );
-  }
-
-  // JOURNAL SCREEN
+// SUBSTANCES SCREEN  if (currentScreen === 'substances') {    return (      <View style={[styles.container, { backgroundColor: colors.bg }]}>        <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />                {/* 2x2 Action Grid at Top */}        <View style={styles.topSection}>          {renderActionGrid()}        </View>        {/* Render the dedicated SubstancesScreen component */}        <SubstancesScreen />        {/* Time Container Navigation at Bottom */}        {renderTimeContainerNav()}      </View>    );  }  // JOURNAL SCREEN
   if (currentScreen === 'journal') {
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
