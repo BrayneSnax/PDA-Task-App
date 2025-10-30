@@ -2,5 +2,7 @@
 export { AddAllyModal, EditAllyModal } from '../modal';
 export { JournalisticSynthesisModal } from './JournalisticSynthesisModal';
 export { SubstanceSynthesisModal } from './SubstanceSynthesisModal';
+export { DailyBlockSynthesisModal } from './DailyBlockSynthesisModal';
+export { PatternSynthesisModal } from './PatternSynthesisModal';
 export { AddFoodModal } from './AddFoodModal';
 export { AddPatternModal } from './AddPatternModal';

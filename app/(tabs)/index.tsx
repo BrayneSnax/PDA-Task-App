@@ -29,7 +29,7 @@ import { JournalEntryCard } from '../components/JournalEntryCard';
 import { PatternCard } from '../components/PatternCard';
 import { FoodEntryCard } from '../components/FoodEntryCard';
 import { AddAllyModal, EditAllyModal } from '../modal';
-import { JournalisticSynthesisModal } from '../modal/JournalisticSynthesisModal';
+import { DailyBlockSynthesisModal } from '../modal/DailyBlockSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
 
@@ -437,15 +437,7 @@ export default function HomeScreen() {
             ally={allyToEdit}
           />
         )}
-        <JournalisticSynthesisModal
-          isVisible={isSynthesisModalVisible}
-          onClose={() => {
-            setIsSynthesisModalVisible(false);
-            setMomentToSynthesize({});
-          }}
-          momentData={momentToSynthesize}
-          colors={colors}
-        />
+        {/* Substances now uses its own SubstanceSynthesisModal in substances.tsx */}
       </View>
     );
   }
@@ -593,7 +585,7 @@ export default function HomeScreen() {
         {renderTimeContainerNav()}
 
         {/* Synthesis Modal for creating journal entries */}
-        <JournalisticSynthesisModal
+        <DailyBlockSynthesisModal
           isVisible={isSynthesisModalVisible}
           onClose={() => {
             setIsSynthesisModalVisible(false);
