@@ -67,14 +67,38 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const loadData = useCallback(async () => {
     const savedState = await loadAppState();
     if (savedState) {
-      setItems(savedState.items.length > 0 ? savedState.items : DEFAULT_GROUNDING_ITEMS);
-      setAllies(savedState.allies.length > 0 ? savedState.allies : DEFAULT_ALLIES);
-      setJournalEntries(savedState.journalEntries || []);
-      setSubstanceJournalEntries(savedState.substanceJournalEntries || []);
-      setCompletions(savedState.completions || []);
-      setPatterns(savedState.patterns || []);
-      setFoodEntries(savedState.foodEntries || []);
-      setActiveContainer(savedState.activeContainer || getCurrentContainer());
+      // normalize incoming state for backward compatibility
+      const normalizeMoment = (m: any) => ({
+        ...m,
+        tone: m.tone || '',
+        frequency: m.frequency || '',
+        presence: m.presence || '',
+        context: m.context || '',
+        action_reflection: m.action_reflection || '',
+        result_shift: m.result_shift || '',
+        conclusion_offering: m.conclusion_offering || '',
+        text: m.text || '',
+      });
+
+      const normalized = {
+        items: Array.isArray(savedState.items) && savedState.items.length > 0 ? savedState.items : DEFAULT_GROUNDING_ITEMS,
+        allies: Array.isArray(savedState.allies) && savedState.allies.length > 0 ? savedState.allies : DEFAULT_ALLIES,
+        journalEntries: Array.isArray(savedState.journalEntries) ? savedState.journalEntries.map(normalizeMoment) : [],
+        substanceJournalEntries: Array.isArray(savedState.substanceJournalEntries) ? savedState.substanceJournalEntries.map(normalizeMoment) : [],
+        completions: Array.isArray(savedState.completions) ? savedState.completions : [],
+        patterns: Array.isArray(savedState.patterns) ? savedState.patterns : [],
+        foodEntries: Array.isArray(savedState.foodEntries) ? savedState.foodEntries : [],
+        activeContainer: savedState.activeContainer || getCurrentContainer(),
+      } as AppState;
+
+      setItems(normalized.items);
+      setAllies(normalized.allies);
+      setJournalEntries(normalized.journalEntries);
+      setSubstanceJournalEntries(normalized.substanceJournalEntries);
+      setCompletions(normalized.completions);
+      setPatterns(normalized.patterns);
+      setFoodEntries(normalized.foodEntries);
+      setActiveContainer(normalized.activeContainer);
 
     }
     setLoading(false);

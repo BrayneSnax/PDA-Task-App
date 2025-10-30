@@ -11,8 +11,9 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import useColors from '../hooks/useColors';
 import { AllyCard } from '../components/AllyCard';
-import { AddAllyModal, EditAllyModal } from '../modal';
-import { SubstanceJournalisticSynthesisModal } from '../modal/SubstanceJournalisticSynthesisModal';
+// ⧈replace-start:imports
+import { AddAllyModal, EditAllyModal, SubstanceJournalisticSynthesisModal } from '../modal';
+// ⧈replace-end:imports
 
 export default function SubstancesScreen() {
   const {
@@ -303,4 +304,3 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
-

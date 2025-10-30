@@ -19,6 +19,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection';
 import { CraftMomentModal } from '../modal';
 import { Modal } from '../components/Modal';
 import { Alert } from 'react-native';
+import { ANALYSIS_URL, REQUEST_TIMEOUT_MS, TEST_MODE } from '../constants/Config';
 import { ContainerId } from '../constants/Types';
 import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
 
@@ -479,30 +480,42 @@ export default function HomeScreen() {
           {journalEntries.length > 0 && (
             <TouchableOpacity
               style={[styles.analyzeButton, { backgroundColor: colors.accent }]}
-              onPress={async () => {
+            onPress={async () => {
                 setIsAnalyzing(true);
                 try {
-                  const response = await fetch("https://3000-ih2uy4a4o9o05vxo1xb09-a9018c65.manusvm.computer/api/trpc/journal.analyzeJournal", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      json: {
-                        entries: journalEntries.slice(0, 10).map(entry => ({
-                          title: entry.allyName || entry.anchorTitle || "Moment",
-                          text: entry.context || "",
-                          date: entry.date,
-                          status: entry.tone || "",
-                          note: entry.text || "",
-                        })),
-                      },
-                    }),
-                  });
-                  const data = await response.json();
-                  if (data.result?.data?.analysis) {
-                    setAnalysisResult(data.result.data.analysis);
+                  if (TEST_MODE || !ANALYSIS_URL) {
+                    await new Promise(r => setTimeout(r, 800));
+                    setAnalysisResult(
+                      'Mock analysis: noticing steady morning anchors, uplift correlates with journaling days. Consider adding an afternoon hydration ritual to reinforce momentum.'
+                    );
                     setIsAnalysisModalVisible(true);
+                  } else {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+                    const response = await fetch(ANALYSIS_URL, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        json: {
+                          entries: journalEntries.slice(0, 10).map(entry => ({
+                            title: entry.allyName || entry.anchorTitle || 'Moment',
+                            text: entry.context || '',
+                            date: entry.date,
+                            status: entry.tone || '',
+                            note: entry.text || '',
+                          })),
+                        },
+                      }),
+                      signal: controller.signal,
+                    });
+                    clearTimeout(timeout);
+                    const data = await response.json();
+                    if (data.result?.data?.analysis) {
+                      setAnalysisResult(data.result.data.analysis);
+                      setIsAnalysisModalVisible(true);
+                    }
                   }
                 } catch (error) {
                   console.error("Analysis failed:", error);
@@ -856,10 +869,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Center the time and date row
     gap: 16,
     marginBottom: 8,
-  	  time: {
-		    fontSize: 24, // Reduced size
-		    fontWeight: '700',
-		  },etterSpacing: -1,
+  },
+  time: {
+    fontSize: 14,
+    fontWeight: '400',
   },
   themeCard: {
     flex: 1,

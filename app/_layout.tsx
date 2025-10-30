@@ -15,6 +15,7 @@ LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -60,16 +61,17 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-    
       <AppProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </AppProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <ErrorBoundary>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+            </Stack>
+            <StatusBar style="auto" />
+          </ErrorBoundary>
+        </ThemeProvider>
+      </AppProvider>
     </SafeAreaProvider>
   );
 }
