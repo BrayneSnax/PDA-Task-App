@@ -26,9 +26,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.michaelmistree.pdataskapp"
     },
+    "plugins": [
+      "expo-router"
+    ],
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "3e85196f-f0b0-4564-af6c-6c37e2ff95be"
+        "projectId": "7ba133ff-6a63-48eb-9c04-aa10ca1ff89a"
       }
     }
   }
