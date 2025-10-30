@@ -1,6 +1,6 @@
 import { Ally, ContainerItem } from './Types';
 
-// Default Chemical Allies (Keeping existing allies)
+// Default Substance Allies (Keeping existing allies)
 export const DEFAULT_ALLIES: Ally[] = [
   {
     id: 'firestarter',

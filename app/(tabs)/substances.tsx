@@ -12,7 +12,7 @@ import { useApp } from '../context/AppContext';
 import useColors from '../hooks/useColors';
 import { AllyCard } from '../components/AllyCard';
 import { AddAllyModal, EditAllyModal } from '../modal';
-import { JournalisticSynthesisModal } from '../modal/JournalisticSynthesisModal';
+import { SubstanceJournalisticSynthesisModal } from '../modal/SubstanceJournalisticSynthesisModal';
 
 export default function SubstancesScreen() {
   const {
@@ -21,6 +21,7 @@ export default function SubstancesScreen() {
     removeAlly,
     updateAlly,
     addAlly,
+    substanceJournalEntries,
     loading,
   } = useApp();
 
@@ -49,7 +50,7 @@ export default function SubstancesScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={[styles.containerTitle, { color: colors.text }]}>
-          Chemical Companions
+          Substances
         </Text>
         <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
           your living pharmacopoeia
@@ -88,6 +89,70 @@ export default function SubstancesScreen() {
           <Text style={[styles.addAllyText, { color: colors.card }]}>+ Add New Companion</Text>
         </TouchableOpacity>
 
+        {/* Substances Journal Section */}
+        <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 32 }]}>
+          SUBSTANCE TRANSMISSIONS
+        </Text>
+        <Text style={[styles.journalSubtitle, { color: colors.dim, marginBottom: 16 }]}>
+          Your personal log of substance experiences
+        </Text>
+
+        {substanceJournalEntries.length === 0 ? (
+          <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+            <Text style={[styles.emptyText, { color: colors.dim }]}>
+              No substance transmissions yet. Log your first interaction to begin.
+            </Text>
+          </View>
+        ) : (
+          substanceJournalEntries.slice(0, 10).map((entry) => (
+            <View key={entry.id} style={[styles.entryCard, { backgroundColor: colors.card }]}>
+              <View style={styles.entryHeader}>
+                <Text style={[styles.entryTitle, { color: colors.text }]}>
+                  {entry.allyName || 'Substance Moment'}
+                </Text>
+                <Text style={[styles.entryDate, { color: colors.dim }]}>
+                  {new Date(entry.date).toLocaleDateString()}
+                </Text>
+              </View>
+              
+              {entry.tone && (
+                <View style={styles.checkInRow}>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Tone:</Text>
+                  <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.tone}</Text>
+                </View>
+              )}
+              
+              {entry.frequency && (
+                <View style={styles.checkInRow}>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Frequency:</Text>
+                  <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.frequency}</Text>
+                </View>
+              )}
+              
+              {entry.presence && (
+                <View style={styles.checkInRow}>
+                  <Text style={[styles.checkInLabel, { color: colors.dim }]}>Presence:</Text>
+                  <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.presence}</Text>
+                </View>
+              )}
+
+              {entry.context && (
+                <View style={styles.reflectionSection}>
+                  <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Reflection:</Text>
+                  <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
+                </View>
+              )}
+
+              {entry.result_shift && (
+                <View style={styles.reflectionSection}>
+                  <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Insight:</Text>
+                  <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.result_shift}</Text>
+                </View>
+              )}
+            </View>
+          ))
+        )}
+
         <View style={{ height: 100 }} />
       </ScrollView>
 
@@ -122,7 +187,7 @@ export default function SubstancesScreen() {
           ally={allyToEdit}
         />
       )}
-      <JournalisticSynthesisModal
+      <SubstanceJournalisticSynthesisModal
         isVisible={isSynthesisModalVisible}
         onClose={() => {
           setIsSynthesisModalVisible(false);
@@ -176,6 +241,66 @@ const styles = StyleSheet.create({
   addAllyText: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  journalSubtitle: {
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  emptyCard: {
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  entryCard: {
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  entryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  entryTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  entryDate: {
+    fontSize: 13,
+  },
+  checkInRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 6,
+  },
+  checkInLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  checkInValue: {
+    fontSize: 13,
+  },
+  reflectionSection: {
+    marginTop: 12,
+    gap: 4,
+  },
+  reflectionLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  reflectionText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
 

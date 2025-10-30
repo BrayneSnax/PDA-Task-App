@@ -86,6 +86,7 @@ export interface AppState {
   items: ContainerItem[];
   allies: Ally[];
   journalEntries: Moment[];
+  substanceJournalEntries: Moment[]; // Separate journal for Substances section
   completions: Completion[];
   patterns: Pattern[];
   foodEntries: FoodEntry[];

@@ -16,6 +16,7 @@ interface AppContextType extends AppState {
   removeAlly: (id: string) => void;
   logAllyUse: (allyName: string, details?: Partial<Moment>) => void;
   addMoment: (moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => void;
+  addSubstanceMoment: (moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => void;
   addPattern: (pattern: Omit<Pattern, 'id' | 'timestamp' | 'date'>) => void;
   removePattern: (id: string) => void;
   addFoodEntry: (entry: Omit<FoodEntry, 'id' | 'timestamp' | 'date'>) => void;
@@ -23,6 +24,7 @@ interface AppContextType extends AppState {
   setActiveContainer: (container: ContainerId) => void;
   loading: boolean;
   removeJournalEntry: (id: string) => void;
+  removeSubstanceJournalEntry: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -31,9 +33,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ContainerItem[]>(DEFAULT_GROUNDING_ITEMS);
   const [allies, setAllies] = useState<Ally[]>(DEFAULT_ALLIES);
   const [journalEntries, setJournalEntries] = useState<Moment[]>([]);
+  const [substanceJournalEntries, setSubstanceJournalEntries] = useState<Moment[]>([]);
   
   const removeJournalEntry = useCallback((id: string) => {
     setJournalEntries(prev => prev.filter(entry => entry.id !== id));
+  }, []);
+  
+  const removeSubstanceJournalEntry = useCallback((id: string) => {
+    setSubstanceJournalEntries(prev => prev.filter(entry => entry.id !== id));
   }, []);
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [patterns, setPatterns] = useState<Pattern[]>([]);
@@ -55,7 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [items, allies, journalEntries, completions, patterns, foodEntries, activeContainer, loading]);
+  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, activeContainer, loading]);
 
   const loadData = useCallback(async () => {
     const savedState = await loadAppState();
@@ -63,6 +70,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setItems(savedState.items.length > 0 ? savedState.items : DEFAULT_GROUNDING_ITEMS);
       setAllies(savedState.allies.length > 0 ? savedState.allies : DEFAULT_ALLIES);
       setJournalEntries(savedState.journalEntries || []);
+      setSubstanceJournalEntries(savedState.substanceJournalEntries || []);
       setCompletions(savedState.completions || []);
       setPatterns(savedState.patterns || []);
       setFoodEntries(savedState.foodEntries || []);
@@ -77,13 +85,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       items,
       allies,
       journalEntries,
+      substanceJournalEntries,
       completions,
       patterns,
       foodEntries,
       activeContainer,
 
     });
-  }, [items, allies, journalEntries, completions, patterns, foodEntries, activeContainer]);
+  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, activeContainer]);
 
   const addItem = useCallback((item: Omit<ContainerItem, 'id'>) => {
     const newItem: ContainerItem = {
@@ -162,6 +171,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [activeContainer]);
 
+  // Add moment specifically to Substances journal (separate from main journal)
+  const addSubstanceMoment = useCallback((moment: Omit<Moment, 'id' | 'timestamp' | 'date'>) => {
+    const newMoment: Moment = {
+      ...moment,
+      id: generateId(),
+      date: new Date().toISOString(),
+      timestamp: Date.now(),
+    };
+    setSubstanceJournalEntries(prev => [newMoment, ...prev]);
+
+    // Update ally log if an ally was involved
+    if (newMoment.allyId) {
+      setAllies(prevAllies => prevAllies.map(ally => {
+        if (ally.id === newMoment.allyId) {
+          return {
+            ...ally,
+            log: [newMoment, ...ally.log],
+          };
+        }
+        return ally;
+      }));
+    }
+  }, [activeContainer]);
+
   // Keeping logAllyUse for now, but redirecting it to the new addMoment
   const logAllyUse = useCallback((ally: Ally, details?: Partial<Moment>) => {
     // Ally object is passed directly from AllyCard/index.tsx
@@ -218,9 +251,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value: AppContextType = {
     removeJournalEntry,
+    removeSubstanceJournalEntry,
     items,
     allies,
     journalEntries,
+    substanceJournalEntries,
     completions,
     patterns,
     foodEntries,
@@ -236,6 +271,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     removeAlly,
     logAllyUse,
     addMoment,
+    addSubstanceMoment,
     addPattern,
     removePattern,
     addFoodEntry,
