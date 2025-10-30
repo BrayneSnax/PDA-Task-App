@@ -107,7 +107,7 @@ export default function HomeScreen() {
         onPress={() => setCurrentScreen('substances')}
       >
         <Text style={[styles.actionIcon, { color: colors.accent }]}>🍃</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Chemical</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Substances</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -360,7 +360,7 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <Text style={[styles.containerTitle, { color: colors.text }]}>
-            Chemical Companions
+            Substances
           </Text>
           <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
             your living pharmacopoeia
