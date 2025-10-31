@@ -30,6 +30,7 @@ import { PatternCard } from '../components/PatternCard';
 import { FoodEntryCard } from '../components/FoodEntryCard';
 import { AddAllyModal, EditAllyModal } from '../modal';
 import { DailyBlockSynthesisModal } from '../modal/DailyBlockSynthesisModal';
+import { SubstanceSynthesisModal } from '../modal/SubstanceSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
 
@@ -52,6 +53,7 @@ export default function HomeScreen() {
     updateAlly,
     addAlly,
     journalEntries,
+    substanceJournalEntries,
     removeJournalEntry,
     patterns,
     addPattern,
@@ -68,6 +70,7 @@ export default function HomeScreen() {
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
   const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false);
+  const [isSubstanceSynthesisModalVisible, setIsSubstanceSynthesisModalVisible] = useState(false);
   const [allyToEdit, setAllyToEdit] = useState(null);
   const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
   const [selectedItem, setSelectedItem] = useState<ContainerItem | null>(null);
@@ -387,7 +390,7 @@ export default function HomeScreen() {
                   container: activeContainer,
                   text: `Used ${ally.name}`,
                 });
-                setIsSynthesisModalVisible(true);
+                setIsSubstanceSynthesisModalVisible(true);
               }}
               colors={colors}
             />
@@ -399,6 +402,63 @@ export default function HomeScreen() {
           >
             <Text style={[styles.addButtonText, { color: colors.card }]}>+ Add New Companion</Text>
           </TouchableOpacity>
+
+          {/* Substances Journal Section */}
+          <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 32 }]}>
+            substance transmissions
+          </Text>
+          <Text style={[styles.journalSubtitle, { color: colors.dim, marginBottom: 16 }]}>
+            your personal log of substance experiences
+          </Text>
+
+          {substanceJournalEntries.length === 0 ? (
+            <View style={[styles.emptyCard, { backgroundColor: colors.card + 'B3' }]}>
+              <Text style={[styles.emptyText, { color: colors.dim }]}>
+                No substance transmissions yet. Log your first interaction to begin.
+              </Text>
+            </View>
+          ) : (
+            substanceJournalEntries.slice(0, 10).map((entry) => (
+              <View key={entry.id} style={[styles.entryCard, { backgroundColor: colors.card + 'B3' }]}>
+                <View style={styles.entryHeader}>
+                  <Text style={[styles.entryTitle, { color: colors.text }]}>
+                    {entry.allyName || 'Substance Moment'}
+                  </Text>
+                  <Text style={[styles.entryDate, { color: colors.dim }]}>
+                    {new Date(entry.date).toLocaleDateString()}
+                  </Text>
+                </View>
+                
+                {entry.tone && (
+                  <View style={styles.checkInRow}>
+                    <Text style={[styles.checkInLabel, { color: colors.dim }]}>Intention:</Text>
+                    <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.tone}</Text>
+                  </View>
+                )}
+                
+                {entry.frequency && (
+                  <View style={styles.checkInRow}>
+                    <Text style={[styles.checkInLabel, { color: colors.dim }]}>Sensation:</Text>
+                    <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.frequency}</Text>
+                  </View>
+                )}
+                
+                {entry.presence && (
+                  <View style={styles.checkInRow}>
+                    <Text style={[styles.checkInLabel, { color: colors.dim }]}>Reflection:</Text>
+                    <Text style={[styles.checkInValue, { color: colors.text }]}>{entry.presence}</Text>
+                  </View>
+                )}
+
+                {entry.context && (
+                  <View style={styles.reflectionSection}>
+                    <Text style={[styles.reflectionLabel, { color: colors.accent }]}>Synthesis & Invocation:</Text>
+                    <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
+                  </View>
+                )}
+              </View>
+            ))
+          )}
 
           <View style={{ height: 80 }} />
         </ScrollView>
@@ -437,7 +497,15 @@ export default function HomeScreen() {
             ally={allyToEdit}
           />
         )}
-        {/* Substances now uses its own SubstanceSynthesisModal in substances.tsx */}
+        <SubstanceSynthesisModal
+          isVisible={isSubstanceSynthesisModalVisible}
+          onClose={() => {
+            setIsSubstanceSynthesisModalVisible(false);
+            setMomentToSynthesize({});
+          }}
+          momentData={momentToSynthesize}
+          colors={colors}
+        />
       </View>
     );
   }
@@ -1149,6 +1217,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     lineHeight: 20,
+  },
+  journalSubtitle: {
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  checkInRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 6,
+  },
+  checkInLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  checkInValue: {
+    fontSize: 13,
   },
 });
 
