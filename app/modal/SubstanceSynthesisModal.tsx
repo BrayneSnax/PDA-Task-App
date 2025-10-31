@@ -81,32 +81,40 @@ export const SubstanceSynthesisModal = ({ isVisible, onClose, momentData }: Prop
             <View style={styles.checkInSection}>
               <Text style={[styles.sectionTitle, { color: colors.accent }]}>THE 3-PART CHECK-IN</Text>
 
-              <Text style={[styles.label, { color: colors.text }]}>Intention</Text>
-              <TextInput
-                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
-                placeholder="..."
-                placeholderTextColor={colors.dim}
-                value={synthesisState.intention}
-                onChangeText={(text) => handleTextChange('intention', text)}
-              />
+              <View style={styles.horizontalFieldsRow}>
+                <View style={styles.horizontalField}>
+                  <Text style={[styles.label, { color: colors.text }]}>Intention</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                    placeholder="..."
+                    placeholderTextColor={colors.dim}
+                    value={synthesisState.intention}
+                    onChangeText={(text) => handleTextChange('intention', text)}
+                  />
+                </View>
 
-              <Text style={[styles.label, { color: colors.text }]}>Sensation</Text>
-              <TextInput
-                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
-                placeholder="..."
-                placeholderTextColor={colors.dim}
-                value={synthesisState.sensation}
-                onChangeText={(text) => handleTextChange('sensation', text)}
-              />
+                <View style={styles.horizontalField}>
+                  <Text style={[styles.label, { color: colors.text }]}>Sensation</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                    placeholder="..."
+                    placeholderTextColor={colors.dim}
+                    value={synthesisState.sensation}
+                    onChangeText={(text) => handleTextChange('sensation', text)}
+                  />
+                </View>
 
-              <Text style={[styles.label, { color: colors.text }]}>Reflection</Text>
-              <TextInput
-                style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
-                placeholder="..."
-                placeholderTextColor={colors.dim}
-                value={synthesisState.reflection}
-                onChangeText={(text) => handleTextChange('reflection', text)}
-              />
+                <View style={styles.horizontalField}>
+                  <Text style={[styles.label, { color: colors.text }]}>Reflection</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.miniTextInput, { color: colors.text, backgroundColor: colors.bg, borderColor: colors.dim }]}
+                    placeholder="..."
+                    placeholderTextColor={colors.dim}
+                    value={synthesisState.reflection}
+                    onChangeText={(text) => handleTextChange('reflection', text)}
+                  />
+                </View>
+              </View>
             </View>
 
             <View style={styles.promptSection}>
@@ -176,6 +184,14 @@ const styles = StyleSheet.create({
   checkInSection: {
     marginBottom: 20,
   },
+  horizontalFieldsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
+  },
+  horizontalField: {
+    flex: 1,
+  },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '700',
@@ -186,7 +202,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: '600',
-    marginTop: 12,
     marginBottom: 6,
   },
   textInput: {
