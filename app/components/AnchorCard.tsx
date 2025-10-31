@@ -18,22 +18,26 @@ interface Props {
 // Atmospheric glow field colors by time of day
 const getGlowFieldStyle = (container: ContainerId | undefined, colors: ColorScheme) => {
   // Base glow colors for each time period
-  const glowColors: Record<string, { base: string; overlay: string }> = {
+  const glowColors: Record<string, { base: string; overlay: string; border: string }> = {
     morning: {
       base: '#F5E6CC', // Pale honey mist
-      overlay: 'rgba(245, 230, 204, 0.15)', // 15% opacity for subtle glow
+      overlay: 'rgba(162, 184, 166, 0.25)', // Sage green at 25% - more visible
+      border: 'rgba(162, 184, 166, 0.35)', // Stronger border
     },
     afternoon: {
       base: '#E0FFFF', // Soft glass with aqua reflection
-      overlay: 'rgba(176, 224, 230, 0.12)', // 12% opacity
+      overlay: 'rgba(176, 224, 230, 0.28)', // 28% opacity - more visible
+      border: 'rgba(176, 224, 230, 0.45)', // Stronger border
     },
     evening: {
       base: '#8C4B3F', // Faint rose gradient
-      overlay: 'rgba(140, 75, 63, 0.18)', // 18% opacity for warmth
+      overlay: 'rgba(140, 75, 63, 0.25)', // 25% opacity for warmth
+      border: 'rgba(140, 75, 63, 0.4)', // Stronger border
     },
     late: {
       base: '#5A6E5A', // Indigo haze
-      overlay: 'rgba(90, 110, 90, 0.15)', // 15% opacity
+      overlay: 'rgba(90, 110, 90, 0.22)', // 22% opacity
+      border: 'rgba(90, 110, 90, 0.35)', // Stronger border
     },
   };
 
@@ -41,7 +45,7 @@ const getGlowFieldStyle = (container: ContainerId | undefined, colors: ColorSche
   
   return {
     backgroundColor: glow.overlay,
-    borderColor: glow.overlay,
+    borderColor: glow.border,
   };
 };
 
