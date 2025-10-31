@@ -114,16 +114,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   title: {
-	    fontSize: 24, // Further reduced font size
+	    fontSize: 20, // Compressed for no-scroll
 	    fontWeight: '700',
-	    marginBottom: 10, // Further reduced margin
+	    marginBottom: 6, // Minimal margin
 	  },
   fieldLabel: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '600',
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 6,
+    letterSpacing: 0.5,
+    marginBottom: 3,
+    marginTop: 4,
   },
   scrollContent: {
     paddingBottom: 40, // Space for the bottom nav/tab bar
@@ -135,45 +136,48 @@ const styles = StyleSheet.create({
 	    borderWidth: 1,
 	  },
   largeBlock: {
-    minHeight: 100,
-    padding: 16,
+    minHeight: 60,
+    padding: 10,
   },
   mediumBlock: {
-    minHeight: 70,
-    padding: 12,
-  },
-  smallBlock: {
     minHeight: 50,
     padding: 10,
   },
+  smallBlock: {
+    minHeight: 40,
+    padding: 8,
+  },
   softText: {
-	    fontSize: 14, // Reduced font size
+	    fontSize: 13, // Compressed
 	    fontWeight: '600',
+	    lineHeight: 18,
 	  },
   largeText: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '600',
+    lineHeight: 20,
   },
   mediumText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
+    lineHeight: 19,
   },
   smallText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
+    lineHeight: 18,
   },
   microLabel: {
     fontSize: 14,
     fontWeight: '500',
   },
 	  didItButton: {
-	    // Overrides for the 'did it' button to make it full width and primary
 	    width: '100%',
-	    paddingVertical: 12, // Reduced padding
-	    marginBottom: 8, // Reduced margin
+	    paddingVertical: 10, // Compressed
+	    marginBottom: 6,
 	  },
 	  didItText: {
-	    fontSize: 20,
+	    fontSize: 16, // Smaller
 	    fontWeight: '700',
 	    textTransform: 'uppercase',
 	  },
@@ -185,22 +189,23 @@ const styles = StyleSheet.create({
 	  actionButton: {
 	    width: '48%',
 	    borderRadius: 12,
-	    paddingVertical: 10, // Reduced padding
+	    paddingVertical: 8, // Compressed
 	    alignItems: 'center',
 	    justifyContent: 'center',
-	    marginBottom: 8, // Reduced margin
+	    marginBottom: 6,
 	  },
   actionText: {
-    fontSize: 16,
+    fontSize: 14, // Smaller
     fontWeight: '500',
   },
   noteInput: {
-	    minHeight: 40, // Reduced min height
+	    minHeight: 35, // Compressed
 	    borderRadius: 12,
-	    padding: 12, // Reduced padding
-	    marginBottom: 16, // Reduced margin
+	    padding: 10,
+	    marginBottom: 8,
+	    marginTop: 4,
 	    borderWidth: 1,
-	    fontSize: 13, // Reduced font size
-	    lineHeight: 18,
+	    fontSize: 12,
+	    lineHeight: 16,
 	  },
 });
