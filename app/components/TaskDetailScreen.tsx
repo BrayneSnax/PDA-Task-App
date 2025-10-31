@@ -20,7 +20,7 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
         <Text style={[styles.backText, { color: colors.text }]}>← back</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+      <Text style={[styles.title, { color: colors.text, textAlign: 'center' }]}>{item.title}</Text>
 
       <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
         {/* Notice Label */}
