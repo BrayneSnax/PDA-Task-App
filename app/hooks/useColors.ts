@@ -34,8 +34,13 @@ export default function useColors(
   // Determine base colors
   let baseColors: ColorScheme;
   
+  console.log('[useColors] screenType:', screenType, 'activeContainer:', activeContainer);
+  console.log('[useColors] ScreenPalettes keys:', Object.keys(ScreenPalettes));
+  console.log('[useColors] Checking:', screenType && screenType !== 'home' && ScreenPalettes[screenType]);
+  
   if (screenType && screenType !== 'home' && ScreenPalettes[screenType]) {
     // Screen-specific palette
+    console.log('[useColors] Using screen-specific palette for:', screenType);
     baseColors = ScreenPalettes[screenType];
   } else if (useCircadian && activeContainer && CircadianPalette[activeContainer]) {
     // Circadian palette for home screen
