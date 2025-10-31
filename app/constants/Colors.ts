@@ -76,3 +76,43 @@ export const ContainerThemes: Record<ContainerId, string> = {
   situational: "Situational Resonance",
   uplift: "Uplift & Expansion",
 };
+
+// Screen-specific color palettes (not time-bound)
+export const ScreenPalettes = {
+  substances: {
+    // Earthy greens/browns - pharmacopoeia vibes
+    bg: "#E8E5D8", // Warm cream
+    accent: "#7A9B76", // Sage green
+    text: "#3D3D2E", // Deep olive
+    dim: "#9B9B88", // Muted sage
+    signal: "#B8956A", // Warm tan
+    card: "#F5F3EB", // Off-white
+  },
+  patterns: {
+    // Cool blues/grays - analytical, observational
+    bg: "#E6EBF0", // Soft blue-gray
+    accent: "#6B8CAE", // Steel blue
+    text: "#2C3E50", // Dark slate
+    dim: "#95A5B8", // Muted blue-gray
+    signal: "#5D7A99", // Deep blue
+    card: "#F8FAFB", // Almost white
+  },
+  nourish: {
+    // Warm creams/golds - nourishment, sustenance
+    bg: "#F5EFE0", // Warm cream
+    accent: "#D4A574", // Golden tan
+    text: "#4A3F2E", // Warm brown
+    dim: "#B8A890", // Muted gold
+    signal: "#C89B5A", // Honey gold
+    card: "#FFFBF5", // Warm white
+  },
+  archetypes: {
+    // Soft purples/indigos - inner modes, consciousness
+    bg: "#E8E6F0", // Soft lavender-gray
+    accent: "#8B7FA8", // Muted purple
+    text: "#3A3545", // Deep indigo
+    dim: "#A399B8", // Soft purple-gray
+    signal: "#9B8FB5", // Lavender
+    card: "#F5F3FA", // Very light lavender
+  },
+};

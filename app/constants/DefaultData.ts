@@ -1,4 +1,4 @@
-import { Ally, ContainerItem } from './Types';
+import { Ally, ContainerItem, Archetype } from './Types';
 
 // Default Substance Allies (Keeping existing allies)
 export const DEFAULT_ALLIES: Ally[] = [
@@ -540,5 +540,70 @@ export const DEFAULT_GROUNDING_ITEMS: ContainerItem[] = [
     desire: 'You are part of the field.',
     container: 'late',
     category: 'uplift',
+  },
+];
+
+
+// Default Archetypes
+export const DEFAULT_ARCHETYPES: Archetype[] = [
+  {
+    id: 'analyst',
+    name: 'Analyst',
+    subtitle: 'Patternseer',
+    icon: '🧠',
+    bio: 'When everything feels chaotic, the Patternseer arrives quietly. They don\'t fight the noise; they listen until rhythm emerges. Their gift is clarity through observation — spotting loops, patterns, and gentle ways out. They rebuild order by seeing what others miss.',
+    activation_phrase: 'Let me watch until it makes sense.',
+    body_cue: 'Slow your breath and imagine a lens focusing; shoulders drop, eyes soften, fingers unclench.',
+    invocation_visualization: 'Picture thin threads of light connecting ideas — each inhale sharpens focus, each exhale smooths static.',
+    deactivation_phrase: 'The pattern is seen; the watcher can rest.',
+    color_theme: {
+      accent: '#6B8CAE', // Cool blue
+      overlay: 'rgba(107, 140, 174, 0.15)', // Soft blue tint
+    },
+  },
+  {
+    id: 'executor',
+    name: 'Executor',
+    subtitle: 'Momentum Mode',
+    icon: '⚡',
+    bio: 'Momentum Mode is the doer when your energy feels frozen. They act before hesitation can grow teeth. They don\'t need a plan — only a start point. Once movement begins, friction fades. Their power is motion as medicine.',
+    activation_phrase: 'Small start — forward anyway.',
+    body_cue: 'Snap fingers, clap once, or tap the table — any physical cue that says go. Stand up if possible; let gravity pull you into action.',
+    invocation_visualization: 'Imagine a bright line sparking from your core, lighting the first step of a path.',
+    deactivation_phrase: 'Momentum complete; stillness earned.',
+    color_theme: {
+      accent: '#E8A87C', // Warm orange
+      overlay: 'rgba(232, 168, 124, 0.15)', // Warm energy tint
+    },
+  },
+  {
+    id: 'regulator',
+    name: 'Regulator',
+    subtitle: 'Groundkeeper',
+    icon: '🌊',
+    bio: 'The Groundkeeper restores calm and presence. They tend your inner garden — soil, water, roots. When the world presses in, they widen the field around you, reminding your body it is safe to pause. Their magic is regulation through earth and breath.',
+    activation_phrase: 'Return to the ground that holds me.',
+    body_cue: 'Press your feet flat; inhale through nose, exhale through mouth twice as long. Touch something textured (stone, wood, fabric).',
+    invocation_visualization: 'Visualize roots from your feet spreading into the ground, carrying heat and tension away.',
+    deactivation_phrase: 'Roots drawn in; balance restored.',
+    color_theme: {
+      accent: '#7A9B76', // Earth green
+      overlay: 'rgba(122, 155, 118, 0.15)', // Grounding green tint
+    },
+  },
+  {
+    id: 'creator',
+    name: 'Creator',
+    subtitle: 'Synth',
+    icon: '🪶',
+    bio: 'Synth gathers fragments — thoughts, sensations, words — and fuses them into something new. Their power is curiosity without demand. They appear when your system wants to explore, not achieve. Every question becomes a color. Every spark, a bridge.',
+    activation_phrase: 'Let\'s play with the pieces.',
+    body_cue: 'Tilt head, loosen jaw, roll shoulders — physical signals of openness. Maybe hum or sway slightly to start the creative rhythm.',
+    invocation_visualization: 'See light swirling in front of you like pigment in water; it organizes itself into form as you move or speak.',
+    deactivation_phrase: 'The current slows; creation rests.',
+    color_theme: {
+      accent: '#B19CD9', // Soft purple
+      overlay: 'rgba(177, 156, 217, 0.15)', // Creative purple tint
+    },
   },
 ];

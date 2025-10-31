@@ -37,7 +37,7 @@ import { SubstanceSynthesisModal } from '../modal/SubstanceSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
 
-type Screen = 'home' | 'substances' | 'journal' | 'patterns' | 'nourish';
+type Screen = 'home' | 'substances' | 'archetypes' | 'patterns' | 'nourish';
 
 export default function HomeScreen() {
   const {
@@ -66,7 +66,12 @@ export default function HomeScreen() {
     removeFoodEntry,
   } = useApp();
 
-  const colors = useColors(activeContainer, true);
+  // Use screen-specific colors or circadian colors based on current screen
+  const colors = useColors(
+    activeContainer, 
+    true, 
+    currentScreen === 'home' ? undefined : currentScreen as any
+  );
   const [currentTime, setCurrentTime] = useState(formatTime());
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
@@ -156,10 +161,10 @@ export default function HomeScreen() {
 
       <TouchableOpacity
         style={[styles.actionButton, { backgroundColor: 'transparent' }]}
-        onPress={() => setCurrentScreen('journal')}
+        onPress={() => setCurrentScreen('archetypes')}
       >
-        <Text style={[styles.actionIcon, { color: colors.accent }]}>📖</Text>
-        <Text style={[styles.actionText, { color: colors.text }]}>Journal</Text>
+        <Text style={[styles.actionIcon, { color: colors.accent }]}>🎭</Text>
+        <Text style={[styles.actionText, { color: colors.text }]}>Archetypes</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -456,7 +461,7 @@ export default function HomeScreen() {
             Substances
           </Text>
           <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
-            your living pharmacopoeia
+            living pharmacopoeia
           </Text>
 
           <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>

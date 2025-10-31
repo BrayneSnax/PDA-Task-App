@@ -80,6 +80,22 @@ export interface FoodEntry {
   energy_level?: string; // Optional: 'low', 'medium', 'high'
 }
 
+export interface Archetype {
+  id: string;
+  name: string; // "Analyst"
+  subtitle: string; // "Patternseer"
+  icon: string; // 🧠
+  bio: string;
+  activation_phrase: string;
+  body_cue: string;
+  invocation_visualization: string;
+  deactivation_phrase: string;
+  color_theme: {
+    accent: string;
+    overlay: string; // Color overlay when archetype is active
+  };
+}
+
 export interface AppState {
   items: ContainerItem[];
   allies: Ally[];
