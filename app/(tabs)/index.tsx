@@ -225,9 +225,32 @@ export default function HomeScreen() {
 	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
 	          <TemporalIntelligenceCard colors={colors} />
 
-          {/* Resonant Grounding Field */}
-	          {/* Resonant Grounding Field - Single Line Title */}
+	          {/* Personal Moments Section */}
 	          <Text style={[styles.sectionHeader, { color: colors.dim, fontSize: 14, fontWeight: '500' }]}>
+	            PERSONAL MOMENTS
+	          </Text>
+	          <CollapsibleSection
+	            title="CRAFTED MOMENTS"
+	            icon="✨"
+	            colors={colors}
+	            defaultExpanded={false}
+	          >
+	            {items.filter(item => item.category !== 'time').map(item => (
+	              <AnchorCard
+	                key={item.id}
+	                item={item}
+	                completed={isCompleted(item.id)}
+	                onToggle={() => toggleCompletion(item.id)}
+	                colors={colors}
+	                onPress={() => setSelectedItem(item)}
+	                onDelete={() => removeItem(item.id)}
+	              />
+	            ))}
+	          </CollapsibleSection>
+
+	          {/* Resonant Grounding Field */}
+	          {/* Resonant Grounding Field - Single Line Title */}
+	          <Text style={[styles.sectionHeader, { color: colors.dim, fontSize: 14, fontWeight: '500', marginTop: 20 }]}>
 	            RESONANT FIELD
 	          </Text>
 

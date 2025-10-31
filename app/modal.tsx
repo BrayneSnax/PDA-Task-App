@@ -399,7 +399,7 @@ export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, o
             )}
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.dim }]}>Body Cue (The trigger)</Text>
+              <Text style={[styles.label, { color: colors.dim }]}>Desire</Text>
               <TextInput
                 style={[styles.input, { borderColor: colors.dim, color: colors.text, backgroundColor: colors.card }]}
                 onChangeText={setBodyCue}
@@ -411,7 +411,7 @@ export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, o
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.dim }]}>Micro-Action (The smallest step)</Text>
+              <Text style={[styles.label, { color: colors.dim }]}>Convince Yourself</Text>
               <TextInput
                 style={[styles.input, { borderColor: colors.dim, color: colors.text, backgroundColor: colors.card }]}
                 onChangeText={setMicro}
@@ -423,7 +423,7 @@ export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, o
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.dim }]}>Desire (The underlying motivation)</Text>
+              <Text style={[styles.label, { color: colors.dim }]}>Result</Text>
               <TextInput
                 style={[styles.input, { borderColor: colors.dim, color: colors.text, backgroundColor: colors.card }]}
                 onChangeText={setDesire}

@@ -23,22 +23,20 @@ export const TaskDetailScreen = ({ item, colors, onClose, onComplete }: Props) =
       <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
 
       <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
-        {/* Main Cue Block - Softened */}
-        <View style={[styles.softBlock, { backgroundColor: colors.card, borderColor: colors.dim }]}>
-          <Text style={[styles.softText, { color: colors.text }]}>{item.body_cue || 'No main cue provided'}</Text>
+        {/* Desire Block - Largest */}
+        <View style={[styles.softBlock, styles.largeBlock, { backgroundColor: colors.card, borderColor: colors.dim }]}>
+          <Text style={[styles.softText, styles.largeText, { color: colors.text }]}>{item.body_cue || 'No desire provided'}</Text>
         </View>
 
-        {/* Micro Cue Block - Softened */}
-        <View style={[styles.softBlock, { backgroundColor: colors.card, borderColor: colors.dim, marginTop: -10 }]}>
-          <Text style={[styles.microLabel, { color: colors.dim, marginBottom: 5 }]}>or try micro version:</Text>
-          <Text style={[styles.softText, { color: colors.text, fontSize: 16 }]}>{item.micro || 'No micro cue provided'}</Text>
+        {/* Convince Yourself Block - Medium */}
+        <View style={[styles.softBlock, styles.mediumBlock, { backgroundColor: colors.card, borderColor: colors.dim, marginTop: -10 }]}>
+          <Text style={[styles.softText, styles.mediumText, { color: colors.text }]}>{item.micro || 'No convincing provided'}</Text>
         </View>
         
-        {/* Optional Desire/Why Block - Softened */}
+        {/* Result Block - Smallest */}
         {item.desire && (
-          <View style={[styles.softBlock, { backgroundColor: colors.card, borderColor: colors.dim, marginTop: -10 }]}>
-            <Text style={[styles.microLabel, { color: colors.dim, marginBottom: 5 }]}>why:</Text>
-            <Text style={[styles.softText, { color: colors.text, fontSize: 16 }]}>{item.desire}</Text>
+          <View style={[styles.softBlock, styles.smallBlock, { backgroundColor: colors.card, borderColor: colors.dim, marginTop: -10 }]}>
+            <Text style={[styles.softText, styles.smallText, { color: colors.text }]}>{item.desire}</Text>
           </View>
         )}
 
@@ -120,10 +118,34 @@ const styles = StyleSheet.create({
 	    marginBottom: 8, // Aggressively reduced margin
 	    borderWidth: 1,
 	  },
+  largeBlock: {
+    minHeight: 100,
+    padding: 16,
+  },
+  mediumBlock: {
+    minHeight: 70,
+    padding: 12,
+  },
+  smallBlock: {
+    minHeight: 50,
+    padding: 10,
+  },
   softText: {
 	    fontSize: 14, // Reduced font size
 	    fontWeight: '600',
 	  },
+  largeText: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  mediumText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  smallText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
   microLabel: {
     fontSize: 14,
     fontWeight: '500',
