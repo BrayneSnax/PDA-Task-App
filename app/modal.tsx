@@ -291,38 +291,24 @@ export const EditAllyModal: React.FC<EditAllyModalProps> = ({ isVisible, onClose
 interface CraftMomentModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onSave: (title: string, container: ContainerId, category: 'time' | 'situational' | 'uplift', body_cue: string, micro: string, desire: string) => void;
+  onSave: (title: string, container: ContainerId, category: 'time' | 'situational' | 'uplift' | 'crafted', body_cue: string, micro: string, desire: string) => void;
   colors: ColorScheme;
 }
 
-const containerOptions: { id: ContainerId; label: string }[] = [
-  { id: 'morning', label: 'Morning Anchor' },
-  { id: 'afternoon', label: 'Afternoon Anchor' },
-  { id: 'evening', label: 'Evening Anchor' },
-  { id: 'late', label: 'Late Anchor' },
-];
 
-const categoryOptions: { id: 'time' | 'situational' | 'uplift'; label: string }[] = [
-  { id: 'time', label: 'Time-based Anchor' },
-  { id: 'situational', label: 'Situational Grounding' },
-  { id: 'uplift', label: 'Uplift & Expansion' },
-];
 
 export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, onClose, onSave, colors }) => {
   const [title, setTitle] = React.useState('');
-  const [selectedContainer, setSelectedContainer] = React.useState<ContainerId>('morning');
-  const [selectedCategory, setSelectedCategory] = React.useState<'time' | 'situational' | 'uplift'>('time');
   const [bodyCue, setBodyCue] = React.useState('');
   const [micro, setMicro] = React.useState('');
   const [desire, setDesire] = React.useState('');
 
   const handleSave = () => {
     if (title.trim()) {
-      onSave(title, selectedContainer, selectedCategory, bodyCue, micro, desire);
+      // All crafted moments go to 'morning' container by default (doesn't matter since they're filtered by category)
+      onSave(title, 'morning', 'crafted', bodyCue, micro, desire);
       // Reset form
       setTitle('');
-      setSelectedContainer('morning');
-      setSelectedCategory('time');
       setBodyCue('');
       setMicro('');
       setDesire('');
@@ -352,51 +338,6 @@ export const CraftMomentModal: React.FC<CraftMomentModalProps> = ({ isVisible, o
               />
             </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.dim }]}>Container Type</Text>
-              <View style={styles.radioGroup}>
-                {categoryOptions.map(option => (
-                  <TouchableOpacity
-                    key={option.id}
-                    style={[
-                      styles.radio,
-                      { borderColor: colors.dim, backgroundColor: selectedCategory === option.id ? colors.accent : colors.card },
-                    ]}
-                    onPress={() => setSelectedCategory(option.id)}
-                  >
-                    <Text style={{ color: selectedCategory === option.id ? colors.card : colors.text }}>
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {selectedCategory === 'time' && (
-              <View style={styles.inputGroup}>
-                <Text style={[styles.label, { color: colors.dim }]}>Time Container</Text>
-                <View style={styles.radioGroup}>
-                  {containerOptions.map(option => (
-                    <TouchableOpacity
-                      key={option.id}
-                      style={[
-                        styles.radio,
-                        { 
-                          borderColor: colors.dim, 
-                          backgroundColor: selectedContainer === option.id ? colors.accent : colors.card,
-                          flex: 1,
-                        },
-                      ]}
-                      onPress={() => setSelectedContainer(option.id)}
-                    >
-                      <Text style={{ color: selectedContainer === option.id ? colors.card : colors.text }}>
-                        {option.label.split(' ')[0]}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )}
 
             <View style={styles.inputGroup}>
               <Text style={[styles.label, { color: colors.dim }]}>Desire</Text>

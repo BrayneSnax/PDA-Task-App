@@ -13,7 +13,7 @@ export interface ContainerItem {
   id: string;
   title: string;
   container: ContainerId;
-  category: 'time' | 'situational' | 'uplift';
+  category: 'time' | 'situational' | 'uplift' | 'crafted';
   body_cue: string;
   micro: string;
   desire: string;

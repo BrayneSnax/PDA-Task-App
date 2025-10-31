@@ -239,7 +239,7 @@ export default function HomeScreen() {
 	            colors={colors}
 	            defaultExpanded={false}
 	          >
-	            {items.filter(item => item.category !== 'time').map(item => (
+	            {items.filter(item => item.category === 'crafted').map(item => (
 	              <AnchorCard
 	                key={item.id}
 	                item={item}
