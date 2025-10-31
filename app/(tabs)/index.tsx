@@ -22,6 +22,9 @@ import { Alert } from 'react-native';
 import { ANALYSIS_URL, REQUEST_TIMEOUT_MS, TEST_MODE } from '../constants/Config';
 import { ContainerId } from '../constants/Types';
 import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
+import { CompletionPulse } from '../components/CompletionPulse';
+import { ShiftToast } from '../components/ShiftToast';
+import { ThresholdCard } from '../components/ThresholdCard';
 
 // Conditional imports moved outside the component to fix "Rendered more hooks" error
 import { AllyCard } from '../components/AllyCard';
@@ -79,6 +82,12 @@ export default function HomeScreen() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
   const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
+  
+  // Somatic feedback state
+  const [showCompletionPulse, setShowCompletionPulse] = useState(false);
+  const [showShiftToast, setShowShiftToast] = useState(false);
+  const [showThresholdCard, setShowThresholdCard] = useState(false);
+  const [previousContainer, setPreviousContainer] = useState<ContainerId>(activeContainer);
 
   // Update time every minute
   useEffect(() => {
@@ -87,6 +96,27 @@ export default function HomeScreen() {
     }, 60000);
     return () => clearInterval(timer);
   }, []);
+
+  // Detect container changes and show threshold card
+  useEffect(() => {
+    if (previousContainer !== activeContainer && currentScreen === 'home') {
+      setShowThresholdCard(true);
+      setPreviousContainer(activeContainer);
+    }
+  }, [activeContainer, currentScreen]);
+
+  // Handle completion with somatic feedback
+  const handleCompletion = (itemId: string) => {
+    toggleCompletion(itemId);
+    // Show pulse animation
+    setShowCompletionPulse(true);
+  };
+
+  // When pulse completes, show shift toast
+  const handlePulseComplete = () => {
+    setShowCompletionPulse(false);
+    setShowShiftToast(true);
+  };
 
   if (loading) {
     return (
@@ -244,7 +274,7 @@ export default function HomeScreen() {
 	                key={item.id}
 	                item={item}
 	                completed={isCompleted(item.id)}
-	                onToggle={() => toggleCompletion(item.id)}
+	                onToggle={() => handleCompletion(item.id)}
 	                colors={colors}
 	                onPress={() => setSelectedItem(item)}
 	                onDelete={() => removeItem(item.id)}
@@ -270,7 +300,7 @@ export default function HomeScreen() {
                 key={item.id}
                 item={item}
                 completed={isCompleted(item.id)}
-                onToggle={() => toggleCompletion(item.id)}
+                onToggle={() => handleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
@@ -290,7 +320,7 @@ export default function HomeScreen() {
                 key={item.id}
                 item={item}
                 completed={isCompleted(item.id)}
-                onToggle={() => toggleCompletion(item.id)}
+                onToggle={() => handleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
@@ -310,7 +340,7 @@ export default function HomeScreen() {
                 key={item.id}
                 item={item}
                 completed={isCompleted(item.id)}
-                onToggle={() => toggleCompletion(item.id)}
+                onToggle={() => handleCompletion(item.id)}
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
@@ -350,7 +380,7 @@ export default function HomeScreen() {
               onClose={() => setSelectedItem(null)}
               onComplete={(status, note) => {
                 if (status === 'did it') {
-                  toggleCompletion(selectedItem.id);
+                  handleCompletion(selectedItem.id);
                 }
                 
                 // Log the action as a journal entry
@@ -370,6 +400,27 @@ export default function HomeScreen() {
             />
           </Modal>
         )}
+
+        {/* Somatic Feedback Layer */}
+        <CompletionPulse
+          isVisible={showCompletionPulse}
+          color={colors.accent}
+          onComplete={handlePulseComplete}
+        />
+        
+        <ShiftToast
+          isVisible={showShiftToast}
+          colors={colors}
+          onDismiss={() => setShowShiftToast(false)}
+        />
+        
+        <ThresholdCard
+          isVisible={showThresholdCard}
+          fromContainer={previousContainer}
+          toContainer={activeContainer}
+          colors={colors}
+          onDismiss={() => setShowThresholdCard(false)}
+        />
       </View>
     );
   }
