@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Assuming Picker is available or will be installed
+import { Picker } from '@react-native-picker/picker';
 
 import { ContainerId, ColorScheme, Moment } from '../constants/Types';
 import { useApp } from '../context/AppContext';
@@ -13,13 +13,6 @@ interface Props {
   colors: ColorScheme;
 }
 
-const synthesisPrompts = [
-  // Combining the first two prompts into a single "Reflection" field
-  { key: 'reflection', title: 'Reflection & Invocation', placeholder: 'Describe the physical and emotional landscape, and how the ritual felt in the body.' },
-  // Combining the last two prompts into a single "Insight" field
-  { key: 'insight', title: 'Field Report & Offering', placeholder: 'What was the most surprising shift, and what is the one lesson you will carry forward?' },
-];
-
 const checkInOptions = {
   tone: ['Lighter', 'Same', 'Spikier'],
   frequency: ['Water', 'Light', 'Movement', 'Sound', 'Novelty', 'Social'],
@@ -31,8 +24,7 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
   const { addMoment } = useApp();
 
   const [synthesisState, setSynthesisState] = useState({
-    reflection: '', // New combined field
-    insight: '',     // New combined field
+    tracesAndEchoes: '',
     tone: '',
     frequency: '',
     presence: '',
@@ -42,8 +34,7 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
     if (isVisible && momentData) {
       // Reset state when modal opens
       setSynthesisState({
-        reflection: '', // New combined field
-        insight: '',     // New combined field
+        tracesAndEchoes: '',
         tone: '',
         frequency: '',
         presence: '',
@@ -52,25 +43,19 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
   }, [isVisible]);
 
   const handleSave = () => {
-    if (!synthesisState.tone || !synthesisState.frequency || !synthesisState.presence) {
-      // Basic validation for the 3 core fields
-      alert('Please select Tone, Frequency, and Presence before saving.');
-      return;
-    }
-
+    // No validation required - all fields are optional
     const finalMoment: Omit<Moment, 'id' | 'timestamp' | 'date'> = {
       ...momentData,
-      ...synthesisState,
-      // The original fields are no longer in synthesisState, so we need to ensure Moment type is updated
-      // For now, we will map the new fields to the old ones for compatibility with the existing Moment type structure
-      // A more complete solution would update the Moment type, but for a quick fix:
-      context: synthesisState.reflection,
+      tone: synthesisState.tone,
+      frequency: synthesisState.frequency,
+      presence: synthesisState.presence,
+      context: synthesisState.tracesAndEchoes,
       action_reflection: '',
-      result_shift: synthesisState.insight,
+      result_shift: '',
       conclusion_offering: '',
-      text: momentData.text || 'Moment recorded', // Fallback text
-      container: momentData.container || 'morning', // Fallback container
-    } as Omit<Moment, 'id' | 'timestamp' | 'date'>; // Cast to ensure correct type
+      text: momentData.text || 'Moment recorded',
+      container: momentData.container || 'morning',
+    } as Omit<Moment, 'id' | 'timestamp' | 'date'>;
 
     addMoment(finalMoment);
     onClose();
@@ -91,13 +76,13 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
         <View style={[styles.modalView, { backgroundColor: colors.card }]}>
           <Text style={[styles.modalTitle, { color: colors.text }]}>Journalistic Synthesis</Text>
           <Text style={[styles.modalSubtitle, { color: colors.dim }]}>
-            Reflect on the Moment with guided prompts.
+            Reflect on this moment.
           </Text>
 
           <ScrollView style={styles.scrollView}>
-            {/* The 3-Part Check-in (Tone, Frequency, Presence) - Now as Dropdowns */}
+            {/* The 3-Part Check-in (Tone, Frequency, Presence) - Optional */}
             <View style={styles.checkInSection}>
-              <Text style={[styles.sectionTitle, { color: colors.accent }]}>The 3-Part Check-in</Text>
+              <Text style={[styles.sectionTitle, { color: colors.accent }]}>THE 3-PART CHECK-IN</Text>
 
               <View style={styles.dropdownRow}>
                 {/* Tone Dropdown */}
@@ -110,7 +95,7 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
                       style={[styles.picker, { color: colors.text }]}
                       dropdownIconColor={colors.text}
                     >
-                      <Picker.Item label="How did it feel?" value="" enabled={false} />
+                      <Picker.Item label="..." value="" />
                       {checkInOptions.tone.map(option => (
                         <Picker.Item key={option} label={option} value={option} />
                       ))}
@@ -128,7 +113,7 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
                       style={[styles.picker, { color: colors.text }]}
                       dropdownIconColor={colors.text}
                     >
-                      <Picker.Item label="What helped?" value="" enabled={false} />
+                      <Picker.Item label="..." value="" />
                       {checkInOptions.frequency.map(option => (
                         <Picker.Item key={option} label={option} value={option} />
                       ))}
@@ -146,7 +131,7 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
                       style={[styles.picker, { color: colors.text }]}
                       dropdownIconColor={colors.text}
                     >
-                      <Picker.Item label="Where was your mind?" value="" enabled={false} />
+                      <Picker.Item label="..." value="" />
                       {checkInOptions.presence.map(option => (
                         <Picker.Item key={option} label={option} value={option} />
                       ))}
@@ -156,23 +141,18 @@ export const DailyBlockSynthesisModal = ({ isVisible, onClose, momentData }: Pro
               </View>
             </View>
 
-            {/* Guided Reflection Prompts */}
+            {/* Single Text Field - Traces & Echoes */}
             <View style={styles.reflectionSection}>
-              <Text style={[styles.sectionTitle, { color: colors.accent }]}>Guided Reflection</Text>
-              {synthesisPrompts.map(prompt => (
-                <View key={prompt.key} style={styles.promptContainer}>
-                  <Text style={[styles.promptLabel, { color: colors.text }]}>{prompt.title}</Text>
-                  <TextInput
-                    style={[styles.input, { backgroundColor: colors.bg, color: colors.text, borderColor: colors.dim }]}
-                    placeholder={prompt.placeholder}
-                    placeholderTextColor={colors.dim}
-                    multiline
-                    numberOfLines={4}
-                    value={synthesisState[prompt.key as keyof typeof synthesisState] as string}
-                    onChangeText={(text) => handleSelect(prompt.key as keyof typeof synthesisState, text)}
-                  />
-                </View>
-              ))}
+              <Text style={[styles.promptLabel, { color: colors.text }]}>Traces & Echoes</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.bg, color: colors.text, borderColor: colors.dim }]}
+                placeholder="Let the moment speak back through you..."
+                placeholderTextColor={colors.dim}
+                multiline
+                numberOfLines={8}
+                value={synthesisState.tracesAndEchoes}
+                onChangeText={(text) => handleSelect('tracesAndEchoes', text)}
+              />
             </View>
           </ScrollView>
 
@@ -242,29 +222,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
+    fontSize: 14,
+    fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  promptContainer: {
-    marginBottom: 15,
+    letterSpacing: 1,
+    marginBottom: 12,
   },
   promptLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
   },
   input: {
     borderRadius: 8,
-    padding: 10,
-    minHeight: 80,
+    padding: 12,
+    minHeight: 120,
     textAlignVertical: 'top',
     fontSize: 14,
     borderWidth: 1,
   },
-  // New styles for the dropdown layout
   dropdownRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -279,23 +255,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   picker: {
-    height: 40, // Adjust height as needed
+    height: 40,
     width: '100%',
-  },
-  // Removed old button styles
-  optionRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  optionButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-  },
-  optionText: {
-    fontSize: 13,
-    fontWeight: '600',
   },
   buttonRow: {
     flexDirection: 'row',
@@ -320,4 +281,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-
