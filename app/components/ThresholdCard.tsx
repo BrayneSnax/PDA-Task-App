@@ -82,10 +82,10 @@ export const ThresholdCard: React.FC<ThresholdCardProps> = ({
         }),
       ]).start();
 
-      // Auto-dismiss after 8 seconds
+      // Auto-dismiss after 3 seconds (evaporates quickly)
       const timer = setTimeout(() => {
         dismissCard();
-      }, 8000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }

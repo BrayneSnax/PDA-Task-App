@@ -304,6 +304,7 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                container={activeContainer}
               />
             ))}
           </CollapsibleSection>
@@ -324,6 +325,7 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                container={activeContainer}
               />
             ))}
           </CollapsibleSection>
@@ -344,6 +346,7 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                container={activeContainer}
               />
             ))}
           </CollapsibleSection>

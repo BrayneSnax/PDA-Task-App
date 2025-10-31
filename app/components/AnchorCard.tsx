@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { ContainerItem, ColorScheme } from '../constants/Types';
+import { ContainerItem, ColorScheme, ContainerId } from '../constants/Types';
 import { getRandomNarrativePhrase, showMicroNote, triggerSoftPulseAnimation } from '../utils/feedback';
 
 interface Props {
@@ -12,9 +12,40 @@ interface Props {
   onPress: () => void;
   onDelete: () => void;
   onEdit?: () => void; // Optional edit handler
+  container?: ContainerId; // Add container to determine glow color
 }
 
-export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress, onDelete, onEdit }: Props) => {
+// Atmospheric glow field colors by time of day
+const getGlowFieldStyle = (container: ContainerId | undefined, colors: ColorScheme) => {
+  // Base glow colors for each time period
+  const glowColors: Record<string, { base: string; overlay: string }> = {
+    morning: {
+      base: '#F5E6CC', // Pale honey mist
+      overlay: 'rgba(245, 230, 204, 0.15)', // 15% opacity for subtle glow
+    },
+    afternoon: {
+      base: '#E0FFFF', // Soft glass with aqua reflection
+      overlay: 'rgba(176, 224, 230, 0.12)', // 12% opacity
+    },
+    evening: {
+      base: '#8C4B3F', // Faint rose gradient
+      overlay: 'rgba(140, 75, 63, 0.18)', // 18% opacity for warmth
+    },
+    late: {
+      base: '#5A6E5A', // Indigo haze
+      overlay: 'rgba(90, 110, 90, 0.15)', // 15% opacity
+    },
+  };
+
+  const glow = glowColors[container || 'morning'] || glowColors.morning;
+  
+  return {
+    backgroundColor: glow.overlay,
+    borderColor: glow.overlay,
+  };
+};
+
+export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPress, onDelete, onEdit, container }: Props) => {
   const opacity = useSharedValue(1);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -56,11 +87,19 @@ export const AnchorCard = React.memo(({ item, completed, onToggle, colors, onPre
     };
   });
 
+  const glowStyle = getGlowFieldStyle(container, colors);
+
   return (
     <>
       <Animated.View style={[animatedStyle, styles.animatedWrapper]}>
         <TouchableOpacity
-          style={[styles.card, { backgroundColor: colors.card }]}
+          style={[
+            styles.card,
+            glowStyle,
+            {
+              shadowColor: glowStyle.borderColor,
+            }
+          ]}
           onPress={onPress}
           onLongPress={handleLongPress}
           activeOpacity={0.7}
@@ -132,8 +171,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   card: {
-    borderRadius: 12,
+    borderRadius: 16, // Increased from 12 for softer edges
+    borderWidth: 1,
     overflow: 'hidden',
+    // Atmospheric glow effect
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 8, // Subtle blur for depth
+    elevation: 2,
   },
   row: {
     flexDirection: 'row',
@@ -150,6 +198,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     fontWeight: '500',
+    // Text appears to float with subtle shadow
+    textShadowColor: 'rgba(0, 0, 0, 0.05)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   chevron: {
     fontSize: 20,
