@@ -68,13 +68,22 @@ export default function HomeScreen() {
     foodEntries,
     addFoodEntry,
     removeFoodEntry,
+    activeArchetypeId,
+    setActiveArchetypeId,
   } = useApp();
 
+  // Get active archetype if one is invoked
+  const activeArchetype = activeArchetypeId 
+    ? DEFAULT_ARCHETYPES.find(a => a.id === activeArchetypeId) || null
+    : null;
+
   // Use screen-specific colors or circadian colors based on current screen
+  // Blend with archetype colors if one is active
   const colors = useColors(
     activeContainer, 
     true, 
-    currentScreen === 'home' ? undefined : currentScreen as any
+    currentScreen === 'home' ? undefined : currentScreen as any,
+    activeArchetype
   );
   const [currentTime, setCurrentTime] = useState(formatTime());
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -443,6 +452,17 @@ export default function HomeScreen() {
           colors={colors}
           onDismiss={() => setShowThresholdCard(false)}
         />
+        
+        {/* Return Node - appears when archetype is active */}
+        {activeArchetype && (
+          <ReturnNode
+            archetype={activeArchetype}
+            onReturn={() => {
+              setActiveArchetypeId(null);
+              // TODO: Show "Back to center" toast
+            }}
+          />
+        )}
       </View>
     );
   }
@@ -679,8 +699,8 @@ export default function HomeScreen() {
             setSelectedArchetype(null);
           }}
           onInvoke={(archetype) => {
-            // TODO: Implement archetype invocation
-            console.log('Invoking archetype:', archetype.name);
+            setActiveArchetypeId(archetype.id);
+            // TODO: Show toast notification
           }}
           colors={colors}
         />

@@ -22,6 +22,8 @@ interface AppContextType extends AppState {
   addFoodEntry: (entry: Omit<FoodEntry, 'id' | 'timestamp' | 'date'>) => void;
   removeFoodEntry: (id: string) => void;
   setActiveContainer: (container: ContainerId) => void;
+  activeArchetypeId: string | null;
+  setActiveArchetypeId: (id: string | null) => void;
   loading: boolean;
   removeJournalEntry: (id: string) => void;
   removeSubstanceJournalEntry: (id: string) => void;
@@ -46,6 +48,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
   const [activeContainer, setActiveContainer] = useState<ContainerId>(getCurrentContainer());
+  const [activeArchetypeId, setActiveArchetypeId] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -301,6 +304,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     addFoodEntry,
     removeFoodEntry,
     setActiveContainer,
+    activeArchetypeId,
+    setActiveArchetypeId,
     loading,
   };
 

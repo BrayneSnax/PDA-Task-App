@@ -1,13 +1,15 @@
 import { useColorScheme as useRNColorScheme } from 'react-native';
-import { ColorScheme, ContainerId } from '../constants/Types';
+import { ColorScheme, ContainerId, Archetype } from '../constants/Types';
 import { CircadianPalette, ScreenPalettes } from '../constants/Colors';
+import { blendArchetypeColors } from '../utils/colorBlending';
 
 type ScreenType = 'home' | 'substances' | 'patterns' | 'nourish' | 'archetypes';
 
 export default function useColors(
   activeContainer?: ContainerId,
   useCircadian: boolean = true,
-  screenType?: ScreenType
+  screenType?: ScreenType,
+  activeArchetype?: Archetype | null
 ): ColorScheme {
   const systemTheme = useRNColorScheme();
 
@@ -29,15 +31,28 @@ export default function useColors(
     card: '#000' 
   };
 
-  // If screen-specific palette is requested, use it
+  // Determine base colors
+  let baseColors: ColorScheme;
+  
   if (screenType && screenType !== 'home' && ScreenPalettes[screenType]) {
-    return ScreenPalettes[screenType];
+    // Screen-specific palette
+    baseColors = ScreenPalettes[screenType];
+  } else if (useCircadian && activeContainer && CircadianPalette[activeContainer]) {
+    // Circadian palette for home screen
+    baseColors = CircadianPalette[activeContainer];
+  } else {
+    // Fallback
+    baseColors = systemTheme === 'dark' ? DarkColorsFallback : LightColorsFallback;
   }
 
-  // Otherwise use circadian palette for home screen
-  if (useCircadian && activeContainer && CircadianPalette[activeContainer]) {
-    return CircadianPalette[activeContainer];
+  // If an archetype is active, blend its colors with the base
+  if (activeArchetype) {
+    return blendArchetypeColors(
+      baseColors,
+      activeArchetype.color_theme.overlay,
+      activeArchetype.color_theme.accent
+    );
   }
-  
-  return systemTheme === 'dark' ? DarkColorsFallback : LightColorsFallback;
+
+  return baseColors;
 }
