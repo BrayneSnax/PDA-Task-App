@@ -88,6 +88,7 @@ export default function HomeScreen() {
   const [showShiftToast, setShowShiftToast] = useState(false);
   const [showThresholdCard, setShowThresholdCard] = useState(false);
   const [previousContainer, setPreviousContainer] = useState<ContainerId>(activeContainer);
+  const [isManualTransition, setIsManualTransition] = useState(false);
 
   // Update time every minute
   useEffect(() => {
@@ -97,13 +98,18 @@ export default function HomeScreen() {
     return () => clearInterval(timer);
   }, []);
 
-  // Detect container changes and show threshold card
+  // Detect container changes and show threshold card (only for automatic transitions)
   useEffect(() => {
     if (previousContainer !== activeContainer && currentScreen === 'home') {
-      setShowThresholdCard(true);
+      // Only show threshold card if this is NOT a manual transition
+      if (!isManualTransition) {
+        setShowThresholdCard(true);
+      }
       setPreviousContainer(activeContainer);
+      // Reset the manual transition flag
+      setIsManualTransition(false);
     }
-  }, [activeContainer, currentScreen]);
+  }, [activeContainer, currentScreen, isManualTransition, previousContainer]);
 
   // Handle completion with somatic feedback
   const handleCompletion = (itemId: string) => {
@@ -202,6 +208,8 @@ export default function HomeScreen() {
                 activeContainer === container && { backgroundColor: colors.accent + '20' }
               ]}
               onPress={() => {
+                // Mark this as a manual transition
+                setIsManualTransition(true);
                 setActiveContainer(container);
                 setCurrentScreen('home');
               }}
