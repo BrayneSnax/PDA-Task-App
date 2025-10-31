@@ -36,6 +36,10 @@ import { DailyBlockSynthesisModal } from '../modal/DailyBlockSynthesisModal';
 import { SubstanceSynthesisModal } from '../modal/SubstanceSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
+import { DEFAULT_ARCHETYPES } from '../constants/DefaultData';
+import { Archetype } from '../constants/Types';
+import { ArchetypeCard } from '../components/ArchetypeCard';
+import { ArchetypeDetailModal } from '../modal/ArchetypeDetailModal';
 
 type Screen = 'home' | 'substances' | 'archetypes' | 'patterns' | 'nourish';
 
@@ -87,6 +91,8 @@ export default function HomeScreen() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAddPatternModalVisible, setIsAddPatternModalVisible] = useState(false);
   const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
+  const [selectedArchetype, setSelectedArchetype] = useState<Archetype | null>(null);
+  const [isArchetypeModalVisible, setIsArchetypeModalVisible] = useState(false);
   
   // Somatic feedback state
   const [showCompletionPulse, setShowCompletionPulse] = useState(false);
@@ -604,8 +610,8 @@ export default function HomeScreen() {
     );
   }
 
-  // JOURNAL SCREEN
-  if (currentScreen === 'journal') {
+  // ARCHETYPES SCREEN
+  if (currentScreen === 'archetypes') {
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
@@ -621,124 +627,42 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <Text style={[styles.containerTitle, { color: colors.text }]}>
-            Alchemical Journal
+            Archetypes
           </Text>
           <Text style={[styles.containerSubtitle, { color: colors.dim }]}>
-            field transmissions & reflections
+            inner modes & invocations
           </Text>
 
           <Text style={[styles.sectionHeader, { color: colors.dim, marginTop: 24 }]}>
-            RECENT TRANSMISSIONS
+            AVAILABLE MODES
           </Text>
 
-          {journalEntries.length > 0 && (
-            <TouchableOpacity
-              style={[styles.analyzeButton, { backgroundColor: colors.accent }]}
-            onPress={async () => {
-                setIsAnalyzing(true);
-                try {
-                  if (TEST_MODE || !ANALYSIS_URL) {
-                    await new Promise(r => setTimeout(r, 800));
-                    setAnalysisResult(
-                      'Mock analysis: noticing steady morning anchors, uplift correlates with journaling days. Consider adding an afternoon hydration ritual to reinforce momentum.'
-                    );
-                    setIsAnalysisModalVisible(true);
-                  } else {
-                    const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-                    const response = await fetch(ANALYSIS_URL, {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        json: {
-                          entries: journalEntries.slice(0, 10).map(entry => ({
-                            title: entry.allyName || entry.anchorTitle || 'Moment',
-                            text: entry.context || '',
-                            date: entry.date,
-                            status: entry.tone || '',
-                            note: entry.text || '',
-                          })),
-                        },
-                      }),
-                      signal: controller.signal,
-                    });
-                    clearTimeout(timeout);
-                    const data = await response.json();
-                    if (data.result?.data?.analysis) {
-                      setAnalysisResult(data.result.data.analysis);
-                      setIsAnalysisModalVisible(true);
-                    }
-                  }
-                } catch (error) {
-                  console.error("Analysis failed:", error);
-                  Alert.alert("Analysis Failed", "Could not analyze journal entries. Please try again.");
-                } finally {
-                  setIsAnalyzing(false);
-                }
+          {/* Archetype Cards */}
+          {DEFAULT_ARCHETYPES.map((archetype) => (
+            <ArchetypeCard
+              key={archetype.id}
+              archetype={archetype}
+              onPress={() => {
+                setSelectedArchetype(archetype);
+                setIsArchetypeModalVisible(true);
               }}
-              disabled={isAnalyzing}
-            >
-              <Text style={[styles.analyzeButtonText, { color: colors.card }]}>
-                {isAnalyzing ? "Analyzing..." : "✨ Analyze with AI"}
-              </Text>
-            </TouchableOpacity>
-          )}
+              colors={colors}
+            />
+          ))}
 
-          {journalEntries.length === 0 ? (
-            <View style={[styles.emptyCard, { backgroundColor: colors.card + 'B3' }]}>
-              <Text style={[styles.emptyText, { color: colors.dim }]}>
-                No transmissions yet. Log your first interaction to begin.
-              </Text>
-            </View>
-          ) : (
-            journalEntries.slice(0, 10).map((entry) => (
-              <TouchableOpacity
-                key={entry.id}
-                style={[styles.entryCard, { backgroundColor: colors.card + 'B3' }]}
-                onLongPress={() => {
-                  Alert.alert(
-                    'Delete Journal Entry',
-                    'Are you sure you want to delete this entry?',
-                    [
-                      { text: 'Cancel', style: 'cancel' },
-                      { text: 'Delete', onPress: () => removeJournalEntry(entry.id), style: 'destructive' },
-                    ]
-                  );
-                }}
-              >
-                <View style={styles.entryHeader}>
-                  <Text style={[styles.entryTitle, { color: colors.text }]}>
-                    {entry.allyName || entry.anchorTitle || 'Moment'}
-                  </Text>
-                  <Text style={[styles.entryDate, { color: colors.dim }]}>
-                    {new Date(entry.date).toLocaleDateString()}
-                  </Text>
-                </View>
-                
-                {entry.tone && (
-                  <Text style={[styles.checkInText, { color: colors.dim }]}>
-                    Tone: <Text style={{ color: colors.text }}>{entry.tone}</Text>
-                  </Text>
-                )}
-                
-                {entry.context && (
-                  <View style={styles.reflectionSection}>
-                    <Text style={[styles.reflectionLabel, { color: colors.accent }]}>The Setting:</Text>
-                    <Text style={[styles.reflectionText, { color: colors.text }]}>{entry.context}</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            ))
-          )}
-
-          <TouchableOpacity
-            style={[styles.addButton, { backgroundColor: colors.accent }]}
-            onPress={() => setIsSynthesisModalVisible(true)}
-          >
-            <Text style={[styles.addButtonText, { color: colors.card }]}>+ Create Journal Entry</Text>
-          </TouchableOpacity>
+          {/* Return Ritual Info */}
+          <View style={[styles.infoCard, { backgroundColor: colors.card + '99', marginTop: 24 }]}>
+            <Text style={[styles.infoTitle, { color: colors.accent }]}>Return Ritual</Text>
+            <Text style={[styles.infoText, { color: colors.text }]}>After using any mode:</Text>
+            <Text style={[styles.infoText, { color: colors.dim, marginTop: 8 }]}>
+              1. Place a hand on your chest.{"\n"}
+              2. Breathe once for gratitude: "Thanks for showing up."{"\n"}
+              3. Whisper: "Back to center."
+            </Text>
+            <Text style={[styles.infoText, { color: colors.dim, marginTop: 8, fontStyle: 'italic' }]}>
+              That closes the loop and keeps roles from blending or overstaying — you choose them, they don't take over.
+            </Text>
+          </View>
 
           <View style={{ height: 80 }} />
         </ScrollView>
@@ -746,14 +670,18 @@ export default function HomeScreen() {
         {/* Time Container Navigation at Bottom */}
         {renderTimeContainerNav()}
 
-        {/* Synthesis Modal for creating journal entries */}
-        <DailyBlockSynthesisModal
-          isVisible={isSynthesisModalVisible}
+        {/* Archetype Detail Modal */}
+        <ArchetypeDetailModal
+          archetype={selectedArchetype}
+          isVisible={isArchetypeModalVisible}
           onClose={() => {
-            setIsSynthesisModalVisible(false);
-            setMomentToSynthesize({}); // Clear the moment on close
+            setIsArchetypeModalVisible(false);
+            setSelectedArchetype(null);
           }}
-          momentData={momentToSynthesize} // Use momentData prop
+          onInvoke={(archetype) => {
+            // TODO: Implement archetype invocation
+            console.log('Invoking archetype:', archetype.name);
+          }}
           colors={colors}
         />
       </View>
@@ -1319,6 +1247,20 @@ const styles = StyleSheet.create({
   },
   checkInValue: {
     fontSize: 13,
+  },
+  infoCard: {
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  infoTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  infoText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
 
