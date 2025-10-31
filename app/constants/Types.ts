@@ -75,10 +75,8 @@ export interface FoodEntry {
   date: string; // YYYY-MM-DDTHH:mm:ss.sssZ
   timestamp: number;
   name: string; // What was eaten
-  portion?: string; // Optional: serving size
-  notes?: string; // Optional: how it felt, context
-  mood_before?: string; // Optional: emotional state before
-  mood_after?: string; // Optional: emotional state after
+  feeling?: string; // Optional: how you feel
+  notes?: string; // Optional: observations about the meal
   energy_level?: string; // Optional: 'low', 'medium', 'high'
 }
 

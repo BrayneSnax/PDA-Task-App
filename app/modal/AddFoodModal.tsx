@@ -17,10 +17,8 @@ interface AddFoodModalProps {
   onClose: () => void;
   onSave: (entry: {
     name: string;
-    portion?: string;
     notes?: string;
-    mood_before?: string;
-    mood_after?: string;
+    feeling?: string;
     energy_level?: string;
   }) => void;
   colors: ColorScheme;
@@ -28,28 +26,22 @@ interface AddFoodModalProps {
 
 export function AddFoodModal({ isVisible, onClose, onSave, colors }: AddFoodModalProps) {
   const [name, setName] = useState('');
-  const [portion, setPortion] = useState('');
+  const [feeling, setFeeling] = useState('');
   const [notes, setNotes] = useState('');
-  const [moodBefore, setMoodBefore] = useState('');
-  const [moodAfter, setMoodAfter] = useState('');
   const [energyLevel, setEnergyLevel] = useState<string>('');
 
   const handleSave = () => {
     if (name.trim()) {
       onSave({
         name: name.trim(),
-        portion: portion.trim() || undefined,
+        feeling: feeling.trim() || undefined,
         notes: notes.trim() || undefined,
-        mood_before: moodBefore.trim() || undefined,
-        mood_after: moodAfter.trim() || undefined,
         energy_level: energyLevel || undefined,
       });
       // Reset form
       setName('');
-      setPortion('');
+      setFeeling('');
       setNotes('');
-      setMoodBefore('');
-      setMoodAfter('');
       setEnergyLevel('');
       onClose();
     }
@@ -57,10 +49,8 @@ export function AddFoodModal({ isVisible, onClose, onSave, colors }: AddFoodModa
 
   const handleClose = () => {
     setName('');
-    setPortion('');
+    setFeeling('');
     setNotes('');
-    setMoodBefore('');
-    setMoodAfter('');
     setEnergyLevel('');
     onClose();
   };
@@ -105,20 +95,6 @@ export function AddFoodModal({ isVisible, onClose, onSave, colors }: AddFoodModa
               placeholderTextColor={colors.dim}
             />
 
-            {/* Portion (optional) */}
-            <Text style={[styles.label, { color: colors.dim, marginTop: 16 }]}>Portion (optional)</Text>
-            <TextInput
-              style={[styles.textInput, { 
-                backgroundColor: colors.card, 
-                color: colors.text,
-                borderColor: colors.dim + '40',
-              }]}
-              value={portion}
-              onChangeText={setPortion}
-              placeholder="e.g., One bowl, small serving"
-              placeholderTextColor={colors.dim}
-            />
-
             {/* Energy Level */}
             <Text style={[styles.label, { color: colors.dim, marginTop: 16 }]}>Energy Level (optional)</Text>
             <View style={styles.energyGrid}>
@@ -138,30 +114,16 @@ export function AddFoodModal({ isVisible, onClose, onSave, colors }: AddFoodModa
               ))}
             </View>
 
-            {/* Mood Before (optional) */}
-            <Text style={[styles.label, { color: colors.dim, marginTop: 16 }]}>How did you feel before? (optional)</Text>
+            {/* How do you feel? */}
+            <Text style={[styles.label, { color: colors.dim, marginTop: 16 }]}>How do you feel? (optional)</Text>
             <TextInput
               style={[styles.textInput, { 
                 backgroundColor: colors.card, 
                 color: colors.text,
                 borderColor: colors.dim + '40',
               }]}
-              value={moodBefore}
-              onChangeText={setMoodBefore}
-              placeholder="e.g., Hungry, tired, anxious"
-              placeholderTextColor={colors.dim}
-            />
-
-            {/* Mood After (optional) */}
-            <Text style={[styles.label, { color: colors.dim, marginTop: 16 }]}>How do you feel after? (optional)</Text>
-            <TextInput
-              style={[styles.textInput, { 
-                backgroundColor: colors.card, 
-                color: colors.text,
-                borderColor: colors.dim + '40',
-              }]}
-              value={moodAfter}
-              onChangeText={setMoodAfter}
+              value={feeling}
+              onChangeText={setFeeling}
               placeholder="e.g., Satisfied, energized, calm"
               placeholderTextColor={colors.dim}
             />
@@ -285,4 +247,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-

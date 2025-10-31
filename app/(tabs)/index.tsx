@@ -829,9 +829,6 @@ export default function HomeScreen() {
                 <View style={styles.foodHeader}>
                   <View style={styles.foodHeaderLeft}>
                     <Text style={[styles.foodName, { color: colors.text }]}>{entry.name}</Text>
-                    {entry.portion && (
-                      <Text style={[styles.foodPortion, { color: colors.dim }]}> • {entry.portion}</Text>
-                    )}
                   </View>
                   <TouchableOpacity onPress={() => removeFoodEntry(entry.id)}>
                     <Text style={[styles.deleteButton, { color: colors.dim }]}>×</Text>
@@ -853,17 +850,10 @@ export default function HomeScreen() {
                   </View>
                 )}
 
-                {entry.mood_before && (
+                {entry.feeling && (
                   <View style={styles.foodDetail}>
-                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>Before:</Text>
-                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>{entry.mood_before}</Text>
-                  </View>
-                )}
-
-                {entry.mood_after && (
-                  <View style={styles.foodDetail}>
-                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>After:</Text>
-                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>{entry.mood_after}</Text>
+                    <Text style={[styles.foodDetailLabel, { color: colors.dim }]}>Feeling:</Text>
+                    <Text style={[styles.foodDetailValue, { color: colors.text }]}>{entry.feeling}</Text>
                   </View>
                 )}
 
