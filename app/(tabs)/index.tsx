@@ -40,6 +40,7 @@ import { DEFAULT_ARCHETYPES } from '../constants/DefaultData';
 import { Archetype } from '../constants/Types';
 import { ArchetypeCard } from '../components/ArchetypeCard';
 import { ArchetypeDetailModal } from '../modal/ArchetypeDetailModal';
+import { ReturnNode } from '../components/ReturnNode';
 
 type Screen = 'home' | 'substances' | 'archetypes' | 'patterns' | 'nourish';
 
