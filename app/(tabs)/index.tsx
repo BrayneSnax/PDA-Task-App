@@ -100,8 +100,12 @@ export default function HomeScreen() {
   const timeAnchors = items.filter(
     item => item.container === activeContainer && item.category === 'time'
   );
-  const situationalAnchors = items.filter(item => item.category === 'situational');
-  const upliftAnchors = items.filter(item => item.category === 'uplift');
+  const situationalAnchors = items.filter(
+    item => item.container === activeContainer && item.category === 'situational'
+  );
+  const upliftAnchors = items.filter(
+    item => item.container === activeContainer && item.category === 'uplift'
+  );
 
   // Render 1x4 horizontal action buttons at top
   const renderActionGrid = () => (
