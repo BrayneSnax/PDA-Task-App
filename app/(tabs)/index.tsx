@@ -409,6 +409,7 @@ export default function HomeScreen() {
             <TaskDetailScreen
               item={selectedItem}
               colors={colors}
+              container={activeContainer}
               onClose={() => setSelectedItem(null)}
               onComplete={(status, note) => {
                 if (status === 'did it') {
