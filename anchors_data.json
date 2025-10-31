@@ -1,0 +1,386 @@
+[
+  {
+    "title": "Ground",
+    "container": "morning",
+    "category": "time",
+    "body_cue": "Breath enters through your nose; feel weight in your heels.",
+    "micro": "Press your toes lightly into the earth.",
+    "desire": "Presence begins from below; let your mind catch up to your body."
+  },
+  {
+    "title": "Light Intake",
+    "container": "morning",
+    "category": "time",
+    "body_cue": "The first light, natural or lamp glow.",
+    "micro": "Lift your gaze; open your chest.",
+    "desire": "Coherence grows toward brightness."
+  },
+  {
+    "title": "Hydration Reset",
+    "container": "morning",
+    "category": "time",
+    "body_cue": "Temperature, texture, swallow.",
+    "micro": "Take one slow sip with attention.",
+    "desire": "The signal returns; your system heard you."
+  },
+  {
+    "title": "Orientation",
+    "container": "morning",
+    "category": "time",
+    "body_cue": "What day wants from you, not the other way.",
+    "micro": "Name one micro-intention aloud.",
+    "desire": "Direction without demand."
+  },
+  {
+    "title": "Body Anchor",
+    "container": "afternoon",
+    "category": "time",
+    "body_cue": "Where energy gathers.",
+    "micro": "Move that area once; shake or tap lightly.",
+    "desire": "Flow re-established."
+  },
+  {
+    "title": "Temperature Anchor",
+    "container": "afternoon",
+    "category": "time",
+    "body_cue": "Rising heat or tension.",
+    "micro": "Cool your wrists or neck.",
+    "desire": "Containment restores signal."
+  },
+  {
+    "title": "Hydration Reset",
+    "container": "afternoon",
+    "category": "time",
+    "body_cue": "Taste the water; feel its temperature.",
+    "micro": "One mindful sip.",
+    "desire": "Coherence through simplicity."
+  },
+  {
+    "title": "Micro-Pause",
+    "container": "afternoon",
+    "category": "time",
+    "body_cue": "The space between tasks.",
+    "micro": "Release your shoulders on an exhale.",
+    "desire": "Silence recalibrates."
+  },
+  {
+    "title": "Transition Field",
+    "container": "evening",
+    "category": "time",
+    "body_cue": "The shift from doing to being.",
+    "micro": "Dim one light; lengthen your exhale.",
+    "desire": "Work dissolves; the field remains."
+  },
+  {
+    "title": "Body Decompression",
+    "container": "evening",
+    "category": "time",
+    "body_cue": "Your jaw, your chest, your hands.",
+    "micro": "Shake them gently or stretch once.",
+    "desire": "Release equals return."
+  },
+  {
+    "title": "Warmth Reset",
+    "container": "evening",
+    "category": "time",
+    "body_cue": "Where your body feels cold.",
+    "micro": "Wrap or warm that zone.",
+    "desire": "Safety before sleep."
+  },
+  {
+    "title": "Closure Phrase",
+    "container": "evening",
+    "category": "time",
+    "body_cue": "What you completed today.",
+    "micro": "Whisper, \"Enough for today.\"",
+    "desire": "Coherence through kindness."
+  },
+  {
+    "title": "Stillness Signal",
+    "container": "late",
+    "category": "time",
+    "body_cue": "The hum of devices or thought.",
+    "micro": "Mute one source of sound.",
+    "desire": "Quiet becomes friend."
+  },
+  {
+    "title": "Temperature Ground",
+    "container": "late",
+    "category": "time",
+    "body_cue": "Air across your skin.",
+    "micro": "Adjust blanket or airflow.",
+    "desire": "Equilibrium, not effort."
+  },
+  {
+    "title": "Hydration Final",
+    "container": "late",
+    "category": "time",
+    "body_cue": "One slow sip; eyes soft.",
+    "micro": "Swallow with gratitude.",
+    "desire": "System ready for rest."
+  },
+  {
+    "title": "Dream Invocation",
+    "container": "late",
+    "category": "time",
+    "body_cue": "One image asking to continue.",
+    "micro": "Invite it forward.",
+    "desire": "Subconscious joins the field."
+  },
+  {
+    "title": "Overwhelm",
+    "container": "morning",
+    "category": "situational",
+    "body_cue": "Breath slows; name three points of contact.",
+    "micro": "Choose one micro-intention only.",
+    "desire": "Order begins with permission."
+  },
+  {
+    "title": "Low Motivation",
+    "container": "morning",
+    "category": "situational",
+    "body_cue": "The small pulse of life under your ribs.",
+    "micro": "Stretch your hands upward; feel space widen.",
+    "desire": "Effort follows spark, not demand."
+  },
+  {
+    "title": "Mental Loop",
+    "container": "morning",
+    "category": "situational",
+    "body_cue": "The phrase repeating in your mind.",
+    "micro": "Speak it once aloud, then smile.",
+    "desire": "Humor frees the pattern."
+  },
+  {
+    "title": "Social Drain from Dreams",
+    "container": "morning",
+    "category": "situational",
+    "body_cue": "The residue of old stories.",
+    "micro": "Send one simple note of gratitude.",
+    "desire": "Return gently to the present."
+  },
+  {
+    "title": "Sensory Overload",
+    "container": "afternoon",
+    "category": "situational",
+    "body_cue": "Light, sound, texture—all at once.",
+    "micro": "Step outside or soften your gaze.",
+    "desire": "Breath thins noise into signal."
+  },
+  {
+    "title": "Decision Fatigue",
+    "container": "afternoon",
+    "category": "situational",
+    "body_cue": "Choice feels heavy.",
+    "micro": "Flip a coin for one small thing.",
+    "desire": "Trust your body's first yes."
+  },
+  {
+    "title": "Tension Loop",
+    "container": "afternoon",
+    "category": "situational",
+    "body_cue": "The knot forming inside you.",
+    "micro": "Tap your forearm three times; exhale through sound.",
+    "desire": "Vibration returns flow."
+  },
+  {
+    "title": "Disconnection",
+    "container": "afternoon",
+    "category": "situational",
+    "body_cue": "You forgot the sky.",
+    "micro": "Name its color; touch the ground.",
+    "desire": "Aliveness re-enters."
+  },
+  {
+    "title": "Irritability",
+    "container": "evening",
+    "category": "situational",
+    "body_cue": "Heat rising behind the face.",
+    "micro": "Place hands under warm water.",
+    "desire": "Soft eyes restore safety."
+  },
+  {
+    "title": "Loneliness",
+    "container": "evening",
+    "category": "situational",
+    "body_cue": "The space around your heart.",
+    "micro": "Message one safe friend or memory.",
+    "desire": "Connection counts, not size."
+  },
+  {
+    "title": "Overthinking",
+    "container": "evening",
+    "category": "situational",
+    "body_cue": "Words circling without end.",
+    "micro": "Write three short phrases; fold the page.",
+    "desire": "Closure invites rest."
+  },
+  {
+    "title": "Emotional Residue",
+    "container": "evening",
+    "category": "situational",
+    "body_cue": "The film of the day on your skin.",
+    "micro": "Brush arms downward; whisper \"clear.\"",
+    "desire": "Breath refreshes boundary."
+  },
+  {
+    "title": "Restlessness",
+    "container": "late",
+    "category": "situational",
+    "body_cue": "Body alive, mind untamed.",
+    "micro": "Hand on heart; count four beats.",
+    "desire": "Whisper, \"Settle.\""
+  },
+  {
+    "title": "Guilt Spiral",
+    "container": "late",
+    "category": "situational",
+    "body_cue": "Thoughts replaying old scenes.",
+    "micro": "Place a note of thanks beside you.",
+    "desire": "Tomorrow is enough."
+  },
+  {
+    "title": "Lonely Mind-Chatter",
+    "container": "late",
+    "category": "situational",
+    "body_cue": "The echo inside silence.",
+    "micro": "Imagine the moon breathing with you.",
+    "desire": "Companionship through rhythm."
+  },
+  {
+    "title": "Physical Ache",
+    "container": "late",
+    "category": "situational",
+    "body_cue": "Where the ache speaks loudest.",
+    "micro": "Press that spot; name it \"alive.\"",
+    "desire": "Gratitude loosens the knot."
+  },
+  {
+    "title": "Energized",
+    "container": "morning",
+    "category": "uplift",
+    "body_cue": "Warmth rising inside.",
+    "micro": "Stand in light; inhale possibility.",
+    "desire": "Motion awakens clarity."
+  },
+  {
+    "title": "Clear",
+    "container": "morning",
+    "category": "uplift",
+    "body_cue": "Order returning to thought.",
+    "micro": "Tidy one small area.",
+    "desire": "Coherence invites calm."
+  },
+  {
+    "title": "Connected",
+    "container": "morning",
+    "category": "uplift",
+    "body_cue": "The thread between you and the world.",
+    "micro": "Speak kindness once; receive it fully.",
+    "desire": "Resonance grows through exchange."
+  },
+  {
+    "title": "Creative Flow",
+    "container": "morning",
+    "category": "uplift",
+    "body_cue": "The first image or word that arrives.",
+    "micro": "Write it down; let it unfold.",
+    "desire": "Inspiration honors attention."
+  },
+  {
+    "title": "Focused",
+    "container": "afternoon",
+    "category": "uplift",
+    "body_cue": "Your spine aligning.",
+    "micro": "Ground feet; breathe into task.",
+    "desire": "Direction becomes devotion."
+  },
+  {
+    "title": "Collaborative",
+    "container": "afternoon",
+    "category": "uplift",
+    "body_cue": "The field between voices.",
+    "micro": "Mirror tone; offer one harmonic idea.",
+    "desire": "Creation prefers duet."
+  },
+  {
+    "title": "Playful",
+    "container": "afternoon",
+    "category": "uplift",
+    "body_cue": "Tension pretending to be seriousness.",
+    "micro": "Change posture; say one word backward.",
+    "desire": "Laughter is coherence in disguise."
+  },
+  {
+    "title": "Curious",
+    "container": "afternoon",
+    "category": "uplift",
+    "body_cue": "The impulse to judge.",
+    "micro": "Ask, \"What else could this mean?\"",
+    "desire": "Wonder opens bandwidth."
+  },
+  {
+    "title": "Grateful",
+    "container": "evening",
+    "category": "uplift",
+    "body_cue": "Three small beauties around you.",
+    "micro": "Name them softly.",
+    "desire": "Presence sweetens memory."
+  },
+  {
+    "title": "Soft Joy",
+    "container": "evening",
+    "category": "uplift",
+    "body_cue": "The hum in your chest.",
+    "micro": "Hum with it; let lips curve.",
+    "desire": "Joy doesn't need a reason."
+  },
+  {
+    "title": "Fulfilled",
+    "container": "evening",
+    "category": "uplift",
+    "body_cue": "The echo of a completed day.",
+    "micro": "Write one line—\"I was alive in…\"",
+    "desire": "Meaning hides in moments."
+  },
+  {
+    "title": "Intimate",
+    "container": "evening",
+    "category": "uplift",
+    "body_cue": "Your own hand waiting.",
+    "micro": "Touch it gently; say \"Thank you for staying.\"",
+    "desire": "Self-companionship is wholeness."
+  },
+  {
+    "title": "Peaceful",
+    "container": "late",
+    "category": "uplift",
+    "body_cue": "Moonlight inside your lungs.",
+    "micro": "Inhale slowly; exhale softer.",
+    "desire": "Quiet becomes glow."
+  },
+  {
+    "title": "Dream-Ready",
+    "container": "late",
+    "category": "uplift",
+    "body_cue": "The story forming behind your eyes.",
+    "micro": "Whisper your seed intention.",
+    "desire": "Night listens."
+  },
+  {
+    "title": "Restored",
+    "container": "late",
+    "category": "uplift",
+    "body_cue": "What your body accomplished today.",
+    "micro": "Name one thing done well.",
+    "desire": "Appreciation restores circuitry."
+  },
+  {
+    "title": "Infinite",
+    "container": "late",
+    "category": "uplift",
+    "body_cue": "The space around awareness itself.",
+    "micro": "Imagine dissolving into the wider breath.",
+    "desire": "You are part of the field."
+  }
+]
