@@ -18,13 +18,13 @@ const getTimeGlowStyle = (container: ContainerId) => {
       backgroundColor: '#F5E6CC15',
       borderColor: '#F5E6CC40',
       shadowColor: '#F5E6CC',
-      labelColor: '#F5E6CC',
+      labelColor: '#D4A574',
     },
     afternoon: {
       backgroundColor: '#B0E0E612',
       borderColor: '#B0E0E635',
       shadowColor: '#B0E0E6',
-      labelColor: '#B0E0E6',
+      labelColor: '#5FA8B8',
     },
     evening: {
       backgroundColor: '#8C4B3F18',

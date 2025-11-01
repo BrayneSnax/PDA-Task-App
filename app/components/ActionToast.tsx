@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
-import { ColorScheme } from '../constants/Types';
+import { ColorScheme, ContainerId } from '../constants/Types';
 
 type ActionType = 'did it' | 'skipped' | 'forgot' | 'couldn\'t' | 'not relevant';
 
@@ -8,6 +8,7 @@ interface ActionToastProps {
   isVisible: boolean;
   actionType: ActionType;
   colors: ColorScheme;
+  container: ContainerId;
   onDismiss: () => void;
 }
 
@@ -44,10 +45,22 @@ const getActionConfig = (actionType: ActionType) => {
   return configs[actionType] || configs['did it'];
 };
 
+// Get time-of-day background color for toast
+const getToastBackground = (container: ContainerId) => {
+  const backgrounds = {
+    morning: '#D4A574E6',
+    afternoon: '#5FA8B8E6',
+    evening: '#E8B4A8E6',
+    late: '#8B9DC3E6',
+  };
+  return backgrounds[container] || backgrounds.morning;
+};
+
 export const ActionToast: React.FC<ActionToastProps> = ({ 
   isVisible, 
   actionType,
   colors,
+  container,
   onDismiss 
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -176,8 +189,8 @@ export const ActionToast: React.FC<ActionToastProps> = ({
         style={[
           styles.toast,
           { 
-            backgroundColor: colors.card + 'F0',
-            borderColor: colors.accent + '25',
+            backgroundColor: getToastBackground(container),
+            borderColor: colors.accent + '30',
           },
         ]}
       >

@@ -458,6 +458,7 @@ export default function HomeScreen() {
           isVisible={showActionToast}
           actionType={currentActionType}
           colors={colors}
+          container={activeContainer}
           onDismiss={() => setShowActionToast(false)}
         />
         
