@@ -18,21 +18,25 @@ const getTimeGlowStyle = (container: ContainerId) => {
       backgroundColor: '#F5E6CC15',
       borderColor: '#F5E6CC40',
       shadowColor: '#F5E6CC',
+      labelColor: '#F5E6CC',
     },
     afternoon: {
       backgroundColor: '#B0E0E612',
       borderColor: '#B0E0E635',
       shadowColor: '#B0E0E6',
+      labelColor: '#B0E0E6',
     },
     evening: {
       backgroundColor: '#8C4B3F18',
       borderColor: '#8C4B3F45',
       shadowColor: '#8C4B3F',
+      labelColor: '#E8B4A8',
     },
     late: {
       backgroundColor: '#3A3F4515',
       borderColor: '#3A3F4540',
       shadowColor: '#3A3F45',
+      labelColor: '#8B9DC3',
     },
   };
 
@@ -66,7 +70,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             shadowColor: timeGlow.shadowColor,
           }
         ]}>
-          <Text style={[styles.inlineLabel, { color: colors.text }]}>NOTICE</Text>
+          <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>NOTICE</Text>
           <Text style={[styles.glowText, styles.largeText, { color: colors.text }]}>
             {item.body_cue || 'No notice provided'}
           </Text>
@@ -82,7 +86,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             shadowColor: timeGlow.shadowColor,
           }
         ]}>
-          <Text style={[styles.inlineLabel, { color: colors.text }]}>ACT</Text>
+          <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>ACT</Text>
           <Text style={[styles.glowText, styles.mediumText, { color: colors.text }]}>
             {item.micro || 'No action provided'}
           </Text>
@@ -99,7 +103,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
               shadowColor: timeGlow.shadowColor,
             }
           ]}>
-            <Text style={[styles.inlineLabel, { color: colors.text }]}>REFLECT</Text>
+            <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>REFLECT</Text>
             <Text style={[styles.glowText, styles.smallText, { color: colors.text }]}>
               {item.desire}
             </Text>
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   largeBlock: {
-    minHeight: 110,
+    minHeight: 90,
   },
   mediumBlock: {
     minHeight: 95,
