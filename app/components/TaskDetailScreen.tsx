@@ -9,6 +9,8 @@ interface Props {
   container: ContainerId;
   onClose: () => void;
   onComplete: (status: 'did it' | 'skipped' | 'forgot' | 'couldn\'t' | 'not relevant', note: string) => void;
+  isEditMode?: boolean;
+  onSave?: (updatedItem: ContainerItem) => void;
 }
 
 // Get time-of-day responsive glow for boxes
@@ -61,9 +63,13 @@ const getDynamicFontSize = (text: string, baseSize: number, baseLineHeight: numb
   }
 };
 
-export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete }: Props) => {
+export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete, isEditMode = false, onSave }: Props) => {
   const insets = useSafeAreaInsets();
   const [note, setNote] = useState('');
+  const [editedTitle, setEditedTitle] = useState(item.title || '');
+  const [editedNotice, setEditedNotice] = useState(item.body_cue || '');
+  const [editedAct, setEditedAct] = useState(item.micro || '');
+  const [editedReflect, setEditedReflect] = useState(item.desire || '');
   const allActionButtons = ['skipped', 'forgot', 'couldn\'t', 'not relevant'];
   const actionButtons = allActionButtons.slice(0, item.actionButtons || 4);
   
@@ -80,7 +86,17 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
         <Text style={[styles.backText, { color: colors.text }]}>← back</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.title, { color: colors.text, textAlign: 'center' }]}>{item.title}</Text>
+      {isEditMode ? (
+        <TextInput
+          style={[styles.title, styles.titleInput, { color: colors.text, textAlign: 'center', borderColor: timeGlow.borderColor }]}
+          value={editedTitle}
+          onChangeText={setEditedTitle}
+          placeholder="Task title"
+          placeholderTextColor={colors.dim}
+        />
+      ) : (
+        <Text style={[styles.title, { color: colors.text, textAlign: 'center' }]}>{item.title}</Text>
+      )}
 
       <View style={styles.content}>
         {/* Notice Block with label inside */}
@@ -94,17 +110,37 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
           }
         ]}>
           <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>NOTICE</Text>
-          <Text style={[
-            styles.glowText,
-            {
-              color: colors.text,
-              fontSize: noticeFontStyle.fontSize,
-              lineHeight: noticeFontStyle.lineHeight,
-              fontWeight: '600',
-            }
-          ]}>
-            {item.body_cue || 'No notice provided'}
-          </Text>
+          {isEditMode ? (
+            <TextInput
+              style={[
+                styles.glowText,
+                styles.editableText,
+                {
+                  color: colors.text,
+                  fontSize: noticeFontStyle.fontSize,
+                  lineHeight: noticeFontStyle.lineHeight,
+                  fontWeight: '600',
+                }
+              ]}
+              value={editedNotice}
+              onChangeText={setEditedNotice}
+              placeholder="Notice..."
+              placeholderTextColor={colors.dim}
+              multiline
+            />
+          ) : (
+            <Text style={[
+              styles.glowText,
+              {
+                color: colors.text,
+                fontSize: noticeFontStyle.fontSize,
+                lineHeight: noticeFontStyle.lineHeight,
+                fontWeight: '600',
+              }
+            ]}>
+              {item.body_cue || 'No notice provided'}
+            </Text>
+          )}
         </View>
 
         {/* Act Block with label inside */}
@@ -118,17 +154,37 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
           }
         ]}>
           <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>ACT</Text>
-          <Text style={[
-            styles.glowText,
-            {
-              color: colors.text,
-              fontSize: actFontStyle.fontSize,
-              lineHeight: actFontStyle.lineHeight,
-              fontWeight: '500',
-            }
-          ]}>
-            {item.micro || 'No action provided'}
-          </Text>
+          {isEditMode ? (
+            <TextInput
+              style={[
+                styles.glowText,
+                styles.editableText,
+                {
+                  color: colors.text,
+                  fontSize: actFontStyle.fontSize,
+                  lineHeight: actFontStyle.lineHeight,
+                  fontWeight: '500',
+                }
+              ]}
+              value={editedAct}
+              onChangeText={setEditedAct}
+              placeholder="Act..."
+              placeholderTextColor={colors.dim}
+              multiline
+            />
+          ) : (
+            <Text style={[
+              styles.glowText,
+              {
+                color: colors.text,
+                fontSize: actFontStyle.fontSize,
+                lineHeight: actFontStyle.lineHeight,
+                fontWeight: '500',
+              }
+            ]}>
+              {item.micro || 'No action provided'}
+            </Text>
+          )}
         </View>
         
         {/* Reflect Block with label inside (if exists) */}
@@ -143,17 +199,37 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             }
           ]}>
             <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>REFLECT</Text>
-            <Text style={[
-              styles.glowText,
-              {
-                color: colors.text,
-                fontSize: reflectFontStyle.fontSize,
-                lineHeight: reflectFontStyle.lineHeight,
-                fontWeight: '500',
-              }
-            ]}>
-              {item.desire}
-            </Text>
+            {isEditMode ? (
+              <TextInput
+                style={[
+                  styles.glowText,
+                  styles.editableText,
+                  {
+                    color: colors.text,
+                    fontSize: reflectFontStyle.fontSize,
+                    lineHeight: reflectFontStyle.lineHeight,
+                    fontWeight: '500',
+                  }
+                ]}
+                value={editedReflect}
+                onChangeText={setEditedReflect}
+                placeholder="Reflect..."
+                placeholderTextColor={colors.dim}
+                multiline
+              />
+            ) : (
+              <Text style={[
+                styles.glowText,
+                {
+                  color: colors.text,
+                  fontSize: reflectFontStyle.fontSize,
+                  lineHeight: reflectFontStyle.lineHeight,
+                  fontWeight: '500',
+                }
+              ]}>
+                {item.desire}
+              </Text>
+            )}
           </View>
         )}
 
@@ -175,34 +251,54 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
           numberOfLines={2}
         />
 
-        {/* Action Buttons - compact grid */}
-        <View style={styles.actionGrid}>
-          {/* Did It Button - full width, prominent */}
+        {/* Action Buttons - compact grid or Save button in edit mode */}
+        {isEditMode ? (
           <TouchableOpacity
             style={[styles.actionButton, styles.didItButton, { backgroundColor: colors.accent }]}
-            onPress={() => onComplete('did it', note)}
+            onPress={() => {
+              if (onSave) {
+                onSave({
+                  ...item,
+                  title: editedTitle,
+                  body_cue: editedNotice,
+                  micro: editedAct,
+                  desire: editedReflect,
+                });
+              }
+              onClose();
+            }}
           >
-            <Text style={[styles.didItText, { color: colors.bg }]}>DID IT</Text>
+            <Text style={[styles.didItText, { color: colors.bg }]}>SAVE CHANGES</Text>
           </TouchableOpacity>
-
-          {actionButtons.map((action) => (
+        ) : (
+          <View style={styles.actionGrid}>
+            {/* Did It Button - full width, prominent */}
             <TouchableOpacity
-              key={action}
-              style={[
-                styles.actionButton,
-                {
-                  backgroundColor: colors.accent + '15',
-                  borderColor: colors.accent + '30',
-                  borderWidth: 1,
-                  opacity: action === 'not relevant' ? 0.7 : 1,
-                },
-              ]}
-              onPress={() => onComplete(action as any, note)}
+              style={[styles.actionButton, styles.didItButton, { backgroundColor: colors.accent }]}
+              onPress={() => onComplete('did it', note)}
             >
-              <Text style={[styles.actionText, { color: colors.text }]}>{action}</Text>
+              <Text style={[styles.didItText, { color: colors.bg }]}>DID IT</Text>
             </TouchableOpacity>
-          ))}
-        </View>
+
+            {actionButtons.map((action) => (
+              <TouchableOpacity
+                key={action}
+                style={[
+                  styles.actionButton,
+                  {
+                    backgroundColor: colors.accent + '15',
+                    borderColor: colors.accent + '30',
+                    borderWidth: 1,
+                    opacity: action === 'not relevant' ? 0.7 : 1,
+                  },
+                ]}
+                onPress={() => onComplete(action as any, note)}
+              >
+                <Text style={[styles.actionText, { color: colors.text }]}>{action}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -301,5 +397,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 14,
     lineHeight: 19,
+  },
+  titleInput: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  editableText: {
+    minHeight: 40,
   },
 });

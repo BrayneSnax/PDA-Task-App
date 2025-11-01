@@ -97,6 +97,7 @@ export default function HomeScreen() {
   const [allyToEdit, setAllyToEdit] = useState(null);
   const [momentToSynthesize, setMomentToSynthesize] = useState<any>({});
   const [selectedItem, setSelectedItem] = useState<ContainerItem | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [isAnalysisModalVisible, setIsAnalysisModalVisible] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -302,15 +303,19 @@ export default function HomeScreen() {
 	            defaultExpanded={false}
 	          >
 	            {items.filter(item => item.category === 'crafted').map(item => (
-	              <AnchorCard
-	                key={item.id}
-	                item={item}
-	                completed={isCompleted(item.id)}
-	                onToggle={() => handleCompletion(item.id)}
-	                colors={colors}
-	                onPress={() => setSelectedItem(item)}
-	                onDelete={() => removeItem(item.id)}
-	              />
+              <AnchorCard
+                key={item.id}
+                item={item}
+                completed={isCompleted(item.id)}
+                onToggle={() => handleCompletion(item.id)}
+                colors={colors}
+                onPress={() => setSelectedItem(item)}
+                onDelete={() => removeItem(item.id)}
+                onEdit={() => {
+                  setSelectedItem(item);
+                  setIsEditMode(true);
+                }}
+              />
 	            ))}
 	          </CollapsibleSection>
 
@@ -336,6 +341,10 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                onEdit={() => {
+                  setSelectedItem(item);
+                  setIsEditMode(true);
+                }}
                 container={activeContainer}
               />
             ))}
@@ -357,6 +366,10 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                onEdit={() => {
+                  setSelectedItem(item);
+                  setIsEditMode(true);
+                }}
                 container={activeContainer}
               />
             ))}
@@ -378,6 +391,10 @@ export default function HomeScreen() {
                 colors={colors}
                 onPress={() => setSelectedItem(item)}
                 onDelete={() => removeItem(item.id)}
+                onEdit={() => {
+                  setSelectedItem(item);
+                  setIsEditMode(true);
+                }}
                 container={activeContainer}
               />
             ))}
@@ -408,12 +425,23 @@ export default function HomeScreen() {
 
         {/* Task Detail Modal */}
         {selectedItem && (
-          <Modal isVisible={!!selectedItem} onClose={() => setSelectedItem(null)}>
+          <Modal isVisible={!!selectedItem} onClose={() => {
+            setSelectedItem(null);
+            setIsEditMode(false);
+          }}>
             <TaskDetailScreen
               item={selectedItem}
               colors={colors}
               container={activeContainer}
-              onClose={() => setSelectedItem(null)}
+              onClose={() => {
+                setSelectedItem(null);
+                setIsEditMode(false);
+              }}
+              isEditMode={isEditMode}
+              onSave={(updatedItem) => {
+                updateItem(updatedItem.id, updatedItem);
+                setIsEditMode(false);
+              }}
               onComplete={(status, note) => {
                 if (status === 'did it') {
                   handleCompletion(selectedItem.id);
