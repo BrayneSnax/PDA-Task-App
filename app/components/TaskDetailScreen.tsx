@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { ContainerItem, ColorScheme, ContainerId } from '../constants/Types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -43,6 +43,24 @@ const getTimeGlowStyle = (container: ContainerId) => {
   return glowStyles[container] || glowStyles.morning;
 };
 
+// Dynamic font size based on character count
+const getDynamicFontSize = (text: string, baseSize: number, baseLineHeight: number) => {
+  const length = text.length;
+  
+  // Thresholds for font size reduction
+  if (length < 50) {
+    return { fontSize: baseSize, lineHeight: baseLineHeight };
+  } else if (length < 80) {
+    return { fontSize: baseSize - 1, lineHeight: baseLineHeight - 2 };
+  } else if (length < 120) {
+    return { fontSize: baseSize - 2, lineHeight: baseLineHeight - 3 };
+  } else if (length < 160) {
+    return { fontSize: baseSize - 3, lineHeight: baseLineHeight - 4 };
+  } else {
+    return { fontSize: baseSize - 4, lineHeight: baseLineHeight - 5 };
+  }
+};
+
 export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete }: Props) => {
   const insets = useSafeAreaInsets();
   const [note, setNote] = useState('');
@@ -50,6 +68,11 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
   const actionButtons = allActionButtons.slice(0, item.actionButtons || 4);
   
   const timeGlow = getTimeGlowStyle(container);
+
+  // Get dynamic font sizes for each text field
+  const noticeFontStyle = getDynamicFontSize(item.body_cue || '', 18, 26);
+  const actFontStyle = getDynamicFontSize(item.micro || '', 17, 24);
+  const reflectFontStyle = getDynamicFontSize(item.desire || '', 16, 23);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bg, paddingBottom: insets.bottom }]}>
@@ -59,7 +82,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
 
       <Text style={[styles.title, { color: colors.text, textAlign: 'center' }]}>{item.title}</Text>
 
-      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
+      <View style={styles.content}>
         {/* Notice Block with label inside */}
         <View style={[
           styles.glowBlock,
@@ -71,7 +94,15 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
           }
         ]}>
           <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>NOTICE</Text>
-          <Text style={[styles.glowText, styles.largeText, { color: colors.text }]}>
+          <Text style={[
+            styles.glowText,
+            {
+              color: colors.text,
+              fontSize: noticeFontStyle.fontSize,
+              lineHeight: noticeFontStyle.lineHeight,
+              fontWeight: '600',
+            }
+          ]}>
             {item.body_cue || 'No notice provided'}
           </Text>
         </View>
@@ -87,7 +118,15 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
           }
         ]}>
           <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>ACT</Text>
-          <Text style={[styles.glowText, styles.mediumText, { color: colors.text }]}>
+          <Text style={[
+            styles.glowText,
+            {
+              color: colors.text,
+              fontSize: actFontStyle.fontSize,
+              lineHeight: actFontStyle.lineHeight,
+              fontWeight: '500',
+            }
+          ]}>
             {item.micro || 'No action provided'}
           </Text>
         </View>
@@ -104,7 +143,15 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             }
           ]}>
             <Text style={[styles.inlineLabel, { color: timeGlow.labelColor }]}>REFLECT</Text>
-            <Text style={[styles.glowText, styles.smallText, { color: colors.text }]}>
+            <Text style={[
+              styles.glowText,
+              {
+                color: colors.text,
+                fontSize: reflectFontStyle.fontSize,
+                lineHeight: reflectFontStyle.lineHeight,
+                fontWeight: '500',
+              }
+            ]}>
               {item.desire}
             </Text>
           </View>
@@ -156,7 +203,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             </TouchableOpacity>
           ))}
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -190,8 +237,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     opacity: 0.6, // Slightly dimmed but same color
   },
-  scrollContent: {
-    paddingBottom: 40,
+  content: {
+    flex: 1,
   },
   // Organic glow blocks
   glowBlock: {
@@ -214,25 +261,7 @@ const styles = StyleSheet.create({
     minHeight: 72,
   },
   glowText: {
-    fontSize: 15,
-    fontWeight: '500',
-    lineHeight: 22,
-    textAlign: 'center', // Center the content text too
-  },
-  largeText: {
-    fontSize: 18,
-    fontWeight: '600',
-    lineHeight: 26,
-  },
-  mediumText: {
-    fontSize: 17,
-    fontWeight: '500',
-    lineHeight: 24,
-  },
-  smallText: {
-    fontSize: 16,
-    fontWeight: '500',
-    lineHeight: 23,
+    textAlign: 'center',
   },
   didItButton: {
     width: '100%',
