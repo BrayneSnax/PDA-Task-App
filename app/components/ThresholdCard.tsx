@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import { ColorScheme, ContainerId } from '../constants/Types';
 
 interface ThresholdCardProps {
@@ -54,6 +54,17 @@ const getContainerLabel = (container: ContainerId): string => {
   return labels[container];
 };
 
+// Get time-of-day background color for toast (matching ActionToast)
+const getToastBackground = (container: ContainerId) => {
+  const backgrounds = {
+    morning: '#D4A574E6',
+    afternoon: '#5FA8B8E6',
+    evening: '#E8B4A8E6',
+    late: '#8B9DC3E6',
+  };
+  return backgrounds[container] || backgrounds.morning;
+};
+
 export const ThresholdCard: React.FC<ThresholdCardProps> = ({ 
   isVisible, 
   fromContainer,
@@ -62,30 +73,40 @@ export const ThresholdCard: React.FC<ThresholdCardProps> = ({
   onDismiss 
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current; // Slide up from bottom
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const ritual = useRef(getRandomRitual(fromContainer, toContainer)).current;
 
   useEffect(() => {
     if (isVisible) {
-      // Fade in and scale up gently
+      // Reset animations
+      fadeAnim.setValue(0);
+      slideAnim.setValue(20);
+      scaleAnim.setValue(0.95);
+
+      // Fade in and slide up gently (matching ActionToast)
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 500,
+          duration: 300,
           useNativeDriver: true,
         }),
-        Animated.spring(scaleAnim, {
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
           toValue: 1,
-          tension: 50,
-          friction: 7,
+          duration: 300,
           useNativeDriver: true,
         }),
       ]).start();
 
-      // Auto-dismiss after 3 seconds (evaporates quickly)
+      // Auto-dismiss after 2000ms (matching ActionToast timing)
       const timer = setTimeout(() => {
         dismissCard();
-      }, 3000);
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
@@ -95,6 +116,11 @@ export const ThresholdCard: React.FC<ThresholdCardProps> = ({
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 20,
         duration: 400,
         useNativeDriver: true,
       }),
@@ -113,100 +139,78 @@ export const ThresholdCard: React.FC<ThresholdCardProps> = ({
   return (
     <Animated.View
       style={[
-        styles.overlay,
+        styles.container,
         {
           opacity: fadeAnim,
+          transform: [
+            { translateY: slideAnim },
+            { scale: scaleAnim },
+          ],
         },
       ]}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={dismissCard}
-        style={styles.backdrop}
+      <View
+        style={[
+          styles.toast,
+          { 
+            backgroundColor: getToastBackground(toContainer),
+            borderColor: colors.accent + '30',
+          },
+        ]}
       >
-        <Animated.View
-          style={[
-            styles.card,
-            {
-              backgroundColor: colors.card,
-              borderColor: colors.accent + '20',
-              transform: [{ scale: scaleAnim }],
-            },
-          ]}
-        >
-          <Text style={[styles.transition, { color: colors.dim }]}>
-            {getContainerLabel(fromContainer)} → {getContainerLabel(toContainer)}
-          </Text>
-          
-          <Text style={[styles.ritual, { color: colors.text }]}>
-            {ritual}
-          </Text>
-
-          <TouchableOpacity
-            onPress={dismissCard}
-            style={[styles.dismissButton, { backgroundColor: colors.accent + '15' }]}
-          >
-            <Text style={[styles.dismissText, { color: colors.accent }]}>
-              continue
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </TouchableOpacity>
+        {/* Transition label */}
+        <Text style={[styles.transition, { color: colors.text }]}>
+          {getContainerLabel(fromContainer)} → {getContainerLabel(toContainer)}
+        </Text>
+        
+        {/* Ritual message */}
+        <Text style={[styles.ritual, { color: colors.text }]}>
+          {ritual}
+        </Text>
+      </View>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 2000,
-  },
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  container: {
+    position: 'absolute',
+    bottom: 100,
+    left: 20,
+    right: 20,
+    zIndex: 1001,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
   },
-  card: {
-    width: '100%',
-    maxWidth: 340,
-    borderRadius: 24,
+  toast: {
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 16,
     borderWidth: 1,
-    padding: 32,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
+    overflow: 'hidden',
   },
   transition: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '600',
     textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    marginBottom: 20,
+    letterSpacing: 1.2,
+    textAlign: 'center',
+    marginBottom: 6,
+    opacity: 0.7,
   },
   ritual: {
-    fontSize: 18,
-    fontWeight: '400',
-    textAlign: 'center',
-    lineHeight: 28,
-    fontStyle: 'italic',
-    marginBottom: 28,
-  },
-  dismissButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 20,
-  },
-  dismissText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
-    letterSpacing: 0.5,
+    fontStyle: 'italic',
+    letterSpacing: 0.2,
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });
