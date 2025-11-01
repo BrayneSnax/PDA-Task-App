@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1.2,
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: 10,
     opacity: 0.6, // Slightly dimmed but same color
   },
   scrollContent: {
@@ -192,8 +192,8 @@ const styles = StyleSheet.create({
   // Organic glow blocks
   glowBlock: {
     borderRadius: 16,
-    padding: 12,
-    marginBottom: 6,
+    padding: 16,
+    marginBottom: 10,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
@@ -201,34 +201,34 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   largeBlock: {
-    minHeight: 70,
+    minHeight: 110,
   },
   mediumBlock: {
-    minHeight: 58,
+    minHeight: 95,
   },
   smallBlock: {
-    minHeight: 50,
+    minHeight: 80,
   },
   glowText: {
     fontSize: 15,
     fontWeight: '500',
-    lineHeight: 20,
+    lineHeight: 22,
     textAlign: 'center', // Center the content text too
   },
   largeText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
-    lineHeight: 22,
+    lineHeight: 26,
   },
   mediumText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '500',
-    lineHeight: 21,
+    lineHeight: 24,
   },
   smallText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '500',
-    lineHeight: 20,
+    lineHeight: 23,
   },
   didItButton: {
     width: '100%',
