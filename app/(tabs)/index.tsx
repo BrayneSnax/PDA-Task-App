@@ -451,6 +451,7 @@ export default function HomeScreen() {
         <ShiftToast
           isVisible={showShiftToast}
           colors={colors}
+          container={activeContainer}
           onDismiss={() => setShowShiftToast(false)}
         />
         

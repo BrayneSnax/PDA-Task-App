@@ -1,41 +1,65 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ColorScheme } from '../constants/Types';
+import { ColorScheme, ContainerId } from '../constants/Types';
 
 interface ShiftToastProps {
   isVisible: boolean;
   colors: ColorScheme;
+  container: ContainerId;
   onDismiss: () => void;
 }
+
+// Get time-of-day background color for toast
+const getToastBackground = (container: ContainerId) => {
+  const backgrounds = {
+    morning: '#D4A574E6',
+    afternoon: '#5FA8B8E6',
+    evening: '#E8B4A8E6',
+    late: '#8B9DC3E6',
+  };
+  return backgrounds[container] || backgrounds.morning;
+};
 
 export const ShiftToast: React.FC<ShiftToastProps> = ({ 
   isVisible, 
   colors,
+  container,
   onDismiss 
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(-20)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current; // Slide up from bottom
+  const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
   useEffect(() => {
     if (isVisible) {
-      // Fade in and slide down gently
+      // Reset animations
+      fadeAnim.setValue(0);
+      slideAnim.setValue(20);
+      scaleAnim.setValue(0.95);
+
+      // Fade in and slide up gently
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 400,
+          duration: 300,
           useNativeDriver: true,
         }),
         Animated.timing(slideAnim, {
           toValue: 0,
-          duration: 400,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 300,
           useNativeDriver: true,
         }),
       ]).start();
 
-      // Auto-dismiss after 3 seconds
+      // Auto-dismiss after 2 seconds (matching "did it" duration)
       const timer = setTimeout(() => {
         dismissToast();
-      }, 3000);
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
@@ -45,12 +69,12 @@ export const ShiftToast: React.FC<ShiftToastProps> = ({
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 500,
+        duration: 400,
         useNativeDriver: true,
       }),
       Animated.timing(slideAnim, {
-        toValue: -20,
-        duration: 500,
+        toValue: 20,
+        duration: 400,
         useNativeDriver: true,
       }),
     ]).start(() => {
@@ -66,7 +90,10 @@ export const ShiftToast: React.FC<ShiftToastProps> = ({
         styles.container,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
+          transform: [
+            { translateY: slideAnim },
+            { scale: scaleAnim },
+          ],
         },
       ]}
     >
@@ -76,12 +103,12 @@ export const ShiftToast: React.FC<ShiftToastProps> = ({
         style={[
           styles.toast,
           { 
-            backgroundColor: colors.card,
+            backgroundColor: getToastBackground(container),
             borderColor: colors.accent + '30',
           },
         ]}
       >
-        <Text style={[styles.text, { color: colors.dim }]}>
+        <Text style={[styles.text, { color: colors.text }]}>
           Feel that shift?
         </Text>
       </TouchableOpacity>
@@ -92,30 +119,32 @@ export const ShiftToast: React.FC<ShiftToastProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 80,
+    bottom: 100,
     left: 20,
     right: 20,
     zIndex: 1001,
     alignItems: 'center',
   },
   toast: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 16,
     borderWidth: 1,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
   },
   text: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     fontStyle: 'italic',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });
