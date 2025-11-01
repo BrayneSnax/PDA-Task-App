@@ -19,14 +19,18 @@ interface GeminiResponse {
  */
 export async function generateInsight(prompt: string): Promise<string> {
   try {
-    // Note: OpenAI client is pre-configured via environment variables
-    // API key and base URL are already set in the sandbox environment
+    // Get API key from environment
+    const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    if (!apiKey) {
+      throw new Error('Gemini API key not configured');
+    }
+    
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: GEMINI_MODEL,
