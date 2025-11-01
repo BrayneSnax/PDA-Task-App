@@ -82,7 +82,7 @@ export const ShiftToast: React.FC<ShiftToastProps> = ({
         ]}
       >
         <Text style={[styles.text, { color: colors.dim }]}>
-          feel that shift?
+          Feel that shift?
         </Text>
       </TouchableOpacity>
     </Animated.View>

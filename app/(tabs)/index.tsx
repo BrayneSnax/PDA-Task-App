@@ -24,6 +24,7 @@ import { ContainerId } from '../constants/Types';
 import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
 import { CompletionPulse } from '../components/CompletionPulse';
 import { ShiftToast } from '../components/ShiftToast';
+import { ActionToast } from '../components/ActionToast';
 import { ThresholdCard } from '../components/ThresholdCard';
 
 // Conditional imports moved outside the component to fix "Rendered more hooks" error
@@ -107,6 +108,8 @@ export default function HomeScreen() {
   // Somatic feedback state
   const [showCompletionPulse, setShowCompletionPulse] = useState(false);
   const [showShiftToast, setShowShiftToast] = useState(false);
+  const [showActionToast, setShowActionToast] = useState(false);
+  const [currentActionType, setCurrentActionType] = useState<'did it' | 'skipped' | 'forgot' | 'couldn\'t' | 'not relevant'>('did it');
   const [showThresholdCard, setShowThresholdCard] = useState(false);
   const [previousContainer, setPreviousContainer] = useState<ContainerId>(activeContainer);
   const [isManualTransition, setIsManualTransition] = useState(false);
@@ -414,6 +417,10 @@ export default function HomeScreen() {
               onComplete={(status, note) => {
                 if (status === 'did it') {
                   handleCompletion(selectedItem.id);
+                } else {
+                  // Show action-specific toast for other actions
+                  setCurrentActionType(status);
+                  setShowActionToast(true);
                 }
                 
                 // Log the action as a journal entry
@@ -445,6 +452,13 @@ export default function HomeScreen() {
           isVisible={showShiftToast}
           colors={colors}
           onDismiss={() => setShowShiftToast(false)}
+        />
+        
+        <ActionToast
+          isVisible={showActionToast}
+          actionType={currentActionType}
+          colors={colors}
+          onDismiss={() => setShowActionToast(false)}
         />
         
         <ThresholdCard
