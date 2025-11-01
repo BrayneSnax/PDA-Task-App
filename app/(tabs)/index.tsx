@@ -139,11 +139,17 @@ export default function HomeScreen() {
       if (!isManualTransition) {
         setShowThresholdCard(true);
       }
-      setPreviousContainer(activeContainer);
       // Reset the manual transition flag
       setIsManualTransition(false);
     }
   }, [activeContainer, currentScreen, isManualTransition, previousContainer]);
+
+  // Update previousContainer AFTER showing the threshold card
+  useEffect(() => {
+    if (!showThresholdCard && previousContainer !== activeContainer) {
+      setPreviousContainer(activeContainer);
+    }
+  }, [showThresholdCard, activeContainer, previousContainer]);
 
   // Handle completion with somatic feedback
   const handleCompletion = (itemId: string) => {

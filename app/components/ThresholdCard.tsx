@@ -13,24 +13,24 @@ interface ThresholdCardProps {
 // Ritual prompts for each transition
 const THRESHOLD_RITUALS: Record<string, string[]> = {
   'morning-afternoon': [
-    'wash hands under warm water',
-    'take three breaths at the window',
-    'stretch your shoulders once',
+    'The sun climbs higher. Wash your hands under warm water.',
+    'Midday approaches. Take three breaths at the window.',
+    'Energy shifts upward. Stretch your shoulders once.',
   ],
   'afternoon-evening': [
-    'dim one light',
-    'place your hand on your heart',
-    'look once toward the horizon',
+    'Light begins to soften. Dim one lamp.',
+    'The day releases its grip. Place your hand on your heart.',
+    'Dusk settles in. Look once toward the horizon.',
   ],
   'evening-late': [
-    'close one door gently',
-    'light a candle or turn off a screen',
-    'whisper "the day is complete"',
+    'Stillness deepens. Close one door gently.',
+    'Night arrives. Light a candle or turn off a screen.',
+    'The day completes itself. Whisper "thank you".',
   ],
   'late-morning': [
-    'open a window to fresh air',
-    'drink water slowly',
-    'say your name aloud',
+    'Dawn returns. Open a window to fresh air.',
+    'A new cycle begins. Drink water slowly.',
+    'You wake again. Say your name aloud.',
   ],
 };
 
@@ -40,7 +40,7 @@ const getTransitionKey = (from: ContainerId, to: ContainerId): string => {
 
 const getRandomRitual = (from: ContainerId, to: ContainerId): string => {
   const key = getTransitionKey(from, to);
-  const rituals = THRESHOLD_RITUALS[key] || ['pause for one breath'];
+  const rituals = THRESHOLD_RITUALS[key] || ['Time shifts. Pause for a moment.'];
   return rituals[Math.floor(Math.random() * rituals.length)];
 };
 
