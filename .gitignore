@@ -43,3 +43,6 @@ app-example
 /android
 "com.facebook.react.devsupport.MultipartStreamReader/" 
 "npx/" 
+.env 
+.idea/ 
+npx 
