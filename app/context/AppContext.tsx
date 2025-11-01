@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { AppState, ContainerItem, Ally, Moment, Completion, ContainerId, Pattern, FoodEntry } from '../constants/Types';
+import { AppState, ContainerItem, Ally, Moment, Completion, ContainerId, Pattern, FoodEntry, Archetype } from '../constants/Types';
 import { JournalEntry } from '../constants/Types'; // Keep JournalEntry for backward compatibility if needed, but Moment is the new primary type
-import { DEFAULT_ALLIES, DEFAULT_GROUNDING_ITEMS } from '../constants/DefaultData';
+import { DEFAULT_ALLIES, DEFAULT_GROUNDING_ITEMS, DEFAULT_ARCHETYPES } from '../constants/DefaultData';
 import { saveAppState, loadAppState } from '../utils/storage';
 import { formatDate, generateId, getCurrentContainer } from '../utils/time';
 
@@ -51,6 +51,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
+  const [archetypes, setArchetypes] = useState<Archetype[]>(DEFAULT_ARCHETYPES);
   const [activeContainer, setActiveContainer] = useState<ContainerId>(getCurrentContainer());
   const [activeArchetypeId, setActiveArchetypeId] = useState<string | null>(null);
 
@@ -69,7 +70,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, activeContainer, loading]);
+  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, archetypes, activeContainer, loading]);
 
   const loadData = useCallback(async () => {
     const savedState = await loadAppState();
@@ -95,6 +96,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         completions: Array.isArray(savedState.completions) ? savedState.completions : [],
         patterns: Array.isArray(savedState.patterns) ? savedState.patterns : [],
         foodEntries: Array.isArray(savedState.foodEntries) ? savedState.foodEntries : [],
+        archetypes: Array.isArray(savedState.archetypes) && savedState.archetypes.length > 0 ? savedState.archetypes : DEFAULT_ARCHETYPES,
         activeContainer: savedState.activeContainer || getCurrentContainer(),
       } as AppState;
 
@@ -105,6 +107,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setCompletions(normalized.completions);
       setPatterns(normalized.patterns);
       setFoodEntries(normalized.foodEntries);
+      setArchetypes(normalized.archetypes);
       setActiveContainer(normalized.activeContainer);
 
     }
@@ -120,10 +123,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completions,
       patterns,
       foodEntries,
+      archetypes,
       activeContainer,
 
     });
-  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, activeContainer]);
+  }, [items, allies, journalEntries, substanceJournalEntries, completions, patterns, foodEntries, archetypes, activeContainer]);
 
   const addItem = useCallback((item: Omit<ContainerItem, 'id'>) => {
     const newItem: ContainerItem = {
@@ -136,6 +140,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const removeItem = useCallback((id: string) => {
     setItems(prev => prev.filter(item => item.id !== id));
     setCompletions(prev => prev.filter(c => c.itemId !== id));
+  }, []);
+
+  const updateItem = useCallback((id: string, updates: Partial<ContainerItem>) => {
+    setItems(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updates } : item
+    ));
   }, []);
 
   const toggleCompletion = useCallback((itemId: string) => {
@@ -278,6 +288,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setFoodEntries(prev => prev.filter(e => e.id !== id));
   }, []);
 
+  const addArchetype = useCallback((archetype: Omit<Archetype, 'id'>) => {
+    const newArchetype: Archetype = {
+      ...archetype,
+      id: generateId(),
+      isDefault: false,
+    };
+    setArchetypes(prev => [...prev, newArchetype]);
+  }, []);
+
+  const updateArchetype = useCallback((archetype: Archetype) => {
+    setArchetypes(prev => prev.map(a => a.id === archetype.id ? archetype : a));
+  }, []);
+
+  const removeArchetype = useCallback((id: string) => {
+    setArchetypes(prev => prev.filter(a => a.id !== id));
+  }, []);
+
 
 
   const value: AppContextType = {
@@ -290,11 +317,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     completions,
     patterns,
     foodEntries,
+    archetypes,
     activeContainer,
 
 
     addItem,
     removeItem,
+    updateItem,
     toggleCompletion,
     isCompleted,
     addAlly,
@@ -307,6 +336,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     removePattern,
     addFoodEntry,
     removeFoodEntry,
+    addArchetype,
+    updateArchetype,
+    removeArchetype,
     setActiveContainer,
     activeArchetypeId,
     setActiveArchetypeId,

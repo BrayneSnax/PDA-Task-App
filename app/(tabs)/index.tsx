@@ -37,10 +37,11 @@ import { DailyBlockSynthesisModal } from '../modal/DailyBlockSynthesisModal';
 import { SubstanceSynthesisModal } from '../modal/SubstanceSynthesisModal';
 import { AddPatternModal } from '../modal/AddPatternModal';
 import { AddFoodModal } from '../modal/AddFoodModal';
-import { DEFAULT_ARCHETYPES } from '../constants/DefaultData';
 import { Archetype } from '../constants/Types';
 import { ArchetypeCard } from '../components/ArchetypeCard';
 import { ArchetypeDetailModal } from '../modal/ArchetypeDetailModal';
+import { AddArchetypeModal } from '../modal/AddArchetypeModal';
+import { EditArchetypeModal } from '../modal/EditArchetypeModal';
 import { ReturnNode } from '../components/ReturnNode';
 
 type Screen = 'home' | 'substances' | 'archetypes' | 'patterns' | 'nourish';
@@ -58,6 +59,7 @@ export default function HomeScreen() {
     loading,
     addItem,
     removeItem,
+    updateItem,
     removeAlly,
     updateAlly,
     addAlly,
@@ -70,13 +72,17 @@ export default function HomeScreen() {
     foodEntries,
     addFoodEntry,
     removeFoodEntry,
+    archetypes,
+    addArchetype,
+    updateArchetype,
+    removeArchetype,
     activeArchetypeId,
     setActiveArchetypeId,
   } = useApp();
 
   // Get active archetype if one is invoked
   const activeArchetype = activeArchetypeId 
-    ? DEFAULT_ARCHETYPES.find(a => a.id === activeArchetypeId) || null
+    ? archetypes.find(a => a.id === activeArchetypeId) || null
     : null;
 
   // Use screen-specific colors or circadian colors based on current screen
@@ -105,6 +111,9 @@ export default function HomeScreen() {
   const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
   const [selectedArchetype, setSelectedArchetype] = useState<Archetype | null>(null);
   const [isArchetypeModalVisible, setIsArchetypeModalVisible] = useState(false);
+  const [isAddArchetypeModalVisible, setIsAddArchetypeModalVisible] = useState(false);
+  const [isEditArchetypeModalVisible, setIsEditArchetypeModalVisible] = useState(false);
+  const [archetypeToEdit, setArchetypeToEdit] = useState<Archetype | null>(null);
   
   // Somatic feedback state
   const [showCompletionPulse, setShowCompletionPulse] = useState(false);
@@ -704,7 +713,7 @@ export default function HomeScreen() {
           </Text>
 
           {/* Archetype Cards */}
-          {DEFAULT_ARCHETYPES.map((archetype) => (
+          {archetypes.map((archetype) => (
             <ArchetypeCard
               key={archetype.id}
               archetype={archetype}
@@ -712,9 +721,35 @@ export default function HomeScreen() {
                 setSelectedArchetype(archetype);
                 setIsArchetypeModalVisible(true);
               }}
+              onEdit={() => {
+                setArchetypeToEdit(archetype);
+                setIsEditArchetypeModalVisible(true);
+              }}
+              onDelete={() => {
+                if (archetype.isDefault) {
+                  Alert.alert('Cannot Delete', 'Default archetypes cannot be deleted.');
+                } else {
+                  Alert.alert(
+                    'Delete Archetype',
+                    `Are you sure you want to delete "${archetype.name}"?`,
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Delete', style: 'destructive', onPress: () => removeArchetype(archetype.id) },
+                    ]
+                  );
+                }
+              }}
               colors={colors}
             />
           ))}
+
+          {/* Create Custom Archetype Button */}
+          <TouchableOpacity
+            style={[styles.createArchetypeButton, { backgroundColor: colors.accent + '20', borderColor: colors.accent + '40' }]}
+            onPress={() => setIsAddArchetypeModalVisible(true)}
+          >
+            <Text style={[styles.createArchetypeButtonText, { color: colors.accent }]}>✨ Create Custom Archetype</Text>
+          </TouchableOpacity>
 
           {/* Return Ritual Info */}
           <View style={[styles.infoCard, { backgroundColor: colors.card + '99', marginTop: 24 }]}>
@@ -747,6 +782,33 @@ export default function HomeScreen() {
           onInvoke={(archetype) => {
             setActiveArchetypeId(archetype.id);
             // TODO: Show toast notification
+          }}
+          colors={colors}
+        />
+
+        {/* Add Archetype Modal */}
+        <AddArchetypeModal
+          isVisible={isAddArchetypeModalVisible}
+          onClose={() => setIsAddArchetypeModalVisible(false)}
+          onSave={(archetype) => {
+            addArchetype(archetype);
+            setIsAddArchetypeModalVisible(false);
+          }}
+          colors={colors}
+        />
+
+        {/* Edit Archetype Modal */}
+        <EditArchetypeModal
+          archetype={archetypeToEdit}
+          isVisible={isEditArchetypeModalVisible}
+          onClose={() => {
+            setIsEditArchetypeModalVisible(false);
+            setArchetypeToEdit(null);
+          }}
+          onSave={(archetype) => {
+            updateArchetype(archetype);
+            setIsEditArchetypeModalVisible(false);
+            setArchetypeToEdit(null);
           }}
           colors={colors}
         />
@@ -1185,6 +1247,19 @@ const styles = StyleSheet.create({
   },
   craftMomentIcon: {
     fontSize: 18,
+  },
+  createArchetypeButton: {
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginTop: 16,
+    marginBottom: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    alignItems: 'center',
+  },
+  createArchetypeButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   craftMomentText: {
     fontSize: 15,
