@@ -26,7 +26,12 @@ export async function generateInsight(prompt: string): Promise<string> {
       throw new Error('Gemini API key not configured');
     }
     
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+    // Create timeout promise for React Native compatibility
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), API_TIMEOUT);
+    });
+
+    const fetchPromise = fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,8 +48,9 @@ export async function generateInsight(prompt: string): Promise<string> {
         temperature: 0.8,
         max_tokens: 100,
       }),
-      signal: AbortSignal.timeout(API_TIMEOUT),
     });
+
+    const response = await Promise.race([fetchPromise, timeoutPromise]);
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
