@@ -1,15 +1,17 @@
 /**
  * Gemini API Service
- * Uses OpenAI-compatible API format with gemini-2.5-flash model
+ * Uses direct Gemini REST API (not OpenAI-compatible)
  */
 
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-2.0-flash-exp';
 const API_TIMEOUT = 10000; // 10 seconds
 
 interface GeminiResponse {
-  choices: Array<{
-    message: {
-      content: string;
+  candidates: Array<{
+    content: {
+      parts: Array<{
+        text: string;
+      }>;
     };
   }>;
 }
@@ -31,33 +33,42 @@ export async function generateInsight(prompt: string): Promise<string> {
       setTimeout(() => reject(new Error('Request timeout')), API_TIMEOUT);
     });
 
-    const fetchPromise = fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: GEMINI_MODEL,
-        messages: [
-          {
-            role: 'user',
-            content: prompt,
+    // Use direct Gemini REST API
+    const fetchPromise = fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 100,
           },
-        ],
-        temperature: 0.8,
-        max_tokens: 100,
-      }),
-    });
+        }),
+      }
+    );
 
     const response = await Promise.race([fetchPromise, timeoutPromise]);
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Gemini API error:', response.status, errorText);
       throw new Error(`API error: ${response.status}`);
     }
 
     const data: GeminiResponse = await response.json();
-    const insight = data.choices[0]?.message?.content?.trim();
+    const insight = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
     if (!insight) {
       throw new Error('No insight generated');
