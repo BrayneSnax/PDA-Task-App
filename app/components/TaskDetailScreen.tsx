@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   // Label inside the bubble - centered, same color as text
   inlineLabel: {
@@ -196,8 +196,8 @@ const styles = StyleSheet.create({
   // Organic glow blocks
   glowBlock: {
     borderRadius: 16,
-    padding: 16,
-    marginBottom: 10,
+    padding: 14,
+    marginBottom: 8,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   largeBlock: {
-    minHeight: 82,
+    minHeight: 75,
   },
   mediumBlock: {
-    minHeight: 85,
+    minHeight: 78,
   },
   smallBlock: {
-    minHeight: 80,
+    minHeight: 72,
   },
   glowText: {
     fontSize: 15,
@@ -264,10 +264,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   noteInput: {
-    minHeight: 40,
+    minHeight: 36,
     borderRadius: 14,
-    padding: 12,
-    marginBottom: 8,
+    padding: 10,
+    marginBottom: 6,
     borderWidth: 1,
     fontSize: 14,
     lineHeight: 19,
