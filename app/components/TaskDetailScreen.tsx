@@ -205,10 +205,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   largeBlock: {
-    minHeight: 90,
+    minHeight: 82,
   },
   mediumBlock: {
-    minHeight: 95,
+    minHeight: 85,
   },
   smallBlock: {
     minHeight: 80,
