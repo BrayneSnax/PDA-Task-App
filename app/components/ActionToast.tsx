@@ -35,9 +35,9 @@ const getActionConfig = (actionType: ActionType) => {
       animation: 'dim',
     },
     'not relevant': {
-      message: 'Not every thread belongs here. Noted.',
-      duration: 1500,
-      animation: 'fade-through',
+      message: 'Noted. The current carries on.',
+      duration: 1800,
+      animation: 'horizontal-shimmer',
     },
   };
 
@@ -98,6 +98,15 @@ export const ActionToast: React.FC<ActionToastProps> = ({
             useNativeDriver: true,
           }),
         ]).start();
+      }
+
+      // Horizontal shimmer for "not relevant" - single pass
+      if (config.animation === 'horizontal-shimmer') {
+        Animated.timing(shimmerAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }).start();
       }
 
       // Auto-dismiss based on action duration
@@ -184,6 +193,29 @@ export const ActionToast: React.FC<ActionToastProps> = ({
             ]}
           />
         )}
+
+        {/* Horizontal shimmer for "not relevant" */}
+        {config.animation === 'horizontal-shimmer' && (
+          <Animated.View
+            style={[
+              styles.horizontalShimmer,
+              {
+                opacity: shimmerAnim.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: [0, 0.4, 0],
+                }),
+                transform: [
+                  {
+                    translateX: shimmerAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-200, 200],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          />
+        )}
         
         <Text style={[styles.text, { color: colors.text }]}>
           {config.message}
@@ -231,6 +263,14 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    borderRadius: 16,
+  },
+  horizontalShimmer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: 100,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
   },
 });

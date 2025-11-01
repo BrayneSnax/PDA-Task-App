@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   didItButton: {
     width: '100%',
     paddingVertical: 12,
-    marginBottom: 6,
+    marginBottom: 12,
     borderRadius: 14,
   },
   didItText: {
@@ -296,7 +296,8 @@ const styles = StyleSheet.create({
     minHeight: 36,
     borderRadius: 14,
     padding: 10,
-    marginBottom: 6,
+    marginTop: 12,
+    marginBottom: 10,
     borderWidth: 1,
     fontSize: 14,
     lineHeight: 19,
