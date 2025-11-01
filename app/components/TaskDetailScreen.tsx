@@ -15,23 +15,23 @@ interface Props {
 const getTimeGlowStyle = (container: ContainerId) => {
   const glowStyles = {
     morning: {
-      backgroundColor: '#F5E6CC15', // Pale honey mist - 15% opacity
-      borderColor: '#F5E6CC40', // 40% opacity border
+      backgroundColor: '#F5E6CC15',
+      borderColor: '#F5E6CC40',
       shadowColor: '#F5E6CC',
     },
     afternoon: {
-      backgroundColor: '#B0E0E612', // Soft aqua glass - 12% opacity
-      borderColor: '#B0E0E635', // 35% opacity border
+      backgroundColor: '#B0E0E612',
+      borderColor: '#B0E0E635',
       shadowColor: '#B0E0E6',
     },
     evening: {
-      backgroundColor: '#8C4B3F18', // Faint rose - 18% opacity
-      borderColor: '#8C4B3F45', // 45% opacity border
+      backgroundColor: '#8C4B3F18',
+      borderColor: '#8C4B3F45',
       shadowColor: '#8C4B3F',
     },
     late: {
-      backgroundColor: '#3A3F4515', // Indigo haze - 15% opacity
-      borderColor: '#3A3F4540', // 40% opacity border
+      backgroundColor: '#3A3F4515',
+      borderColor: '#3A3F4540',
       shadowColor: '#3A3F45',
     },
   };
@@ -56,10 +56,7 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
       <Text style={[styles.title, { color: colors.text, textAlign: 'center' }]}>{item.title}</Text>
 
       <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
-        {/* Notice Label */}
-        <Text style={[styles.fieldLabel, { color: colors.accent }]}>NOTICE</Text>
-        
-        {/* Notice Block - Largest, organic glow */}
+        {/* Notice Block with label inside */}
         <View style={[
           styles.glowBlock,
           styles.largeBlock,
@@ -69,15 +66,13 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             shadowColor: timeGlow.shadowColor,
           }
         ]}>
+          <Text style={[styles.inlineLabel, { color: colors.text }]}>NOTICE</Text>
           <Text style={[styles.glowText, styles.largeText, { color: colors.text }]}>
             {item.body_cue || 'No notice provided'}
           </Text>
         </View>
 
-        {/* Act Label */}
-        <Text style={[styles.fieldLabel, { color: colors.accent }]}>ACT</Text>
-        
-        {/* Act Block - Medium, organic glow */}
+        {/* Act Block with label inside */}
         <View style={[
           styles.glowBlock,
           styles.mediumBlock,
@@ -87,32 +82,31 @@ export const TaskDetailScreen = ({ item, colors, container, onClose, onComplete 
             shadowColor: timeGlow.shadowColor,
           }
         ]}>
+          <Text style={[styles.inlineLabel, { color: colors.text }]}>ACT</Text>
           <Text style={[styles.glowText, styles.mediumText, { color: colors.text }]}>
             {item.micro || 'No action provided'}
           </Text>
         </View>
         
-        {/* Reflect Label & Block */}
+        {/* Reflect Block with label inside (if exists) */}
         {item.desire && (
-          <>
-            <Text style={[styles.fieldLabel, { color: colors.accent }]}>REFLECT</Text>
-            <View style={[
-              styles.glowBlock,
-              styles.smallBlock,
-              {
-                backgroundColor: timeGlow.backgroundColor,
-                borderColor: timeGlow.borderColor,
-                shadowColor: timeGlow.shadowColor,
-              }
-            ]}>
-              <Text style={[styles.glowText, styles.smallText, { color: colors.text }]}>
-                {item.desire}
-              </Text>
-            </View>
-          </>
+          <View style={[
+            styles.glowBlock,
+            styles.smallBlock,
+            {
+              backgroundColor: timeGlow.backgroundColor,
+              borderColor: timeGlow.borderColor,
+              shadowColor: timeGlow.shadowColor,
+            }
+          ]}>
+            <Text style={[styles.inlineLabel, { color: colors.text }]}>REFLECT</Text>
+            <Text style={[styles.glowText, styles.smallText, { color: colors.text }]}>
+              {item.desire}
+            </Text>
+          </View>
         )}
 
-        {/* Note Input - compact, organic */}
+        {/* Note Input - compact */}
         <TextInput
           style={[
             styles.noteInput,
@@ -167,11 +161,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: 6,
   },
   backButton: {
     paddingVertical: 4,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   backText: {
     fontSize: 16,
@@ -180,23 +174,25 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 6,
   },
-  fieldLabel: {
-    fontSize: 10,
+  // Label inside the bubble - centered, same color as text
+  inlineLabel: {
+    fontSize: 9,
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 4,
-    marginTop: 6,
+    letterSpacing: 1.2,
+    textAlign: 'center',
+    marginBottom: 6,
+    opacity: 0.6, // Slightly dimmed but same color
   },
   scrollContent: {
     paddingBottom: 40,
   },
   // Organic glow blocks
   glowBlock: {
-    borderRadius: 16, // More rounded for organic feel
-    padding: 14,
+    borderRadius: 16,
+    padding: 12,
     marginBottom: 6,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 2 },
@@ -205,26 +201,24 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   largeBlock: {
-    minHeight: 75,
-    padding: 14,
+    minHeight: 70,
   },
   mediumBlock: {
-    minHeight: 62,
-    padding: 14,
+    minHeight: 58,
   },
   smallBlock: {
     minHeight: 50,
-    padding: 12,
   },
   glowText: {
     fontSize: 15,
     fontWeight: '500',
     lineHeight: 20,
+    textAlign: 'center', // Center the content text too
   },
   largeText: {
     fontSize: 17,
     fontWeight: '600',
-    lineHeight: 23,
+    lineHeight: 22,
   },
   mediumText: {
     fontSize: 16,
@@ -238,7 +232,7 @@ const styles = StyleSheet.create({
   },
   didItButton: {
     width: '100%',
-    paddingVertical: 14,
+    paddingVertical: 12,
     marginBottom: 6,
     borderRadius: 14,
   },
@@ -252,12 +246,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 6, // Modern gap property for consistent spacing
+    gap: 6,
   },
   actionButton: {
     width: '48%',
     borderRadius: 12,
-    paddingVertical: 11,
+    paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -266,11 +260,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   noteInput: {
-    minHeight: 44,
+    minHeight: 40,
     borderRadius: 14,
     padding: 12,
     marginBottom: 8,
-    marginTop: 6,
     borderWidth: 1,
     fontSize: 14,
     lineHeight: 19,
