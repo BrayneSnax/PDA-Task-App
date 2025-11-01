@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '90%',
-    maxHeight: '85%',
+    maxHeight: '80%',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
   content: {
-    flex: 1,
+    maxHeight: 400,
   },
   themePreview: {
     borderRadius: 12,
