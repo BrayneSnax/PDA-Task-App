@@ -22,6 +22,8 @@ import { Alert } from 'react-native';
 import { ANALYSIS_URL, REQUEST_TIMEOUT_MS, TEST_MODE } from '../constants/Config';
 import { ContainerId } from '../constants/Types';
 import { TemporalIntelligenceCard } from '../components/TemporalIntelligenceCard';
+import { DailySynthesisCard } from '../components/DailySynthesisCard';
+import { SynthesisHistoryModal } from '../components/SynthesisHistoryModal';
 import { CompletionPulse } from '../components/CompletionPulse';
 import { ShiftToast } from '../components/ShiftToast';
 import { ActionToast } from '../components/ActionToast';
@@ -98,6 +100,7 @@ export default function HomeScreen() {
   const [isCraftMomentModalVisible, setIsCraftMomentModalVisible] = useState(false);
   const [isAddAllyModalVisible, setIsAddAllyModalVisible] = useState(false);
   const [isEditAllyModalVisible, setIsEditAllyModalVisible] = useState(false);
+  const [isSynthesisHistoryVisible, setIsSynthesisHistoryVisible] = useState(false);
   const [isSynthesisModalVisible, setIsSynthesisModalVisible] = useState(false);
   const [isSubstanceSynthesisModalVisible, setIsSubstanceSynthesisModalVisible] = useState(false);
   const [allyToEdit, setAllyToEdit] = useState(null);
@@ -304,8 +307,14 @@ export default function HomeScreen() {
 			              </Text>
 		          </View>
 
-	          {/* Temporal Intelligence - Adaptive Suggestions Card */}
-	          <TemporalIntelligenceCard colors={colors} />
+          {/* Temporal Intelligence - Adaptive Suggestions Card */}
+          <TemporalIntelligenceCard colors={colors} />
+
+          {/* Daily Synthesis - Evening Reflection */}
+          <DailySynthesisCard 
+            colors={colors} 
+            onViewHistory={() => setIsSynthesisHistoryVisible(true)}
+          />
 
 	          {/* Personal Moments Section */}
 	          <Text style={[styles.sectionHeader, { color: colors.dim, fontSize: 14, fontWeight: '500' }]}>
@@ -512,6 +521,12 @@ export default function HomeScreen() {
           toContainer={activeContainer}
           colors={colors}
           onDismiss={() => setShowThresholdCard(false)}
+        />
+
+        <SynthesisHistoryModal
+          visible={isSynthesisHistoryVisible}
+          onClose={() => setIsSynthesisHistoryVisible(false)}
+          colors={colors}
         />
         
         {/* Return Node - appears when archetype is active */}
