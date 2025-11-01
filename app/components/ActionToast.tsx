@@ -13,31 +13,31 @@ interface ActionToastProps {
 
 // Get message and duration for each action type
 const getActionConfig = (actionType: ActionType) => {
-  const configs = {
+  const configs: Record<ActionType, { message: string; duration: number; animation: string }> = {
     'did it': {
       message: 'Feel that shift?',
       duration: 2000,
-      animation: 'fade', // Standard fade
+      animation: 'fade',
     },
     'skipped': {
-      message: 'Noted. You're staying fluid.',
+      message: "Noted. You're staying fluid.",
       duration: 1800,
-      animation: 'ripple', // Light ripple effect
+      animation: 'ripple',
     },
     'forgot': {
       message: 'Forgetfulness is part of rhythm. Remembering returns.',
       duration: 2000,
-      animation: 'shimmer', // Faint shimmer
+      animation: 'shimmer',
     },
-    'couldn\'t': {
-      message: 'The field holds what couldn't move today.',
+    "couldn't": {
+      message: "The field holds what couldn't move today.",
       duration: 2000,
-      animation: 'dim', // Slight dimming
+      animation: 'dim',
     },
     'not relevant': {
       message: 'Not every thread belongs here. Noted.',
       duration: 1500,
-      animation: 'fade-through', // Fade through to blank
+      animation: 'fade-through',
     },
   };
 
