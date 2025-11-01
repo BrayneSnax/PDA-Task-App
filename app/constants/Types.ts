@@ -94,6 +94,13 @@ export interface Archetype {
     accent: string;
     overlay: string; // Color overlay when archetype is active
   };
+  theme?: { // Optional harmonic theme for custom archetypes
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+  };
+  isDefault?: boolean; // Mark default archetypes to protect from deletion
 }
 
 export interface AppState {
@@ -104,6 +111,7 @@ export interface AppState {
   completions: Completion[];
   patterns: Pattern[];
   foodEntries: FoodEntry[];
+  archetypes: Archetype[]; // User's archetypes (includes defaults + custom)
   activeContainer: ContainerId;
 
 }

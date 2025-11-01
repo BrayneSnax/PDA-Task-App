@@ -9,6 +9,7 @@ interface AppContextType extends AppState {
 
   addItem: (item: Omit<ContainerItem, 'id'>) => void;
   removeItem: (id: string) => void;
+  updateItem: (id: string, item: Partial<ContainerItem>) => void;
   toggleCompletion: (itemId: string) => void;
   isCompleted: (itemId: string) => boolean;
   addAlly: (ally: Omit<Ally, 'id'>) => void;
@@ -21,6 +22,9 @@ interface AppContextType extends AppState {
   removePattern: (id: string) => void;
   addFoodEntry: (entry: Omit<FoodEntry, 'id' | 'timestamp' | 'date'>) => void;
   removeFoodEntry: (id: string) => void;
+  addArchetype: (archetype: Omit<import('../constants/Types').Archetype, 'id'>) => void;
+  updateArchetype: (archetype: import('../constants/Types').Archetype) => void;
+  removeArchetype: (id: string) => void;
   setActiveContainer: (container: ContainerId) => void;
   activeArchetypeId: string | null;
   setActiveArchetypeId: (id: string | null) => void;

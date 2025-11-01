@@ -560,6 +560,7 @@ export const DEFAULT_ARCHETYPES: Archetype[] = [
       accent: '#6B8CAE', // Cool blue
       overlay: 'rgba(107, 140, 174, 0.15)', // Soft blue tint
     },
+    isDefault: true,
   },
   {
     id: 'executor',
@@ -575,6 +576,7 @@ export const DEFAULT_ARCHETYPES: Archetype[] = [
       accent: '#E8A87C', // Warm orange
       overlay: 'rgba(232, 168, 124, 0.15)', // Warm energy tint
     },
+    isDefault: true,
   },
   {
     id: 'regulator',
@@ -590,6 +592,7 @@ export const DEFAULT_ARCHETYPES: Archetype[] = [
       accent: '#7A9B76', // Earth green
       overlay: 'rgba(122, 155, 118, 0.15)', // Grounding green tint
     },
+    isDefault: true,
   },
   {
     id: 'creator',
@@ -605,5 +608,6 @@ export const DEFAULT_ARCHETYPES: Archetype[] = [
       accent: '#B19CD9', // Soft purple
       overlay: 'rgba(177, 156, 217, 0.15)', // Creative purple tint
     },
+    isDefault: true,
   },
 ];
